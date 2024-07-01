@@ -18,7 +18,7 @@ watch(checked, (newVal) => {
 </script>
 
 <template>
-  <component :is="type" class="lg:w-1">
+  <component :is="type" class="lg:w-2">
     <label class="checkbox">
       <input v-model="checked" type="checkbox" />
       <span class="check" />

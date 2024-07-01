@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Route;
 use Illuminate\Foundation\Application;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\DocumentController;
+use App\Http\Controllers\StudentDocumentController;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 
 
@@ -41,5 +42,8 @@ Route::middleware('auth')->group(function () {
 });
 
 Route::resource('documents', DocumentController::class);
+Route::post('/student-document/completion', [StudentDocumentController::class, 'updateCompletionStatus'])->name('student-document.update');
+
 
 require __DIR__.'/auth.php';
+

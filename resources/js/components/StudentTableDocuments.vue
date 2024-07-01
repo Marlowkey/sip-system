@@ -1,29 +1,37 @@
 <script setup>
 import { computed, ref, defineProps } from 'vue'
 import { mdiEye, mdiTrashCan } from '@mdi/js'
+import { router, usePage } from '@inertiajs/vue3'
 import CardBoxModal from '@/components/CardBoxModal.vue'
 import TableCheckboxCell from '@/components/TableCheckboxCell.vue'
 import BaseLevel from '@/components/BaseLevel.vue'
 import BaseButtons from '@/components/BaseButtons.vue'
 import BaseButton from '@/components/BaseButton.vue'
 import UserAvatar from '@/components/UserAvatar.vue'
+import { useForm } from '@inertiajs/vue3'
 
 const props = defineProps({
   checkable: Boolean,
-  documents: {
+  document: {
     type: Array,
     required: true,
 }
 })
 
-
-const items = computed(() => props.documents)
+const user = computed(() => usePage().props.auth.user)
+const items = computed(() => props.document)
 const isModalActive = ref(false)
 const isModalDangerActive = ref(false)
 const perPage = ref(8)
 const currentPage = ref(0)
 const checkedRows = ref([])
 const currentDescription = ref('')
+
+const form = useForm({
+  user_id: user.value.id,
+  document_id: null,
+  is_completed: false,
+})
 
 const itemsPaginated = computed(() =>
   items.value.slice(perPage.value * currentPage.value, perPage.value * (currentPage.value + 1))
@@ -49,8 +57,22 @@ const viewDocument = (document) => {
 }
 
 const isCompleted = (document) => {
-  return document.users.length > 0 && document.users[0].pivot.is_completed
+  // Check if any user has completed the document
+  return document.users.some(user => user.pivot.is_completed);
+};
+const updateCompletionStatus = (document, event) => {
+  form.document_id = document.id
+  form.is_completed = event.target.checked
+
+  form.post(route('student-document.update'), {
+    onFinish: () => {
+      document.is_completed = form.is_completed
+    },
+    preserveScroll: true,
+  })
 }
+
+
 </script>
 
 <template>
@@ -59,30 +81,37 @@ const isCompleted = (document) => {
     </CardBoxModal>
 
 
-    <table class="min-w-full px-0">
+    <table class="min-w-full ">
       <thead>
         <tr class="py-6">
-          <th v-if="checkable" />
-          <th class="py-6">Title</th>
-          <th>Due on</th>
-          <th>Action</th>
+          <th class="py-6 mx-16 ">Title</th>
+          <th class="py-6 mx-16">Due on</th>
+          <th class="py-6 mx-2">Action</th>
+          <th class="" v-if="checkable" />
 
         </tr>
       </thead>
       <tbody>
-        <tr v-for="documents in itemsPaginated" :key="documents.id">
-        <TableCheckboxCell v-if="checkable" @checked="checked($event, client)" :checked="isCompleted(documents)" />
-          <td data-label="Title" class="text-center">
-            {{ documents.title }}
+        <tr v-for="document in itemsPaginated" :key="document.id">
+          <td data-label="Title" class="px-16">
+            {{ document.title }}
           </td>
-          <td data-label="Due on" class="text-center">
-            {{ documents.due_date }}
+          <td data-label="Due on" class="px-8">
+            {{ document.due_date }}
           </td>
           <td class="before:hidden lg:w-1 whitespace-nowrap text-center px-6">
             <BaseButtons type="justify-start lg:justify-end" no-wrap>
-              <BaseButton color="info" :icon="mdiEye" small @click="viewDocument(documents)"/>
+              <BaseButton color="info" :icon="mdiEye" small @click="viewDocument(document)"/>
             </BaseButtons>
           </td>
+          <td v-if="checkable" class="px-6 text-center">
+          <input
+            type="checkbox"
+            :checked="isCompleted(document)"
+            @change="event => updateCompletionStatus(document, event)"
+          />
+        </td>
+
         </tr>
       </tbody>
     </table>
