@@ -3,29 +3,56 @@ import { Head } from '@inertiajs/vue3'
 import { computed, ref, onMounted } from 'vue'
 import { useMainStore } from '@/stores/main.js'
 import {
-  mdiAccountFile,
+    mdiAccountFile,
+    mdiCog,
+    mdiPlus
 } from '@mdi/js'
 import SectionMain from '@/components/SectionMain.vue'
 import CardBox from '@/components/CardBox.vue'
 import SectionTitleLineWithButton from '@/components/SectionTitleLineWithButton.vue'
-import StudentTableDocuments from '@/components/StudentTableDocuments.vue'
+import TableStudentDocuments from '@/components/TableStudentDocuments.vue'
+import TableCoordinatorDocuments from '@/components/TableCoordinatorDocuments.vue'
 import LayoutAuthenticated from '@/layouts/LayoutAuthenticated.vue'
+import BaseButton from '@/components/BaseButton.vue'
+import NotificationBar from '@/components/NotificationBar.vue'
+
 
 const props = defineProps({
-  documents: Array // Documents passed as a prop from Inertia
+    user: Object, // Authenticated user passed as a prop from Inertia
+    documents: Array // Documents passed as a prop from Inertia
 })
 
-const mainStore = useMainStore()
-
+const userRole = props.user.role;
 </script>
 
 <template>
     <LayoutAuthenticated>
-        <SectionMain>
-      <SectionTitleLineWithButton :icon="mdiAccountFile" title="Document Submission" />
-      <CardBox has-table >
-        <StudentTableDocuments :document="documents" checkable/>
-      </CardBox>
-    </SectionMain>
+
+        <Head title="Document Submission" />
+        <SectionMain v-if="userRole === 'student'">
+
+            <NotificationBar v-if="$page.props.flash.message" icon="mdiAlert" color="info" class="m-2">
+                {{ $page.props.flash.message }}
+            </NotificationBar>
+
+            <SectionTitleLineWithButton :icon="mdiAccountFile" title="Document Submission" main />
+            <CardBox has-table>
+                <TableStudentDocuments :document="documents" checkable />
+            </CardBox>
+        </SectionMain>
+
+        <SectionMain v-else>
+
+            <NotificationBar v-if="$page.props.flash.message" icon="mdiAlert" color="info" class="m-2">
+                {{ $page.props.flash.message }}
+            </NotificationBar>
+            
+            <SectionTitleLineWithButton :icon="mdiAccountFile" title="Document Submission" main>
+                <BaseButton :icon="mdiPlus" color="whiteDark" routeName="documents.create" />
+            </SectionTitleLineWithButton>
+            <CardBox has-table>
+                <TableCoordinatorDocuments :document="documents" />
+            </CardBox>
+        </SectionMain>
     </LayoutAuthenticated>
 </template>

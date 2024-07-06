@@ -24,5 +24,6 @@ class StudentDocumentController extends Controller
                 'is_completed' => $request->is_completed,
             ]
         );
-        return redirect()->back()->with('message', 'Document completion status updated successfully.');    }
+        return redirect()->back()->with('message', 'Document completion status updated successfully.');
+    }
 }

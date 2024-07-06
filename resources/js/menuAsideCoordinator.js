@@ -9,6 +9,7 @@ import {
     mdiTelevisionGuide,
     mdiResponsive,
     mdiPalette,
+    mdiAccountFile
   } from '@mdi/js'
 
 
@@ -17,6 +18,11 @@ import {
         route: 'dashboard',
         icon: mdiMonitor,
         label: 'Dashboard'
+      },
+      {
+        route: 'documents.index',
+        icon: mdiAccountFile,
+        label: 'Document Submission'
       },
       {
         route: 'tables',
