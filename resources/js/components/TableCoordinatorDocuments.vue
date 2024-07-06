@@ -1,6 +1,6 @@
 <script setup>
 import { computed, ref, defineProps } from 'vue'
-import { mdiEye, mdiTrashCan } from '@mdi/js'
+import { mdiEye, mdiTrashCan, mdiFileLinkOutline } from '@mdi/js'
 import { router, usePage } from '@inertiajs/vue3'
 import CardBoxModal from '@/components/CardBoxModal.vue'
 import TableCheckboxCell from '@/components/TableCheckboxCell.vue'
@@ -56,22 +56,6 @@ const viewDocument = (document) => {
   isModalActive.value = true
 }
 
-const isCompleted = (document) => {
-  // Check if any user has completed the document
-  return document.users.some(user => user.pivot.is_completed);
-};
-const updateCompletionStatus = (document, event) => {
-  form.document_id = document.id
-  form.is_completed = event.target.checked
-
-  form.post(route('student-document.update'), {
-    onFinish: () => {
-      document.is_completed = form.is_completed
-    },
-    preserveScroll: true,
-  })
-}
-
 
 </script>
 
@@ -87,8 +71,6 @@ const updateCompletionStatus = (document, event) => {
           <th class="py-6 mx-16 ">Title</th>
           <th class="py-6 mx-16">Due on</th>
           <th class="py-6 mx-2">Action</th>
-          <th class="" v-if="checkable" />
-
         </tr>
       </thead>
       <tbody>
@@ -102,15 +84,9 @@ const updateCompletionStatus = (document, event) => {
           <td class="before:hidden lg:w-1 whitespace-nowrap text-center px-6">
             <BaseButtons type="justify-start lg:justify-end" no-wrap>
               <BaseButton color="info" :icon="mdiEye" small @click="viewDocument(document)"/>
+              <BaseButton color="warning" :icon="mdiFileLinkOutline" small routeName="documents.create" />
             </BaseButtons>
           </td>
-          <td v-if="checkable" class="px-6 text-center">
-          <input
-            type="checkbox"
-            :checked="isCompleted(document)"
-            @change="event => updateCompletionStatus(document, event)"
-          />
-        </td>
 
         </tr>
       </tbody>

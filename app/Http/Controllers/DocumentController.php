@@ -2,10 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Document;
-use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Inertia\Response;
+use App\Models\Document;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\Log;
+
 
 class DocumentController extends Controller
 {
@@ -14,12 +17,14 @@ class DocumentController extends Controller
      */
     public function index()
     {
+        $user = auth()->user();
     // Fetch documents with users and their completion status
         $documents = Document::with(['users' => function ($query) {
             $query->where('user_id', auth()->id());
         }])->get();
 
         return Inertia::render('Document/Index', [
+            'user' => $user,
             'documents' => $documents,
         ]);
     }
@@ -29,7 +34,7 @@ class DocumentController extends Controller
      */
     public function create()
     {
-        //
+        return Inertia::render('Document/Create');
     }
 
     /**
@@ -37,7 +42,18 @@ class DocumentController extends Controller
      */
     public function store(Request $request)
     {
-        //
+    Log::info('Incoming request:', $request->all());
+    // Validate the incoming request
+    $validated = $request->validate([
+        'title' => 'required|string|max:255',
+        'due_date' => 'required|date',
+        'description' => 'nullable|string',
+    ]);
+
+    // Create a new document with the validated data
+        Document::create($validated);
+        return Redirect::route('documents.index')->with('message', 'Document created successfully.');
+
     }
 
     /**
@@ -71,6 +87,4 @@ class DocumentController extends Controller
     {
         //
     }
-
-    
 }
