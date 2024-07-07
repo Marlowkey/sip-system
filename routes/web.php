@@ -2,6 +2,7 @@
 
 use App\Models\User;
 use Inertia\Inertia;
+use App\Models\Document;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Foundation\Application;
 use App\Http\Controllers\ProfileController;
@@ -10,17 +11,18 @@ use App\Http\Controllers\StudentDocumentController;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 
 
-Route::get('/', [AuthenticatedSessionController::class, 'create']);
-
-
-Route::middleware(['auth:sanctum', 'verified'])->get('/home', function () {
-
+Route::middleware(['auth:sanctum', 'verified'])->get('/', function () {
     $user = auth()->user();
     $users = User::all();
+    $documents = Document::with(['users' => function ($query) {
+        $query->where('user_id', auth()->id());
+    }])->get();
+
     return Inertia::render('HomeView', [
         'user' => $user,
-        'users' => $users
-    ]);})->name('dashboard');
+        'users' => $users,
+        'documents' => $documents,
+    ]);})->name('home');
 
 Route::get('/tables', function () {
     return Inertia::render('TablesView');

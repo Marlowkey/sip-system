@@ -8,6 +8,8 @@ import {
   mdiChartTimelineVariant,
   mdiMonitorCellphone,
   mdiAccountFile,
+  mdiPlus,
+  mdiArrowRight
 } from '@mdi/js'
 import SectionMain from '@/components/SectionMain.vue'
 import CardBoxWidget from '@/components/CardBoxWidget.vue'
@@ -18,9 +20,10 @@ import BaseButton from '@/components/BaseButton.vue'
 import CardBoxTransaction from '@/components/CardBoxTransaction.vue'
 import CardBoxClient from '@/components/CardBoxClient.vue'
 import SectionTitleLineWithButton from '@/components/SectionTitleLineWithButton.vue'
+import TableStudentDocuments from '@/components/TableStudentDocuments.vue'
 
 const props = defineProps({
-  users: Array // Users passed as a prop from Inertia
+  documents: Array,
 })
 
 const mainStore = useMainStore()
@@ -58,9 +61,12 @@ const transactionBarItems = computed(() => mainStore.history)
         />
       </div>
 
-      <SectionTitleLineWithButton :icon="mdiAccountFile" title="Document Submission" />
-      <CardBox has-table >
-        <TableUsers :users="users"/>
-      </CardBox>
+      <SectionTitleLineWithButton :icon="mdiAccountFile" title="Document Submission">
+      <BaseButton :icon="mdiArrowRight" color="whiteDark" routeName="documents.index" />
+      </SectionTitleLineWithButton>
+
+            <CardBox has-table>
+                <TableStudentDocuments :document="documents" />
+            </CardBox>
     </SectionMain>
 </template>

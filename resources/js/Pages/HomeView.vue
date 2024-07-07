@@ -8,7 +8,8 @@ import AdminView from './Admin/AdminView.vue'
 
 const props = defineProps({
   user: Object, // Authenticated user passed as a prop from Inertia
-  users: Array  // Users passed as a prop from Inertia
+  users: Array, // Users passed as a prop from Inertia
+  documents: Array, // Documents passed as a prop from Inertia
 })
 
 const currentDashboard = computed(() => {
@@ -28,6 +29,6 @@ const currentDashboard = computed(() => {
 <template>
   <LayoutAuthenticated>
     <Head title="Home" />
-    <component :is="currentDashboard" :users="users" />
+    <component :is="currentDashboard" :users="users" :documents="documents" />
   </LayoutAuthenticated>
 </template>

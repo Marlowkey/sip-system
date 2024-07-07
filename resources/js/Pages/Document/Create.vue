@@ -1,6 +1,6 @@
 <script setup>
-import { reactive, ref } from 'vue'
-import { useForm, router} from '@inertiajs/vue3'
+import { reactive, ref, computed } from 'vue'
+import { useForm } from '@inertiajs/vue3'
 import { mdiBallotOutline, mdiAccount, mdiMail, mdiGithub } from '@mdi/js'
 import SectionMain from '@/components/SectionMain.vue'
 import CardBox from '@/components/CardBox.vue'
@@ -17,11 +17,18 @@ import SectionTitleLineWithButton from '@/components/SectionTitleLineWithButton.
 import NotificationBarInCard from '@/components/NotificationBarInCard.vue'
 import InputError from '@/components/InputError.vue'
 
+const props = defineProps({
+    document: Object // Documents passed as a prop from Inertia
+})
+
+const documentId = ref(props.document?.id);
+const isEditMode = computed(() => !!props.document)
+const title = computed(() => isEditMode.value ? 'Edit Document' : 'Create Document')
 
 const form = useForm({
-  title: null,
-  due_date: null,
-  description: null,
+  title: props.document?.title || '',
+  due_date:  props.document?.due_date || '',
+  description:  props.document?.description || '',
 })
 
 const submit = async () => {
@@ -37,13 +44,25 @@ const submit = async () => {
     // Show error notification
   }
 }
+
+const deleteDocument = async (documentId) => {
+  try {
+    const form = useForm({})
+    await form.delete(route('documents.destroy', documentId))
+    // Show success notification
+  } catch (error) {
+    console.error('Error deleting document:', error)
+    // Show error notification
+  }
+}
 </script>
 
 
 <template>
   <LayoutAuthenticated>
     <SectionMain>
-      <SectionTitleLineWithButton :icon="mdiBallotOutline" title="Create Document" main>
+
+      <SectionTitleLineWithButton :icon="mdiBallotOutline" :title="title" main>
       </SectionTitleLineWithButton>
       <CardBox isForm @submit.prevent="submit">
         <FormField label="Title">
@@ -65,8 +84,9 @@ const submit = async () => {
 
         <template #footer>
           <BaseButtons>
-            <BaseButton type="submit" color="info" label="Submit" />
-            <BaseButton type="reset" color="info" outline label="Reset" />
+            <BaseButton type="submit" color="contrast" label="Submit" />
+            <BaseButton type="reset" color="light" outline label="Reset" v-if="!isEditMode" />
+            <BaseButton color="danger" label="Delete" @click.prevent="deleteDocument(documentId)" v-if="isEditMode"/>
           </BaseButtons>
         </template>
       </CardBox>

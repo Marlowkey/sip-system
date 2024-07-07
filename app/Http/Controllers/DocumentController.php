@@ -42,7 +42,6 @@ class DocumentController extends Controller
      */
     public function store(Request $request)
     {
-    Log::info('Incoming request:', $request->all());
     // Validate the incoming request
     $validated = $request->validate([
         'title' => 'required|string|max:255',
@@ -67,24 +66,39 @@ class DocumentController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit($id)
     {
-        //
+        $document = Document::findOrFail($id);
+
+        return Inertia::render('Document/Create', [
+            'document' => $document,
+        ]);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, $id)
     {
-        //
+          // Validate the incoming request
+    $validated = $request->validate([
+        'title' => 'required|string|max:255',
+        'due_date' => 'required|date',
+        'description' => 'nullable|string',
+    ]);
+
+    $document = Document::findOrFail($id);
+    $document::update($validated);
+    return Redirect::route('documents.index')->with('message', 'Document updated successfully.');
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy($id)
     {
-        //
+        $document = Document::findOrFail($id);
+        $document->delete();
+        return Redirect::route('documents.index')->with('message', 'Document deleted successfully.');
     }
 }

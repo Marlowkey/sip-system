@@ -15,7 +15,7 @@ import {
 
   export default [
       {
-        route: 'dashboard',
+        route: 'home',
         icon: mdiMonitor,
         label: 'Dashboard'
       },

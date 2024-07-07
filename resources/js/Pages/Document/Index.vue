@@ -15,6 +15,7 @@ import TableCoordinatorDocuments from '@/components/TableCoordinatorDocuments.vu
 import LayoutAuthenticated from '@/layouts/LayoutAuthenticated.vue'
 import BaseButton from '@/components/BaseButton.vue'
 import NotificationBar from '@/components/NotificationBar.vue'
+import CardBoxComponentEmpty from '@/components/CardBoxComponentEmpty.vue'
 
 
 const props = defineProps({
@@ -41,12 +42,11 @@ const userRole = props.user.role;
             </CardBox>
         </SectionMain>
 
-        <SectionMain v-else>
-
+        <SectionMain v-else-if="userRole === 'coordinator'">
             <NotificationBar v-if="$page.props.flash.message" icon="mdiAlert" color="info" class="m-2">
                 {{ $page.props.flash.message }}
             </NotificationBar>
-            
+
             <SectionTitleLineWithButton :icon="mdiAccountFile" title="Document Submission" main>
                 <BaseButton :icon="mdiPlus" color="whiteDark" routeName="documents.create" />
             </SectionTitleLineWithButton>
@@ -54,5 +54,16 @@ const userRole = props.user.role;
                 <TableCoordinatorDocuments :document="documents" />
             </CardBox>
         </SectionMain>
+
+
+        <SectionMain v-else>
+            <NotificationBar color="danger" :icon="mdiTableOff">
+                <b>Empty table.</b>
+            </NotificationBar>
+            <CardBox>
+                <CardBoxComponentEmpty />
+            </CardBox>
+        </SectionMain>
+
     </LayoutAuthenticated>
 </template>

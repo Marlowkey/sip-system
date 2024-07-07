@@ -14,7 +14,7 @@ const props = defineProps({
   },
   button: {
     type: String,
-    default: 'info'
+    default: 'contrast'
   },
   buttonLabel: {
     type: String,
