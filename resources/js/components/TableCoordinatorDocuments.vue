@@ -22,7 +22,7 @@ const user = computed(() => usePage().props.auth.user)
 const items = computed(() => props.document)
 const isModalActive = ref(false)
 const isModalDangerActive = ref(false)
-const perPage = ref(8)
+const perPage = ref(10)
 const currentPage = ref(0)
 const checkedRows = ref([])
 const currentDescription = ref('')
@@ -83,8 +83,8 @@ const viewDocument = (document) => {
           </td>
           <td class="before:hidden lg:w-1 whitespace-nowrap text-center px-6">
             <BaseButtons type="justify-start lg:justify-end" no-wrap>
-              <BaseButton color="info" :icon="mdiEye" small @click="viewDocument(document)"/>
-              <BaseButton color="warning" :icon="mdiFileLinkOutline" small routeName="documents.create" />
+              <BaseButton color="contrast" :icon="mdiEye" small @click="viewDocument(document)"/>
+              <BaseButton color="contrast" :icon="mdiFileLinkOutline" small :href="route('documents.edit', { id: document.id })" />
             </BaseButtons>
           </td>
 

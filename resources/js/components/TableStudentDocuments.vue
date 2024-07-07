@@ -83,34 +83,34 @@ const updateCompletionStatus = (document, event) => {
         <p>{{ currentDescription }}</p>
     </CardBoxModal>
 
-    <table class="min-w-full ">
+    <table class="m-auto p-auto">
         <thead>
-            <tr class="py-6">
-                <th class="py-6 mx-16 ">Title</th>
-                <th class="py-6 mx-16">Due on</th>
-                <th class="py-6 mx-2">View</th>
-                <th class="" v-if="checkable" />
-
+            <tr class="py-6 px-6">
+                <th class="py-6">Title</th>
+                <th class="py-6">Due on</th>
+                <th class="py-6">View</th>
+                <th class="py-6 text-center" v-if="checkable">Mark as Done</th>
             </tr>
         </thead>
         <tbody>
             <tr v-for="document in itemsPaginated" :key="document.id">
-                <td data-label="Title" class="px-16">
+                <td data-label="Title" class="px-12">
                     {{ document.title }}
                 </td>
-                <td data-label="Due on" class="px-8">
+                <td data-label="Due on" class="px-12">
                     {{ document.due_date }}
                 </td>
-                <td class="before:hidden lg:w-1 whitespace-nowrap text-center px-6">
+                <td class="before:hidden lg:w-1 whitespace-nowrap text-center px-12">
                     <BaseButtons type="justify-start lg:justify-end" no-wrap>
                         <BaseButton color="info" :icon="mdiEye" small @click="viewDocument(document)" />
                     </BaseButtons>
                 </td>
-                <td v-if="checkable" class="px-6 text-center">
+                <td v-if="checkable" class="px-2 text-center">
                     <input type="checkbox" :checked="isCompleted(document)"
-                        @change="event => updateCompletionStatus(document, event)" />
+                        @change="event => updateCompletionStatus(document, event)"
+                        class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500"
+                        />
                 </td>
-
             </tr>
         </tbody>
     </table>
