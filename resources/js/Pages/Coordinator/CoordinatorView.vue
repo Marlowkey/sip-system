@@ -21,14 +21,14 @@ import CardBoxClient from '@/components/CardBoxClient.vue'
 import SectionTitleLineWithButton from '@/components/SectionTitleLineWithButton.vue'
 
 const props = defineProps({
-  users: Array // Users passed as a prop from Inertia
+  users: Array, // Users passed as a prop from Inertia
+  user: Object,
 })
 
-const mainStore = useMainStore()
+const title = computed(() => props.user.course + ' Student Interns');
 
-const clientBarItems = computed(() => mainStore.clients.slice(0, 4))
+    const mainStore = useMainStore()
 
-const transactionBarItems = computed(() => mainStore.history)
 </script>
 
 <template>
@@ -64,7 +64,7 @@ const transactionBarItems = computed(() => mainStore.history)
         />
       </div>
 
-      <SectionTitleLineWithButton :icon="mdiAccountMultiple" title="Student Interns" />
+      <SectionTitleLineWithButton :icon="mdiAccountMultiple" :title="title" />
       <CardBox has-table >
         <TableStudentUsers :users="users"/>
       </CardBox>

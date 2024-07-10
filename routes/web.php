@@ -16,9 +16,17 @@ Route::middleware(['auth:sanctum', 'verified'])->get('/', function () {
         // Get the currently authenticated user
         $user = auth()->user();
 
-        $studentUsers =User::where('role', 'student')
-        ->orderBy('last_name')
-        ->get();
+        // Base query for student users
+        $studentUsersQuery = User::where('role', 'student')
+            ->orderBy('last_name');
+
+        // Filter students based on coordinator's assigned course
+        if ($user->role == 'coordinator') {
+            $studentUsersQuery->where('course', $user->course);
+        }
+
+        // Get the filtered list of student users
+        $studentUsers = $studentUsersQuery->get();
 
         $studentUserWithProgress = $studentUsers->map(function ($student) {
             $totalDocuments = Document::count();
@@ -32,14 +40,12 @@ Route::middleware(['auth:sanctum', 'verified'])->get('/', function () {
                 'first_name' => $student->first_name,
                 'last_name' => $student->last_name,
                 'email' => $student->email,
-                'year_level' => $student->year_level,
+                'block' => $student->block,
                 'course' => $student->course,
                 'host_training_establishment' => $student->host_training_establishment,
                 'progress' => $progress,
             ];
         });
-
-
 
 
         $documents = Document::with(['users' => function ($query) {
@@ -53,6 +59,7 @@ Route::middleware(['auth:sanctum', 'verified'])->get('/', function () {
 
         $coordinatorViewData = [
             'users' => $studentUserWithProgress,
+            'user' => $user,
         ];
 
         // Prepare data based on user role
