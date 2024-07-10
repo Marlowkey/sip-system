@@ -17,8 +17,8 @@ return new class extends Migration
             $table->string('last_name');
             $table->string('middle_initial');
             $table->string('email')->unique();
-            $table->string('course');
-            $table->string('year_level');
+            $table->enum('course', ['Computer Science', 'Information Technology', 'Information System']);
+            $table->string('block');
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->enum('role', ['student', 'coordinator', 'admin'])->default('student');

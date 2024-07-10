@@ -58,7 +58,7 @@ const pagesList = computed(() => {
                 <th class="py-2">Last Name</th>
                 <th class="py-2">First Name</th>
                 <th class="py-3">Email</th>
-                <th class="py-3">Year Level</th>
+                <th class="py-3">Block</th>
                 <th class="py-3">Course</th>
                 <th class="py-3">Progress</th>
                 <th class="">HTE</th>
@@ -78,7 +78,7 @@ const pagesList = computed(() => {
                     {{ user.email }}
                 </td>
                 <td data-label="Year Level" class="text-center">
-                    {{ user.year_level }}
+                    {{ user.block }}
                 </td>
                 <td data-label="Course" class="text-center">
                     {{ user.course }}

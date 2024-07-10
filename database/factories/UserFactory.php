@@ -2,9 +2,10 @@
 
 namespace Database\Factories;
 
-use Illuminate\Database\Eloquent\Factories\Factory;
-use Illuminate\Support\Facades\Hash;
+use App\Models\Course;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\User>
@@ -26,11 +27,11 @@ class UserFactory extends Factory
         return [
             'first_name' => $this->faker->firstName(),
             'last_name' => $this->faker->lastName(),
-            // 'middle_initial' => $this->faker->optional()->lexify('?').'.', // 'A.
+            'middle_initial' => $this->faker->optional()->lexify('?').'.', // 'A.
             'email' => $this->faker->unique()->safeEmail(),
             'email_verified_at' => now(),
-            'course' => $this->faker->randomElement(['Computer Science', 'Information Technology', 'Information System']),
-            'year_level' => $this->faker->randomElement(['3rd Year', '4th Year']),
+            'course' =>  $this->faker->randomElement(['Computer Science', 'Information Technology', 'Information System']),
+            'block' => $this->faker->randomElement(['A', 'B', 'C']),
             'password' => static::$password ??= Hash::make('password'),
             'role' => $this->faker->randomElement(['student', 'coordinator', 'admin']),
             'host_training_establishment' => $this->faker->optional()->company(),
