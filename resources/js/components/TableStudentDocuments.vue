@@ -10,6 +10,8 @@ import BaseButton from '@/components/BaseButton.vue'
 import UserAvatar from '@/components/UserAvatar.vue'
 import { useForm } from '@inertiajs/vue3'
 import NotificationBar from './NotificationBar.vue'
+import { format, parse } from 'date-fns';
+
 
 const props = defineProps({
     checkable: Boolean,
@@ -58,7 +60,6 @@ const viewDocument = (document) => {
 }
 
 const isCompleted = (document) => {
-    // Check if any user has completed the document
     return document.users.some(user => user.pivot.is_completed);
 };
 
@@ -74,6 +75,22 @@ const updateCompletionStatus = (document, event) => {
         preserveScroll: true,
     })
 }
+
+const formatDueDate = (dueDate) => {
+    if (!dueDate) return 'No date';
+
+    // Ensure the date string matches the expected format
+    const parsedDate = parse(dueDate, 'yyyy-MM-dd', new Date());
+
+    // Check if parsing was successful
+    if (isNaN(parsedDate)) {
+        return 'Invalid date';
+    }
+
+    return format(parsedDate, 'MMMM do, yyyy');
+}
+
+
 
 
 </script>
@@ -94,22 +111,21 @@ const updateCompletionStatus = (document, event) => {
         </thead>
         <tbody>
             <tr v-for="document in itemsPaginated" :key="document.id">
-                <td data-label="Title" class="px-12">
+                <td data-label="Title" class="px-2">
                     {{ document.title }}
                 </td>
                 <td data-label="Due on" class="px-12">
-                    {{ document.due_date }}
+                    {{ formatDueDate(document.due_date) }}
                 </td>
-                <td class="before:hidden lg:w-1 whitespace-nowrap text-center px-12">
+                <td class="before:hidden lg:w-1 whitespace-nowrap text-center px-16">
                     <BaseButtons type="justify-start lg:justify-end" no-wrap>
-                        <BaseButton color="info" :icon="mdiEye" small @click="viewDocument(document)" />
+                        <BaseButton roundedFull color="contrast" :icon="mdiEye" small @click="viewDocument(document)" />
                     </BaseButtons>
                 </td>
                 <td v-if="checkable" class="px-2 text-center">
                     <input type="checkbox" :checked="isCompleted(document)"
                         @change="event => updateCompletionStatus(document, event)"
-                        class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500"
-                        />
+                        class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500" />
                 </td>
             </tr>
         </tbody>

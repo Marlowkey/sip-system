@@ -11,10 +11,10 @@ import {
   mdiPlus,
   mdiArrowRight
 } from '@mdi/js'
+import LayoutAuthenticated from '@/layouts/LayoutAuthenticated.vue'
 import SectionMain from '@/components/SectionMain.vue'
 import CardBoxWidget from '@/components/CardBoxWidget.vue'
 import CardBox from '@/components/CardBox.vue'
-import TableUsers from '@/components/TableUsers.vue'
 import NotificationBar from '@/components/NotificationBar.vue'
 import BaseButton from '@/components/BaseButton.vue'
 import CardBoxTransaction from '@/components/CardBoxTransaction.vue'
@@ -34,6 +34,8 @@ const transactionBarItems = computed(() => mainStore.history)
 </script>
 
 <template>
+    <LayoutAuthenticated>
+        <Head title="Home" />
     <SectionMain>
       <SectionTitleLineWithButton title="Overview" main>
       </SectionTitleLineWithButton>
@@ -62,11 +64,13 @@ const transactionBarItems = computed(() => mainStore.history)
       </div>
 
       <SectionTitleLineWithButton :icon="mdiAccountFile" title="Document Submission">
-      <BaseButton :icon="mdiArrowRight" color="whiteDark" routeName="documents.index" />
+      <BaseButton roundedFull :icon="mdiArrowRight" color="whiteDark" routeName="documents.index" />
       </SectionTitleLineWithButton>
 
             <CardBox has-table>
                 <TableStudentDocuments :document="documents" />
             </CardBox>
     </SectionMain>
+</LayoutAuthenticated>
 </template>
+

@@ -1,6 +1,6 @@
 <?php
 
-use App\Models\User;
+use Illuminate\Support\Facades\Log;use App\Models\User;
 use Inertia\Inertia;
 use App\Models\Document;
 use Illuminate\Support\Facades\Route;
@@ -12,17 +12,66 @@ use App\Http\Controllers\Auth\AuthenticatedSessionController;
 
 
 Route::middleware(['auth:sanctum', 'verified'])->get('/', function () {
-    $user = auth()->user();
-    $users = User::all();
-    $documents = Document::with(['users' => function ($query) {
-        $query->where('user_id', auth()->id());
-    }])->get();
+    try {
+        // Get the currently authenticated user
+        $user = auth()->user();
 
-    return Inertia::render('HomeView', [
-        'user' => $user,
-        'users' => $users,
-        'documents' => $documents,
-    ]);})->name('home');
+        $studentUsers =User::where('role', 'student')
+        ->orderBy('last_name')
+        ->get();
+
+        $studentUserWithProgress = $studentUsers->map(function ($student) {
+            $totalDocuments = Document::count();
+            $completedDocuments = $student->documents->filter(function ($document) {
+                return $document->pivot->is_completed;
+            })->count();
+            $progress = $totalDocuments > 0 ? ($completedDocuments / $totalDocuments) * 100 : 0;
+
+            return [
+                'id' => $student->id,
+                'first_name' => $student->first_name,
+                'last_name' => $student->last_name,
+                'email' => $student->email,
+                'year_level' => $student->year_level,
+                'course' => $student->course,
+                'host_training_establishment' => $student->host_training_establishment,
+                'progress' => $progress,
+            ];
+        });
+
+
+
+
+        $documents = Document::with(['users' => function ($query) {
+            $query->where('user_id', auth()->id());
+        }])->get();
+
+        // Initialize data arrays
+        $studentViewData = [
+            'documents' => $documents
+        ];
+
+        $coordinatorViewData = [
+            'users' => $studentUserWithProgress,
+        ];
+
+        // Prepare data based on user role
+        switch ($user->role) {
+            case 'admin':
+                return Inertia::render('Admin/AdminView');
+            case 'student':
+                return Inertia::render('Student/StudentView', $studentViewData);
+            case 'coordinator':
+                return Inertia::render('Coordinator/CoordinatorView', $coordinatorViewData);
+            default:
+                abort(403, 'Unauthorized action.');
+        }
+    } catch (\Exception $e) {
+        // Log the exception for debugging
+        Log::error('Error rendering home page: ' . $e->getMessage());
+        abort(500, 'Internal Server Error');
+    }
+})->name('home');
 
 Route::get('/tables', function () {
     return Inertia::render('TablesView');

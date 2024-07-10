@@ -2,12 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
 use Inertia\Inertia;
 use Inertia\Response;
 use App\Models\Document;
+use App\Models\StudentDocument;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Redirect;
 
 
 class DocumentController extends Controller
@@ -18,14 +20,37 @@ class DocumentController extends Controller
     public function index()
     {
         $user = auth()->user();
+        $documentAll = Document::all();
+
+
     // Fetch documents with users and their completion status
         $documents = Document::with(['users' => function ($query) {
             $query->where('user_id', auth()->id());
         }])->get();
 
+
+        $documentWithNumberOfCompleted = $documentAll->map(function ($document) {
+            $studentUsers = User::where('role', 'student')
+            ->count();
+
+             $completedDocuments = $document->users->filter(function ($user) {
+                return $user->pivot->is_completed;
+            })->count();
+
+            return [
+                'id' => $document->id,
+                'title' => $document->title,
+                'description' => $document->description,
+                'due_date' => $document->due_date,
+                'completed' => $completedDocuments,
+                'number_of_users' => $studentUsers,
+            ];
+        });
+
         return Inertia::render('Document/Index', [
             'user' => $user,
             'documents' => $documents,
+            'documentWithNumberOfCompleted' => $documentWithNumberOfCompleted,
         ]);
     }
 

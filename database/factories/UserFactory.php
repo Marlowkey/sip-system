@@ -26,8 +26,11 @@ class UserFactory extends Factory
         return [
             'first_name' => $this->faker->firstName(),
             'last_name' => $this->faker->lastName(),
+            // 'middle_initial' => $this->faker->optional()->lexify('?').'.', // 'A.
             'email' => $this->faker->unique()->safeEmail(),
             'email_verified_at' => now(),
+            'course' => $this->faker->randomElement(['Computer Science', 'Information Technology', 'Information System']),
+            'year_level' => $this->faker->randomElement(['3rd Year', '4th Year']),
             'password' => static::$password ??= Hash::make('password'),
             'role' => $this->faker->randomElement(['student', 'coordinator', 'admin']),
             'host_training_establishment' => $this->faker->optional()->company(),
