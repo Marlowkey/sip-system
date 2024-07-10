@@ -20,7 +20,8 @@ import CardBoxComponentEmpty from '@/components/CardBoxComponentEmpty.vue'
 
 const props = defineProps({
     user: Object, // Authenticated user passed as a prop from Inertia
-    documents: Array // Documents passed as a prop from Inertia
+    documents: Array, // Documents passed as a prop from Inertia
+    documentWithNumberOfCompleted: Array, // Documents with number of completed passed as a prop from Inertia
 })
 
 const userRole = props.user.role;
@@ -48,10 +49,10 @@ const userRole = props.user.role;
             </NotificationBar>
 
             <SectionTitleLineWithButton :icon="mdiAccountFile" title="Document Submission" main>
-                <BaseButton :icon="mdiPlus" color="whiteDark" routeName="documents.create" />
+                <BaseButton roundedFull :icon="mdiPlus" color="whiteDark" routeName="documents.create" />
             </SectionTitleLineWithButton>
             <CardBox has-table>
-                <TableCoordinatorDocuments :document="documents" />
+                <TableCoordinatorDocuments :document="documentWithNumberOfCompleted" />
             </CardBox>
         </SectionMain>
 

@@ -1,5 +1,6 @@
 <script setup>
 import { computed, ref, defineProps } from 'vue'
+import { format, parse } from 'date-fns'
 import { mdiEye, mdiTrashCan, mdiFileLinkOutline } from '@mdi/js'
 import { router, usePage } from '@inertiajs/vue3'
 import CardBoxModal from '@/components/CardBoxModal.vue'
@@ -56,6 +57,21 @@ const viewDocument = (document) => {
   isModalActive.value = true
 }
 
+const formatDueDate = (dueDate) => {
+    if (!dueDate) return 'No date';
+
+    // Ensure the date string matches the expected format
+    const parsedDate = parse(dueDate, 'yyyy-MM-dd', new Date());
+
+    // Check if parsing was successful
+    if (isNaN(parsedDate)) {
+        return 'Invalid date';
+    }
+
+    return format(parsedDate, 'MMMM do, yyyy');
+}
+
+
 
 </script>
 
@@ -65,29 +81,32 @@ const viewDocument = (document) => {
     </CardBoxModal>
 
 
-    <table class="min-w-full ">
+    <table class="m-auto p-auto">
       <thead>
         <tr class="py-6">
-          <th class="py-6 mx-16 ">Title</th>
-          <th class="py-6 mx-16">Due on</th>
+          <th class="py-2 ">Title</th>
+          <th class="py-2">Due on</th>
           <th class="py-6 mx-2">Action</th>
+          <th class="py-6 mx-2"># of Completed</th>
         </tr>
       </thead>
       <tbody>
         <tr v-for="document in itemsPaginated" :key="document.id">
-          <td data-label="Title" class="px-16">
+          <td data-label="Title" class="px-8">
             {{ document.title }}
           </td>
           <td data-label="Due on" class="px-8">
-            {{ document.due_date }}
+            {{ formatDueDate(document.due_date) }}
           </td>
           <td class="before:hidden lg:w-1 whitespace-nowrap text-center px-6">
             <BaseButtons type="justify-start lg:justify-end" no-wrap>
-              <BaseButton color="contrast" :icon="mdiEye" small @click="viewDocument(document)"/>
-              <BaseButton color="contrast" :icon="mdiFileLinkOutline" small :href="route('documents.edit', { id: document.id })" />
+              <BaseButton roundedFull color="contrast" :icon="mdiEye" small @click="viewDocument(document)"/>
+              <BaseButton roundedFull color="contrast" :icon="mdiFileLinkOutline" small :href="route('documents.edit', { id: document.id })" />
             </BaseButtons>
           </td>
-
+          <td data-label="Completed" class="text-center px-8">
+            {{ document.completed}}/{{ document.number_of_users }}
+          </td>
         </tr>
       </tbody>
     </table>
