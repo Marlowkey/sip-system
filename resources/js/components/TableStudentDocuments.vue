@@ -1,6 +1,6 @@
 <script setup>
 import { computed, ref, defineProps } from 'vue'
-import { mdiEye, mdiTrashCan } from '@mdi/js'
+import { mdiEye, mdiTrashCan, mdiDownload } from '@mdi/js'
 import { router, usePage } from '@inertiajs/vue3'
 import CardBoxModal from '@/components/CardBoxModal.vue'
 import TableCheckboxCell from '@/components/TableCheckboxCell.vue'
@@ -105,7 +105,7 @@ const formatDueDate = (dueDate) => {
             <tr class="py-6 px-6">
                 <th class="py-6">Title</th>
                 <th class="py-6">Due on</th>
-                <th class="py-6">View</th>
+                <th class="py-6 text-center">Action</th>
                 <th class="py-6 text-center" v-if="checkable">Mark as Done</th>
             </tr>
         </thead>
@@ -119,7 +119,8 @@ const formatDueDate = (dueDate) => {
                 </td>
                 <td class="before:hidden lg:w-1 whitespace-nowrap text-center px-16">
                     <BaseButtons type="justify-start lg:justify-end" no-wrap>
-                        <BaseButton roundedFull color="contrast" :icon="mdiEye" small @click="viewDocument(document)" />
+                        <BaseButton  roundedFull color="info" :icon="mdiEye" small @click="viewDocument(document)" />
+                        <BaseButton v-if="document.file_path" roundedFull color="success" :icon="mdiDownload" small :href="route('documents.download', { id: document.id })" />
                     </BaseButtons>
                 </td>
                 <td v-if="checkable" class="px-2 text-center">

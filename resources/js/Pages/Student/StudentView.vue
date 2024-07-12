@@ -63,7 +63,7 @@ const transactionBarItems = computed(() => mainStore.history)
         />
       </div>
 
-      <SectionTitleLineWithButton :icon="mdiAccountFile" title="Document Submission">
+      <SectionTitleLineWithButton :icon="mdiAccountFile" title="SIP Requirements">
       <BaseButton roundedFull :icon="mdiArrowRight" color="whiteDark" routeName="documents.index" />
       </SectionTitleLineWithButton>
 

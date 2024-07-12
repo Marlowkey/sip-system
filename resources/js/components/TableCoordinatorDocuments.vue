@@ -1,7 +1,7 @@
 <script setup>
 import { computed, ref, defineProps } from 'vue'
 import { format, parse } from 'date-fns'
-import { mdiEye, mdiTrashCan, mdiFileLinkOutline } from '@mdi/js'
+import { mdiEye, mdiTrashCan, mdiFileLinkOutline, mdiDownload } from '@mdi/js'
 import { router, usePage } from '@inertiajs/vue3'
 import CardBoxModal from '@/components/CardBoxModal.vue'
 import TableCheckboxCell from '@/components/TableCheckboxCell.vue'
@@ -100,8 +100,9 @@ const formatDueDate = (dueDate) => {
           </td>
           <td class="before:hidden lg:w-1 whitespace-nowrap text-center px-6">
             <BaseButtons type="justify-start lg:justify-end" no-wrap>
-              <BaseButton roundedFull color="contrast" :icon="mdiEye" small @click="viewDocument(document)"/>
-              <BaseButton roundedFull color="contrast" :icon="mdiFileLinkOutline" small :href="route('documents.edit', { id: document.id })" />
+              <BaseButton roundedFull color="info" :icon="mdiEye" small @click="viewDocument(document)"/>
+              <BaseButton roundedFull color="success" :icon="mdiDownload" small :href="route('documents.download', {id: document.id})" />
+              <BaseButton roundedFull color="warning" :icon="mdiFileLinkOutline" small :href="route('documents.edit', { id: document.id })" />
             </BaseButtons>
           </td>
           <td data-label="Completed" class="text-center px-8">
@@ -110,7 +111,7 @@ const formatDueDate = (dueDate) => {
         </tr>
       </tbody>
     </table>
-    <div class="p-3 lg:px-6 border-t border-gray-100 dark:border-slate-800">
+    <div class="p-3 my-6 lg:px-6 border-t border-gray-100 dark:border-slate-800">
       <BaseLevel>
         <BaseButtons>
           <BaseButton

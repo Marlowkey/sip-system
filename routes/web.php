@@ -75,7 +75,7 @@ Route::middleware(['auth:sanctum', 'verified'])->get('/', function () {
         }
     } catch (\Exception $e) {
         // Log the exception for debugging
-        Log::error('Error rendering home page: ' . $e->getMessage());
+        Log::error('Error home page: ' . $e->getMessage());
         abort(500, 'Internal Server Error');
     }
 })->name('home');
@@ -101,7 +101,7 @@ Route::middleware('auth')->group(function () {
 
 Route::resource('documents', DocumentController::class);
 Route::post('/student-document/completion', [StudentDocumentController::class, 'updateCompletionStatus'])->name('student-document.update');
-
+Route::get('/documents/download/{document}', [DocumentController::class, 'download'])->name('documents.download');
 
 require __DIR__.'/auth.php';
 
