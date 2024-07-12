@@ -101,7 +101,7 @@ Route::middleware('auth')->group(function () {
 
 Route::resource('documents', DocumentController::class);
 Route::post('/student-document/completion', [StudentDocumentController::class, 'updateCompletionStatus'])->name('student-document.update');
-
+Route::get('/documents/download/{document}', [DocumentController::class, 'download'])->name('documents.download');
 
 require __DIR__.'/auth.php';
 

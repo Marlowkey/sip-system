@@ -6,9 +6,10 @@ use App\Models\User;
 use Inertia\Inertia;
 use Inertia\Response;
 use App\Models\Document;
-use App\Models\StudentDocument;
 use Illuminate\Http\Request;
+use App\Models\StudentDocument;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Redirect;
 
 
@@ -23,7 +24,7 @@ class DocumentController extends Controller
         $documentAll = Document::all();
 
 
-    // Fetch documents with users and their completion status
+        // Fetch documents with users and their completion status
         $documents = Document::with(['users' => function ($query) {
             $query->where('user_id', auth()->id());
         }])->get();
@@ -31,9 +32,9 @@ class DocumentController extends Controller
 
         $documentWithNumberOfCompleted = $documentAll->map(function ($document) {
             $studentUsers = User::where('role', 'student')
-            ->count();
+                ->count();
 
-             $completedDocuments = $document->users->filter(function ($user) {
+            $completedDocuments = $document->users->filter(function ($user) {
                 return $user->pivot->is_completed;
             })->count();
 
@@ -41,6 +42,7 @@ class DocumentController extends Controller
                 'id' => $document->id,
                 'title' => $document->title,
                 'description' => $document->description,
+                'file_path' => $document->file_path,
                 'due_date' => $document->due_date,
                 'completed' => $completedDocuments,
                 'number_of_users' => $studentUsers,
@@ -67,17 +69,28 @@ class DocumentController extends Controller
      */
     public function store(Request $request)
     {
-    // Validate the incoming request
-    $validated = $request->validate([
-        'title' => 'required|string|max:255',
-        'due_date' => 'required|date',
-        'description' => 'nullable|string',
-    ]);
+        $request->validate([
+            'title' => 'required|string|max:255',
+            'due_date' => 'required|date',
+            'description' => 'nullable|string',
+            'file' => 'nullable|mimes:pdf,doc,docx,jpg,jpeg,png|max:2048',
+        ]);
 
-    // Create a new document with the validated data
-        Document::create($validated);
-        return Redirect::route('documents.index')->with('message', 'Document created successfully.');
+        $document = new Document();
+        $document->title = $request->title;
+        $document->due_date = $request->due_date;
+        $document->description = $request->description;
 
+        if ($request->hasFile('file')) {
+            $file = $request->file('file');
+            $fileName = time() . '_' . $file->getClientOriginalName();
+            $file->storeAs('public/documents', $fileName);
+            $document->file_path = 'documents/' . $fileName;
+        }
+
+        $document->save();
+
+        return redirect()->route('documents.index')->with('success', 'Document created successfully.');
     }
 
     /**
@@ -105,16 +118,16 @@ class DocumentController extends Controller
      */
     public function update(Request $request, $id)
     {
-          // Validate the incoming request
-    $validated = $request->validate([
-        'title' => 'required|string|max:255',
-        'due_date' => 'required|date',
-        'description' => 'nullable|string',
-    ]);
+        // Validate the incoming request
+        $validated = $request->validate([
+            'title' => 'required|string|max:255',
+            'due_date' => 'required|date',
+            'description' => 'nullable|string',
+        ]);
 
-    $document = Document::findOrFail($id);
-    $document::update($validated);
-    return Redirect::route('documents.index')->with('message', 'Document updated successfully.');
+        $document = Document::findOrFail($id);
+        $document::update($validated);
+        return Redirect::route('documents.index')->with('message', 'Document updated successfully.');
     }
 
     /**
@@ -123,7 +136,28 @@ class DocumentController extends Controller
     public function destroy($id)
     {
         $document = Document::findOrFail($id);
+
+        // Delete file if it exists
+        if ($document->file_path) {
+            Storage::delete('public/' . $document->file_path);
+        }
         $document->delete();
         return Redirect::route('documents.index')->with('message', 'Document deleted successfully.');
+    }
+
+    public function download(Document $document)
+    {
+        $filePath = public_path('storage/' . $document->file_path); // Get public path
+
+        if (file_exists($filePath)) {
+            // Get the file extension
+            $extension = pathinfo($filePath, PATHINFO_EXTENSION);
+
+            // Set the downloaded file name with extension
+            $fileName = $document->title . '.' . $extension;
+
+            // Return the file as a downloadable response
+            return response()->download($filePath, $fileName);
+        }
     }
 }

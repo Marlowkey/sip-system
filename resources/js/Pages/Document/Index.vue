@@ -30,7 +30,7 @@ const userRole = props.user.role;
 <template>
     <LayoutAuthenticated>
 
-        <Head title="Document Submission" />
+        <Head title="SIP Requirements" />
         <SectionMain v-if="userRole === 'student'">
 
             <NotificationBar v-if="$page.props.flash.message" icon="mdiAlert" color="info" class="m-2">

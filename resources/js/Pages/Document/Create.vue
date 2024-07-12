@@ -29,22 +29,36 @@ const form = useForm({
   title: props.document?.title || '',
   due_date:  props.document?.due_date || '',
   description:  props.document?.description || '',
+  file: null,
 })
 
 const submit = async () => {
-  console.log('Form data before submission:', form)
 
-  try {
-    await form.post(route('documents.store'))
-    console.log('Form data after submission:', form)
-    form.reset()
-    // Show success notification
-  } catch (error) {
-    console.error('Error submitting form:', error)
-    // Show error notification
-  }
+    try {
+        // Append file to FormData if it exists
+        const formData = new FormData()
+        formData.append('title', form.title)
+        formData.append('due_date', form.due_date)
+        formData.append('description', form.description)
+        if (form.file) {
+            formData.append('file', form.file)
+        }
+
+        await form.post(route('documents.store'), formData, {
+            onFinish: () => {
+                form.reset()
+            }
+        })
+    } catch (error) {
+        console.error('Error submitting form:', error)
+        // Show error notification
+    }
 }
 
+const handleFileUpload = (event) => {
+    form.file = event.target.files[0]
+    form.file = file
+}
 const deleteDocument = async (documentId) => {
   try {
     const form = useForm({})
@@ -61,10 +75,9 @@ const deleteDocument = async (documentId) => {
 <template>
   <LayoutAuthenticated>
     <SectionMain>
-
       <SectionTitleLineWithButton :icon="mdiBallotOutline" :title="title" main>
       </SectionTitleLineWithButton>
-      <CardBox isForm @submit.prevent="submit">
+      <CardBox isForm @submit.prevent="submit"  enctype="multipart/form-data">
         <FormField label="Title">
           <FormControl v-model="form.title" type="text" />
         </FormField>
@@ -81,6 +94,11 @@ const deleteDocument = async (documentId) => {
           <FormControl  v-model="form.description"  type="textarea" />
         </FormField>
         <InputError :message="form.errors.description" />
+
+        <FormField label="File" help="Upload a document file">
+          <input type="file" @change="handleFileUpload" />
+        </FormField>
+        <InputError :message="form.errors.file" />
 
         <template #footer>
           <BaseButtons>

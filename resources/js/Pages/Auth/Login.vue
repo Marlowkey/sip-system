@@ -46,7 +46,7 @@ const submit = () => {
 
     <SectionFullScreen
       v-slot="{ cardClass }"
-      bg="purplePink"
+      bg="blue"
     >
       <CardBox
         :class="cardClass"
@@ -55,7 +55,7 @@ const submit = () => {
       >
         <FormValidationErrors />
 
-        <NotificationBarInCard 
+        <NotificationBarInCard
           v-if="status"
           color="info"
         >
@@ -104,7 +104,7 @@ const submit = () => {
           <BaseButtons>
             <BaseButton
               type="submit"
-              color="info"
+              color="contrast"
               label="Login"
               :class="{ 'opacity-25': form.processing }"
               :disabled="form.processing"
@@ -112,7 +112,7 @@ const submit = () => {
             <BaseButton
               v-if="canResetPassword"
               route-name="password.request"
-              color="info"
+              color="white"
               outline
               label="Remind"
             />
