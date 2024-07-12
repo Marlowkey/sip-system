@@ -3,7 +3,6 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
-use App\Models\Course;
 use App\Models\Document;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -50,10 +49,7 @@ class User extends Authenticatable
                     ->withTimestamps();
     }
 
-    public function course()
-    {
-        return $this->belongsTo(Course::class);
-    }
+
 
     public function isStudent()
     {

@@ -75,7 +75,7 @@ Route::middleware(['auth:sanctum', 'verified'])->get('/', function () {
         }
     } catch (\Exception $e) {
         // Log the exception for debugging
-        Log::error('Error rendering home page: ' . $e->getMessage());
+        Log::error('Error home page: ' . $e->getMessage());
         abort(500, 'Internal Server Error');
     }
 })->name('home');
