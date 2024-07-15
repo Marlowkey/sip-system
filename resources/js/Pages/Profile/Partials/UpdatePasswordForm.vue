@@ -5,6 +5,7 @@ import PrimaryButton from '@/ComponentsBreeze/PrimaryButton.vue';
 import TextInput from '@/ComponentsBreeze/TextInput.vue';
 import { useForm } from '@inertiajs/vue3';
 import { ref } from 'vue';
+import BaseButton from '@/components/BaseButton.vue';
 
 const passwordInput = ref(null);
 const currentPasswordInput = ref(null);
@@ -46,7 +47,6 @@ const updatePassword = () => {
         <form @submit.prevent="updatePassword" class="mt-6 space-y-6">
             <div>
                 <InputLabel for="current_password" value="Current Password" />
-
                 <TextInput
                     id="current_password"
                     ref="currentPasswordInput"
@@ -89,7 +89,7 @@ const updatePassword = () => {
             </div>
 
             <div class="flex items-center gap-4">
-                <PrimaryButton :disabled="form.processing">Save</PrimaryButton>
+                <BaseButton label="Save" color="lightDark" :disabled="form.processing" type="submit"/>
 
                 <Transition
                     enter-active-class="transition ease-in-out"

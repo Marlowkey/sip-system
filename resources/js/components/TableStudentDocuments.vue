@@ -119,8 +119,8 @@ const formatDueDate = (dueDate) => {
                 </td>
                 <td class="before:hidden lg:w-1 whitespace-nowrap text-center px-16">
                     <BaseButtons type="justify-start lg:justify-end" no-wrap>
-                        <BaseButton  roundedFull color="info" :icon="mdiEye" small @click="viewDocument(document)" />
-                        <BaseButton v-if="document.file_path" roundedFull color="success" :icon="mdiDownload" small :href="route('documents.download', { id: document.id })" />
+                        <BaseButton  roundedFull color="blue" :icon="mdiEye" small @click="viewDocument(document)" />
+                        <BaseButton v-if="document.file_path" roundedFull color="teal" :icon="mdiDownload" small :href="route('documents.download', { id: document.id })" />
                     </BaseButtons>
                 </td>
                 <td v-if="checkable" class="px-2 text-center">

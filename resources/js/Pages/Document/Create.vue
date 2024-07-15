@@ -26,10 +26,10 @@ const isEditMode = computed(() => !!props.document)
 const title = computed(() => isEditMode.value ? 'Edit Document' : 'Create Document')
 
 const form = useForm({
-  title: props.document?.title || '',
-  due_date:  props.document?.due_date || '',
-  description:  props.document?.description || '',
-  file: null,
+    title: props.document?.title || '',
+    due_date: props.document?.due_date || '',
+    description: props.document?.description || '',
+    file: null,
 })
 
 const submit = async () => {
@@ -44,11 +44,12 @@ const submit = async () => {
             formData.append('file', form.file)
         }
 
-        await form.post(route('documents.store'), formData, {
-            onFinish: () => {
-                form.reset()
-            }
-        })
+        if (isEditMode.value) {
+            await form.put(route('documents.update', documentId.value), formData)
+        } else {
+            await form.post(route('documents.store'), formData)
+        }
+        // Show success notification
     } catch (error) {
         console.error('Error submitting form:', error)
         // Show error notification
@@ -59,55 +60,55 @@ const handleFileUpload = (event) => {
     form.file = event.target.files[0]
     form.file = file
 }
+
 const deleteDocument = async (documentId) => {
-  try {
-    const form = useForm({})
-    await form.delete(route('documents.destroy', documentId))
-    // Show success notification
-  } catch (error) {
-    console.error('Error deleting document:', error)
-    // Show error notification
-  }
+    try {
+        const form = useForm({})
+        await form.delete(route('documents.destroy', documentId))
+        // Show success notification
+    } catch (error) {
+        console.error('Error deleting document:', error)
+        // Show error notification
+    }
 }
 </script>
-
-
 <template>
-  <LayoutAuthenticated>
-    <SectionMain>
-      <SectionTitleLineWithButton :icon="mdiBallotOutline" :title="title" main>
-      </SectionTitleLineWithButton>
-      <CardBox isForm @submit.prevent="submit"  enctype="multipart/form-data">
-        <FormField label="Title">
-          <FormControl v-model="form.title" type="text" />
-        </FormField>
-        <InputError :message="form.errors.title" />
+    <LayoutAuthenticated>
+        <SectionMain>
+            <SectionTitleLineWithButton :icon="mdiBallotOutline" :title="title" main>
+            </SectionTitleLineWithButton>
+            <CardBox isForm @submit.prevent="submit" enctype="multipart/form-data">
+                <FormField label="Title">
+                    <FormControl v-model="form.title" type="text" />
+                </FormField>
+                <InputError :message="form.errors.title" />
 
-        <FormField label="Due Date">
-          <FormControl v-model="form.due_date" type="date" />
-        </FormField>
-        <InputError :message="form.errors.due_date" />
+                <FormField label="Due Date">
+                    <FormControl v-model="form.due_date" type="date" />
+                </FormField>
+                <InputError :message="form.errors.due_date" />
 
-        <BaseDivider />
+                <BaseDivider />
 
-        <FormField label="Description" help="Describe the document. Max 255 characters">
-          <FormControl  v-model="form.description"  type="textarea" />
-        </FormField>
-        <InputError :message="form.errors.description" />
+                <FormField label="Description" help="Describe the document. Max 255 characters">
+                    <FormControl v-model="form.description" type="textarea" />
+                </FormField>
+                <InputError :message="form.errors.description" />
 
-        <FormField label="File" help="Upload a document file">
-          <input type="file" @change="handleFileUpload" />
-        </FormField>
-        <InputError :message="form.errors.file" />
+                <FormField v-if="!isEditMode" label="File" help="Upload a document file">
+                    <FormControl type="file" @change="handleFileUpload"/>
+                </FormField>
+                <InputError :message="form.errors.file" />
 
-        <template #footer>
-          <BaseButtons>
-            <BaseButton type="submit" color="contrast" label="Submit" />
-            <BaseButton type="reset" color="light" outline label="Reset" v-if="!isEditMode" />
-            <BaseButton color="danger" label="Delete" @click.prevent="deleteDocument(documentId)" v-if="isEditMode"/>
-          </BaseButtons>
-        </template>
-      </CardBox>
-    </SectionMain>
-  </LayoutAuthenticated>
+                <template #footer>
+                    <BaseButtons>
+                        <BaseButton roundedFull small type="submit" color="blue" label="Submit" />
+                        <BaseButton roundedFull small type="reset" color="whiteTwo" label="Reset" v-if="!isEditMode" />
+                        <BaseButton roundedFull small color="red" label="Delete" @click.prevent="deleteDocument(documentId)"
+                            v-if="isEditMode" />
+                    </BaseButtons>
+                </template>
+            </CardBox>
+        </SectionMain>
+    </LayoutAuthenticated>
 </template>
