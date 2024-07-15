@@ -100,9 +100,9 @@ const formatDueDate = (dueDate) => {
           </td>
           <td class="before:hidden lg:w-1 whitespace-nowrap text-center px-6">
             <BaseButtons type="justify-start lg:justify-end" no-wrap>
-              <BaseButton roundedFull color="info" :icon="mdiEye" small @click="viewDocument(document)"/>
-              <BaseButton roundedFull color="success" :icon="mdiDownload" small :href="route('documents.download', {id: document.id})" />
-              <BaseButton roundedFull color="warning" :icon="mdiFileLinkOutline" small :href="route('documents.edit', { id: document.id })" />
+              <BaseButton roundedFull color="blue" :icon="mdiEye" small @click="viewDocument(document)"/>
+              <BaseButton v-if="document.file_path" roundedFull color="teal" :icon="mdiDownload" small :href="route('documents.download', {id: document.id})" />
+              <BaseButton roundedFull color="yellow" :icon="mdiFileLinkOutline" small :href="route('documents.edit', { id: document.id })" />
             </BaseButtons>
           </td>
           <td data-label="Completed" class="text-center px-8">

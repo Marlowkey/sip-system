@@ -4,6 +4,7 @@ import InputLabel from '@/ComponentsBreeze/InputLabel.vue';
 import PrimaryButton from '@/ComponentsBreeze/PrimaryButton.vue';
 import TextInput from '@/ComponentsBreeze/TextInput.vue';
 import { Link, useForm, usePage } from '@inertiajs/vue3';
+import BaseButton from '@/components/BaseButton.vue';
 
 defineProps({
     mustVerifyEmail: {
@@ -103,7 +104,7 @@ const form = useForm({
             </div>
 
             <div class="flex items-center gap-4">
-                <PrimaryButton :disabled="form.processing">Save</PrimaryButton>
+                <BaseButton label="Save" color="lightDark" :disabled="form.processing" type="submit"/>
 
                 <Transition
                     enter-active-class="transition ease-in-out"

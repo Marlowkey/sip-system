@@ -119,14 +119,25 @@ class DocumentController extends Controller
     public function update(Request $request, $id)
     {
         // Validate the incoming request
-        $validated = $request->validate([
+         $request->validate([
             'title' => 'required|string|max:255',
             'due_date' => 'required|date',
             'description' => 'nullable|string',
+            'file' => 'nullable|mimes:pdf,doc,docx,jpg,jpeg,png|max:2048',
         ]);
 
         $document = Document::findOrFail($id);
-        $document::update($validated);
+        $document->title = $request->title;
+        $document->due_date = $request->due_date;
+        $document->description = $request->description;
+
+        if ($request->hasFile('file')) {
+            $file = $request->file('file');
+            $fileName = time() . '_' . $file->getClientOriginalName();
+            $file->storeAs('public/documents', $fileName);
+            $document->file_path = 'documents/' . $fileName;
+        }
+        $document->save();
         return Redirect::route('documents.index')->with('message', 'Document updated successfully.');
     }
 
