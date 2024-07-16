@@ -102,9 +102,9 @@ const deleteDocument = async (documentId) => {
 
                 <template #footer>
                     <BaseButtons>
-                        <BaseButton type="submit" color="contrast" label="Submit" />
-                        <BaseButton type="reset" color="light" outline label="Reset" v-if="!isEditMode" />
-                        <BaseButton color="danger" label="Delete" @click.prevent="deleteDocument(documentId)"
+                        <BaseButton roundedFull small type="submit" color="blue" label="Submit" />
+                        <BaseButton roundedFull small type="reset" color="whiteTwo" label="Reset" v-if="!isEditMode" />
+                        <BaseButton roundedFull small color="red" label="Delete" @click.prevent="deleteDocument(documentId)"
                             v-if="isEditMode" />
                     </BaseButtons>
                 </template>
