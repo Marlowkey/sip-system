@@ -1,13 +1,14 @@
 <?php
 
-use Illuminate\Support\Facades\Log;use App\Models\User;
 use Inertia\Inertia;
 use App\Models\Document;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Foundation\Application;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\DocumentController;
+use App\Http\Controllers\AttendanceController;
 use App\Http\Controllers\StudentDocumentController;
+use Illuminate\Support\Facades\Log;use App\Models\User;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 
 
@@ -88,7 +89,6 @@ Route::get('/forms', function () {
     return Inertia::render('FormsView');
 })->name('forms');
 
-
 Route::get('/error', function () {
     return Inertia::render('ErrorView');
 })->name('error');
@@ -103,5 +103,6 @@ Route::resource('documents', DocumentController::class);
 Route::post('/student-document/completion', [StudentDocumentController::class, 'updateCompletionStatus'])->name('student-document.update');
 Route::get('/documents/download/{document}', [DocumentController::class, 'download'])->name('documents.download');
 
+Route::resource('attendances', AttendanceController::class);
 require __DIR__.'/auth.php';
 

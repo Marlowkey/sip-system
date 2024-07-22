@@ -10,6 +10,7 @@ import {
     mdiTelevisionGuide,
     mdiResponsive,
     mdiPalette,
+    mdiCalendarBadge
   } from '@mdi/js'
 
 
@@ -22,12 +23,12 @@ import {
       {
         route: 'documents.index',
         icon: mdiAccountFile,
-        label: 'Documents'
+        label: 'SIP Requirements'
       },
       {
-        route: 'tables',
-        label: 'Attendance',
-        icon: mdiTable
+        route: 'attendances.index',
+        label: 'DTR',
+        icon: mdiCalendarBadge
       },
       {
         route: 'forms',
