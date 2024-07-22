@@ -22,7 +22,7 @@ const props = defineProps({
 })
 
 const user = computed(() => usePage().props.auth.user)
-const items = computed(() => props.document)
+const items = computed(() => props.document ? props.document : [])
 const isModalActive = ref(false)
 const isModalDangerActive = ref(false)
 const perPage = ref(8)
@@ -117,7 +117,7 @@ const formatDueDate = (dueDate) => {
                 <td data-label="Due on" class="px-12">
                     {{ formatDueDate(document.due_date) }}
                 </td>
-                <td class="before:hidden lg:w-1 whitespace-nowrap text-center px-16">
+                <td class="before:hidden lg:w-1 whitespace-nowrap text-center px-6">
                     <BaseButtons type="justify-start lg:justify-end" no-wrap>
                         <BaseButton  roundedFull color="blue" :icon="mdiEye" small @click="viewDocument(document)" />
                         <BaseButton v-if="document.file_path" roundedFull color="teal" :icon="mdiDownload" small :href="route('documents.download', { id: document.id })" />
