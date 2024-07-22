@@ -51,7 +51,7 @@ router.on('navigate', () => {
 
 const menuClick = (event, item) => {
   if (item.isLogout) {
-    router.post(route('logout'))
+    router.post(route('logout'));
   }
 }
 
@@ -93,8 +93,8 @@ const menuClick = (event, item) => {
         @aside-lg-close-click="isAsideLgActive = false"
       />
       <slot />
-      <FooterBar>
-      </FooterBar>
+      <!-- <FooterBar>
+      </FooterBar> -->
     </div>
   </div>
 </template>

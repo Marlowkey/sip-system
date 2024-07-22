@@ -17,7 +17,7 @@ const props = defineProps({
     }
 })
 
-const items = computed(() => props.users)
+const items = computed(() => props.users ? props.users : [])
 const isModalActive = ref(false)
 const isModalDangerActive = ref(false)
 const perPage = ref(5)

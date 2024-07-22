@@ -37,8 +37,8 @@ const userRole = props.user.role;
                 {{ $page.props.flash.message }}
             </NotificationBar>
 
-            <SectionTitleLineWithButton :icon="mdiAccountFile" title="Document Submission" main />
-            <CardBox has-table>
+            <SectionTitleLineWithButton :icon="mdiAccountFile" title="SIP Requirements Checklist" main />
+            <CardBox>
                 <TableStudentDocuments :document="documents" checkable />
             </CardBox>
         </SectionMain>
@@ -51,7 +51,7 @@ const userRole = props.user.role;
             <SectionTitleLineWithButton :icon="mdiAccountFile" title="Document Submission" main>
                 <BaseButton roundedFull :icon="mdiPlus" color="whiteDark" routeName="documents.create" />
             </SectionTitleLineWithButton>
-            <CardBox has-table>
+            <CardBox>
                 <TableCoordinatorDocuments :document="documentWithNumberOfCompleted" />
             </CardBox>
         </SectionMain>

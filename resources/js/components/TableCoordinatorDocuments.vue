@@ -20,7 +20,7 @@ const props = defineProps({
 })
 
 const user = computed(() => usePage().props.auth.user)
-const items = computed(() => props.document)
+const items = computed(() => props.document ? props.document : [])
 const isModalActive = ref(false)
 const isModalDangerActive = ref(false)
 const perPage = ref(10)
