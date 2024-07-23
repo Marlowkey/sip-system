@@ -1,7 +1,7 @@
 <script setup>
 import { computed, ref, defineProps } from 'vue'
 import { format, parse } from 'date-fns'
-import { mdiEye, mdiTrashCan, mdiFileLinkOutline, mdiDownload } from '@mdi/js'
+import { mdiEye, mdiTrashCan, mdiFileEditOutline, mdiDownload} from '@mdi/js'
 import { router, usePage } from '@inertiajs/vue3'
 import CardBoxModal from '@/components/CardBoxModal.vue'
 import TableCheckboxCell from '@/components/TableCheckboxCell.vue'
@@ -80,37 +80,39 @@ const formatDueDate = (dueDate) => {
       <p>{{ currentDescription }}</p>
     </CardBoxModal>
 
-
-    <table class="m-auto p-auto">
+    <div class="relative overflow-x-auto">
+        <table class="w-full table-auto p-auto m-auto">
       <thead>
         <tr class="py-6">
-          <th class="py-2 ">Title</th>
+          <th class="py-2">Title</th>
           <th class="py-2">Due on</th>
           <th class="py-6 mx-2">Action</th>
           <th class="py-6 mx-2"># of Completed</th>
         </tr>
       </thead>
-      <tbody>
+      <tbody class="text-center">
         <tr v-for="document in itemsPaginated" :key="document.id">
-          <td data-label="Title" class="px-8">
+          <td data-label="Title" class="px-2">
             {{ document.title }}
           </td>
-          <td data-label="Due on" class="px-8">
+          <td data-label="Due on" class="px-2">
             {{ formatDueDate(document.due_date) }}
           </td>
-          <td class="before:hidden lg:w-1 whitespace-nowrap text-center px-6">
+          <td class="before:hidden lg:w-1 whitespace-nowrap px-2">
             <BaseButtons type="justify-start lg:justify-end" no-wrap>
               <BaseButton roundedFull color="blue" :icon="mdiEye" small @click="viewDocument(document)"/>
               <BaseButton v-if="document.file_path" roundedFull color="teal" :icon="mdiDownload" small :href="route('documents.download', {id: document.id})" />
-              <BaseButton roundedFull color="yellow" :icon="mdiFileLinkOutline" small :href="route('documents.edit', { id: document.id })" />
+              <BaseButton roundedFull color="yellow" :icon="mdiFileEditOutline" small :href="route('documents.edit', { id: document.id })" />
             </BaseButtons>
           </td>
-          <td data-label="Completed" class="text-center px-8">
+          <td data-label="Completed" class="px-2">
             {{ document.completed}}/{{ document.number_of_users }}
           </td>
         </tr>
       </tbody>
     </table>
+</div>
+
     <div class="p-3 my-6 lg:px-6 border-t border-gray-100 dark:border-slate-800">
       <BaseLevel>
         <BaseButtons>

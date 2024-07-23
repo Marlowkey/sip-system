@@ -54,10 +54,12 @@ const submit = async () => {
 }
 
 
-const deleteDocument = async (documentId) => {
+const deleteAttendance = async (documentId) => {
     try {
         const form = useForm({})
-        await form.delete(route('documents.destroy', documentId))
+        await form.delete(route('attendances.destroy', attendanceId.value), {
+            preserveScroll: true,
+        })
         // Show success notification
     } catch (error) {
         console.error('Error deleting document:', error)
@@ -68,7 +70,6 @@ const deleteDocument = async (documentId) => {
 <template>
     <LayoutAuthenticated>
         <SectionMain>
-
             <NotificationBar v-if="$page.props.flash.message" icon="mdiAlert" color="info" class="m-2">
                 {{ $page.props.flash.message }}
             </NotificationBar>
@@ -82,16 +83,16 @@ const deleteDocument = async (documentId) => {
                 <InputError :message="form.errors.date" />
 
                 <FormField label="Time In/Out (AM)">
-                    <FormControl v-model="form.time_in_am" type="time" :icon="mdiCalendarPlus"/>
-                    <FormControl v-model="form.time_out_am" type="time" :icon="mdiCalendarRemove"/>
+                    <FormControl v-model="form.time_in_am" type="time" :icon="mdiCalendarPlus" class="text-green-800"/>
+                    <FormControl v-model="form.time_out_am" type="time" :icon="mdiCalendarRemove" class="text-red-800"/>
                 </FormField>
                 <InputError :message="form.errors.time_in_am" />
                 <InputError :message="form.errors.time_out_am" />
                 <BaseDivider />
 
                 <FormField label="Time In/Out (PM)">
-                    <FormControl v-model="form.time_in_pm" type="time" :icon="mdiCalendarPlus"/>
-                    <FormControl v-model="form.time_out_pm" type="time" :icon="mdiCalendarRemove"/>
+                    <FormControl v-model="form.time_in_pm" type="time" :icon="mdiCalendarPlus" class="text-green-800"/>
+                    <FormControl v-model="form.time_out_pm" type="time" :icon="mdiCalendarRemove" class="text-red-800"/>
                 </FormField>
                 <InputError :message="form.errors.time_in_pm" />
                 <InputError :message="form.errors.time_out_pm" />
@@ -99,7 +100,7 @@ const deleteDocument = async (documentId) => {
                     <BaseButtons>
                         <BaseButton roundedFull small type="submit" color="blue" label="Submit" />
                         <BaseButton roundedFull small type="reset" color="whiteTwo" label="Reset" v-if="!isEditMode" />
-                        <BaseButton roundedFull small color="red" label="Delete"
+                        <BaseButton roundedFull small color="red" label="Delete" @click="deleteAttendance(attendanceId)"
                             v-if="isEditMode" />
                     </BaseButtons>
                 </template>

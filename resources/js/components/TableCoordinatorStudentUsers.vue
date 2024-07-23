@@ -50,7 +50,7 @@ const pagesList = computed(() => {
         <p>Lorem ipsum dolor sit amet <b>adipiscing elit</b></p>
         <p>This is sample modal</p>
     </CardBoxModal>
-
+    <div class="relative overflow-x-auto shadow-md">
     <table class="m-8 min-w-full">
         <thead>
             <tr class="m-auto">
@@ -97,6 +97,7 @@ const pagesList = computed(() => {
             </tr>
         </tbody>
     </table>
+    </div>
     <div class="p-3 lg:px-6 border-t border-gray-100 dark:border-slate-800">
         <BaseLevel>
             <BaseButtons>

@@ -32,7 +32,7 @@ import {
       },
       {
         route: 'forms',
-        label: 'Report',
+        label: 'Journal',
         icon: mdiSquareEditOutline
       },
   ]

@@ -1,6 +1,6 @@
 <script setup>
 import { computed, ref, defineProps } from 'vue'
-import { mdiEye, mdiTrashCan, mdiDownload } from '@mdi/js'
+import { mdiDeleteEmptyOutline, mdiFileEditOutline } from '@mdi/js'
 import { router, usePage } from '@inertiajs/vue3'
 import BaseLevel from '@/components/BaseLevel.vue'
 import BaseButtons from '@/components/BaseButtons.vue'
@@ -13,7 +13,7 @@ import CardBoxComponentEmpty from './CardBoxComponentEmpty.vue'
 const props = defineProps({
     checkable: Boolean,
     attendance: {
-        type: Array, 
+        type: Array,
         required: true,
     }
 })
@@ -47,59 +47,76 @@ const pagesList = computed(() => {
     return pagesList
 })
 
-const formatDueDate = (dueDate) => {
-    if (!dueDate) return 'No date';
-
-    // Ensure the date string matches the expected format
-    const parsedDate = parse(dueDate, 'yyyy-MM-dd', new Date());
-
-    // Check if parsing was successful
-    if (isNaN(parsedDate)) {
-        return 'Invalid date';
+const deleteAttendance = async (id) => {
+    try {
+        const form = useForm({})
+        await form.delete(route('attendances.destroy', id), {
+            preserveScroll: true,
+        })
+        // Show success notification
+    } catch (error) {
+        console.error('Error deleting document:', error)
+        // Show error notification
     }
+}
 
-    return format(parsedDate, 'MMMM do, yyyy');
+
+const formatTime = (time) => {
+    if (!time) return '---';
+
+    const date = new Date(`1970-01-01T${time}`);
+    return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: true });
+}
+
+const formatDate = (date) => {
+    if (!date) return '---';
+
+    return format(parse(date, 'yyyy-MM-dd', new Date()), 'MMMM dd, yyyy');
 }
 
 </script>
 
 <template>
-    <table class="m-auto p-auto">
-        <thead>
-            <tr class="py-6 px-6">
-                <th class="py-6">Date</th>
-                <th class="py-6">Time In (AM)</th>
-                <th class="py-6 text-center">Time Out (AM)</th>
-                <th class="py-6">Time In (PM)</th>
-                <th class="py-6 text-center">Time Out (PM)</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr v-for="attendance in itemsPaginated" :key="attendance.id">
-                <td data-label="Date" class="px-2">
-                    {{ attendance.title }}
-                </td>
-                <td data-label="Time In (AM)" class="px-12">
-                    {{ attendance.time_in_am  }}
-                </td>
-                <td data-label="Time Out (AM)" class="px-12">
-                    {{ attendance.time_out_am  }}
-                </td>
-                <td data-label="Time In (PM)" class="px-12">
-                    {{ attendance.time_in_pm  }}
-                </td>
-                <td data-label="Time Out (PM)" class="px-12">
-                    {{ attendance.time_out_pm  }}
-                </td>
-                <td class="before:hidden lg:w-1 whitespace-nowrap text-center px-6">
-                    <BaseButtons type="justify-start lg:justify-end" no-wrap>
-                        <BaseButton  roundedFull color="blue" :icon="mdiEye" small  />
-                        <BaseButton  roundedFull color="teal" :icon="mdiDownload" small  />
-                    </BaseButtons>
-                </td>
-            </tr>
-        </tbody>
-    </table>
+    <div class="relative overflow-x-auto">
+        <table class="m-auto p-auto">
+            <thead>
+                <tr class="py-6 px-6">
+                    <th class="py-6">Date</th>
+                    <th class="py-6">Time In (AM)</th>
+                    <th class="py-6 text-center">Time Out (AM)</th>
+                    <th class="py-6">Time In (PM)</th>
+                    <th class="py-6 text-center">Time Out (PM)</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr v-for="attendance in itemsPaginated" :key="attendance.id">
+                    <td data-label="Date" class="px-6 font-semibold">
+                        {{ formatDate(attendance.date) }}
+                    </td>
+                    <td data-label="Time In (AM)" class="px-12 text-green-900 font-semibold">
+                        {{ formatTime(attendance.time_in_am) }}
+                    </td>
+                    <td data-label="Time Out (AM)" class="px-12  text-red-900 font-semibold">
+                        {{ formatTime(attendance.time_out_am) }}
+                    </td>
+                    <td data-label="Time In (PM)" class="px-12  text-green-900 font-semibold">
+                        {{ formatTime(attendance.time_in_pm) }}
+                    </td>
+                    <td data-label="Time Out (PM)" class="px-12  text-red-900 font-semibold">
+                        {{ formatTime(attendance.time_out_pm) }}
+                    </td>
+                    <td class="before:hidden lg:w-1 whitespace-nowrap text-center px-6">
+                        <BaseButtons type="justify-start lg:justify-end" no-wrap>
+                            <BaseButton roundedFull color="blue" :icon="mdiFileEditOutline"
+                                :href="route('attendances.edit', { id: attendance.id })" small />
+                            <BaseButton roundedFull color="red" :icon="mdiDeleteEmptyOutline" small
+                                @click.prevent="deleteAttendance(attendance.id)" />
+                        </BaseButtons>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
     <div class="p-3 lg:px-6 border-t border-gray-100 dark:border-slate-800">
         <BaseLevel>
             <BaseButtons>

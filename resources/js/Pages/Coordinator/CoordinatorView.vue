@@ -13,7 +13,7 @@ import LayoutAuthenticated from '@/layouts/LayoutAuthenticated.vue'
 import SectionMain from '@/components/SectionMain.vue'
 import CardBoxWidget from '@/components/CardBoxWidget.vue'
 import CardBox from '@/components/CardBox.vue'
-import TableStudentUsers from '@/components/TableStudentUsers.vue'
+import TableCoordinatorStudentUsers from '@/components/TableCoordinatorStudentUsers.vue'
 import NotificationBar from '@/components/NotificationBar.vue'
 import BaseButton from '@/components/BaseButton.vue'
 import CardBoxTransaction from '@/components/CardBoxTransaction.vue'
@@ -66,7 +66,7 @@ const title = computed(() => props.user.course + ' Student Interns');
 
       <SectionTitleLineWithButton :icon="mdiAccountMultiple" :title="title" />
       <CardBox has-table >
-        <TableStudentUsers :users="users"/>
+        <TableCoordinatorStudentUsers :users="users"/>
       </CardBox>
     </SectionMain>
     </LayoutAuthenticated>

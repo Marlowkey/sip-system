@@ -1,14 +1,8 @@
 import {
-    mdiAccountCircle,
     mdiMonitor,
-    mdiLock,
     mdiAlertCircle,
     mdiSquareEditOutline,
-    mdiTable,
-    mdiViewList,
-    mdiTelevisionGuide,
-    mdiResponsive,
-    mdiPalette,
+    mdiCalendarBadge,
     mdiAccountFile
   } from '@mdi/js'
 
@@ -22,12 +16,12 @@ import {
       {
         route: 'documents.index',
         icon: mdiAccountFile,
-        label: 'Document Submission'
+        label: 'SIP Requirements'
       },
       {
-        route: 'tables',
-        label: 'Tables',
-        icon: mdiTable
+        route: 'attendances.index',
+        icon: mdiCalendarBadge,
+        label: 'DTR',
       },
       {
         route: 'forms',

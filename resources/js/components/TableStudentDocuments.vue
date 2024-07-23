@@ -99,8 +99,8 @@ const formatDueDate = (dueDate) => {
     <CardBoxModal v-model="isModalActive" title="Description">
         <p>{{ currentDescription }}</p>
     </CardBoxModal>
-
-    <table class="m-auto p-auto">
+    <div class="relative overflow-x-auto">
+    <table class="m-auto p-auto table-auto">
         <thead>
             <tr class="py-6 px-6">
                 <th class="py-6">Title</th>
@@ -111,10 +111,10 @@ const formatDueDate = (dueDate) => {
         </thead>
         <tbody>
             <tr v-for="document in itemsPaginated" :key="document.id">
-                <td data-label="Title" class="px-2">
+                <td data-label="Title" class="px-2 text-center">
                     {{ document.title }}
                 </td>
-                <td data-label="Due on" class="px-12">
+                <td data-label="Due on" class="px-6">
                     {{ formatDueDate(document.due_date) }}
                 </td>
                 <td class="before:hidden lg:w-1 whitespace-nowrap text-center px-6">
@@ -131,6 +131,7 @@ const formatDueDate = (dueDate) => {
             </tr>
         </tbody>
     </table>
+    </div>
     <div class="p-3 lg:px-6 border-t border-gray-100 dark:border-slate-800">
         <BaseLevel>
             <BaseButtons>
