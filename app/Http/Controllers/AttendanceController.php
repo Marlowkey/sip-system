@@ -59,7 +59,7 @@ class AttendanceController extends Controller
                 'time_out_pm' => $request->time_out_pm,           ]
         );
 
-        return redirect()->back()->with('message', 'Attendance recorded successfully.');
+        return redirect()->route('attendances.index')->with('message', 'Attendance recorded successfully.');
 
     }
 
@@ -94,8 +94,11 @@ class AttendanceController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Attendance $attendance)
+    public function destroy($id)
     {
-        //
+        $attendance = Attendance::findOrFail($id);
+        $attendance->delete();
+
+        return redirect()->route('attendances.index')->with('message', 'Attendance deleted successfully.');
     }
 }
