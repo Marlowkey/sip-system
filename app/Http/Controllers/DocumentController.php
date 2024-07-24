@@ -31,12 +31,17 @@ class DocumentController extends Controller
 
 
         $documentWithNumberOfCompleted = $documentAll->map(function ($document) {
+            $user = auth()->user();
+
             $studentUsers = User::where('role', 'student')
-                ->count();
+            ->where('course', $user->course)
+            ->count();
 
             $completedDocuments = $document->users->filter(function ($user) {
                 return $user->pivot->is_completed;
-            })->count();
+            })
+            ->where('course', $user->course)
+            ->count();
 
             return [
                 'id' => $document->id,
@@ -119,7 +124,7 @@ class DocumentController extends Controller
     public function update(Request $request, $id)
     {
         // Validate the incoming request
-         $request->validate([
+        $request->validate([
             'title' => 'required|string|max:255',
             'due_date' => 'required|date',
             'description' => 'nullable|string',
