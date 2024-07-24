@@ -50,43 +50,43 @@ const pagesList = computed(() => {
         <p>Lorem ipsum dolor sit amet <b>adipiscing elit</b></p>
         <p>This is sample modal</p>
     </CardBoxModal>
-    <div class="relative overflow-x-auto shadow-md">
-    <table class="m-8 min-w-full">
-        <thead>
-            <tr class="m-auto">
+    <div class="relative overflow-x-auto">
+    <table class="w-full text-gray-800 text-left rtl:text-right">
+        <thead class="text-gray-700">
+            <tr>
                 <th v-if="checkable" />
-                <th class="py-2">Last Name</th>
-                <th class="py-2">First Name</th>
-                <th class="py-3">Email</th>
-                <th class="py-3">Block</th>
-                <th class="py-3">Course</th>
-                <th class="py-3">Progress</th>
-                <th class="">HTE</th>
+                <th  scope="col" class="px-6 py-3">Last Name</th>
+                <th  scope="col" class="px-6 py-3">First Name</th>
+                <th  scope="col" class="px-6 py-3">Email</th>
+                <th  scope="col" class="px-6 py-3">Block</th>
+                <th  scope="col" class="px-6 py-3">Course</th>
+                <th scope="col" class="px-8 py-3">Progress</th>
+                <th scope="col" class="px-6 py-3">HTE</th>
                 <!-- <th>Action</th> -->
 
             </tr>
         </thead>
         <tbody>
             <tr v-for="user in itemsPaginated" :key="user.id">
-                <td data-label="Last Name" class="text-center py-1">
+                <td data-label="Last Name" scope="row" class="px-4 py-1">
                     {{ user.last_name }}
                 </td>
-                <td data-label="First Name" class="text-center ">
+                <td data-label="First Name" class="px-4 py-1">
                     {{ user.first_name }}
                 </td>
-                <td data-label="Email" class="text-center">
+                <td data-label="Email" class="px-4 py-1">
                     {{ user.email }}
                 </td>
-                <td data-label="Year Level" class="text-center">
+                <td data-label="Year Level" class="px-4 py-1">
                     {{ user.block }}
                 </td>
-                <td data-label="Course" class="text-center">
+                <td data-label="Course" class="px-4 py-1">
                     {{ user.course }}
                 </td>
-                <td data-label="Progress" class="lg:w-32 text-center"  >
+                <td data-label="Progress" class="px-4 py-1 min-w-ful">
                     <ProgressBar :progress="user.progress" />
                 </td>
-                <td data-label="HTE" class="text-center">
+                <td data-label="HTE" class="px-4 py-1">
                     {{ user.host_training_establishment }}
                 </td>
                 <!-- <td class="before:hidden lg:w-1 whitespace-nowrap text-center px-6">

@@ -78,34 +78,34 @@ const formatDate = (date) => {
 
 <template>
     <div class="relative overflow-x-auto">
-        <table class="m-auto p-auto">
-            <thead>
-                <tr class="py-6 px-6">
-                    <th class="py-6">Date</th>
-                    <th class="py-6">Time In (AM)</th>
-                    <th class="py-6 text-center">Time Out (AM)</th>
-                    <th class="py-6">Time In (PM)</th>
-                    <th class="py-6 text-center">Time Out (PM)</th>
+        <table class="w-full text-gray-800 text-left rtl:text-right">
+            <thead class="text-gray-800 text-left">
+                <tr>
+                    <th scope="col" class="px-4 py-3">Date</th>
+                    <th scope="col" class="px-4 py-3">Time In (AM)</th>
+                    <th scope="col" class="px-4 py-3">Time Out (AM)</th>
+                    <th scope="col" class="px-4 py-3">Time In (PM)</th>
+                    <th scope="col" class="px-4 py-3">Time Out (PM)</th>
                 </tr>
             </thead>
             <tbody>
                 <tr v-for="attendance in itemsPaginated" :key="attendance.id">
-                    <td data-label="Date" class="px-6 font-semibold">
+                    <td data-label="Date" scope="row" class="px-4 py-1 font-semibold">
                         {{ formatDate(attendance.date) }}
                     </td>
-                    <td data-label="Time In (AM)" class="px-12 text-green-900 font-semibold">
+                    <td data-label="Time In (AM)" class="px-4 py-1 text-green-900 font-semibold">
                         {{ formatTime(attendance.time_in_am) }}
                     </td>
-                    <td data-label="Time Out (AM)" class="px-12  text-red-900 font-semibold">
+                    <td data-label="Time Out (AM)" class="px-4 py-1  text-red-900 font-semibold">
                         {{ formatTime(attendance.time_out_am) }}
                     </td>
-                    <td data-label="Time In (PM)" class="px-12  text-green-900 font-semibold">
+                    <td data-label="Time In (PM)" class="px-4 py-1 text-green-900 font-semibold">
                         {{ formatTime(attendance.time_in_pm) }}
                     </td>
-                    <td data-label="Time Out (PM)" class="px-12  text-red-900 font-semibold">
+                    <td data-label="Time Out (PM)" class="px-4 py-1  text-red-900 font-semibold">
                         {{ formatTime(attendance.time_out_pm) }}
                     </td>
-                    <td class="before:hidden lg:w-1 whitespace-nowrap text-center px-6">
+                    <td class="hitespace-nowrap px-2 py-1">
                         <BaseButtons type="justify-start lg:justify-end" no-wrap>
                             <BaseButton roundedFull color="blue" :icon="mdiFileEditOutline"
                                 :href="route('attendances.edit', { id: attendance.id })" small />

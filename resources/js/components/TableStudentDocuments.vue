@@ -100,30 +100,30 @@ const formatDueDate = (dueDate) => {
         <p>{{ currentDescription }}</p>
     </CardBoxModal>
     <div class="relative overflow-x-auto">
-    <table class="m-auto p-auto table-auto">
-        <thead>
-            <tr class="py-6 px-6">
-                <th class="py-6">Title</th>
-                <th class="py-6">Due on</th>
-                <th class="py-6 text-center">Action</th>
-                <th class="py-6 text-center" v-if="checkable">Mark as Done</th>
+    <table class="w-full text-gray-800 text-left rtl:text-right">
+        <thead class="text-gray-700">
+            <tr>
+                <th scope="col" class="px-4 py-3">Title</th>
+                <th scope="col" class="px-4 py-3">Due on</th>
+                <th scope="col" class="px-4 py-3">Action</th>
+                <th scope="col" class="px-4 py-3 text-center" v-if="checkable">Mark as Done</th>
             </tr>
         </thead>
         <tbody>
             <tr v-for="document in itemsPaginated" :key="document.id">
-                <td data-label="Title" class="px-2 text-center">
+                <td data-label="Title" scope="row" class="px-4 py-1">
                     {{ document.title }}
                 </td>
-                <td data-label="Due on" class="px-6">
+                <td data-label="Due on" class="px-4 py-1">
                     {{ formatDueDate(document.due_date) }}
                 </td>
-                <td class="before:hidden lg:w-1 whitespace-nowrap text-center px-6">
-                    <BaseButtons type="justify-start lg:justify-end" no-wrap>
+                <td class="px-4 py-1 whitespace-nowrap">
+                    <BaseButtons type="justify-start" no-wrap>
                         <BaseButton  roundedFull color="blue" :icon="mdiEye" small @click="viewDocument(document)" />
                         <BaseButton v-if="document.file_path" roundedFull color="teal" :icon="mdiDownload" small :href="route('documents.download', { id: document.id })" />
                     </BaseButtons>
                 </td>
-                <td v-if="checkable" class="px-2 text-center">
+                <td v-if="checkable" class="px-4 py-1 text-center">
                     <input type="checkbox" :checked="isCompleted(document)"
                         @change="event => updateCompletionStatus(document, event)"
                         class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500" />

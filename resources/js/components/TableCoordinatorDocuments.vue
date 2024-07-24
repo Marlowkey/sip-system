@@ -81,31 +81,31 @@ const formatDueDate = (dueDate) => {
     </CardBoxModal>
 
     <div class="relative overflow-x-auto">
-        <table class="w-full table-auto p-auto m-auto">
-      <thead>
-        <tr class="py-6">
-          <th class="py-2">Title</th>
-          <th class="py-2">Due on</th>
-          <th class="py-6 mx-2">Action</th>
-          <th class="py-6 mx-2"># of Completed</th>
+        <table class="w-full text-gray-800 text-left rtl:text-right">
+      <thead class="text-gray-800">
+        <tr >
+          <th scope="col" class="px-6 py-3">Title</th>
+          <th scope="col" class="px-6 py-3">Due on</th>
+          <th scope="col" class="px-6 py-3">Action</th>
+          <th scope="col" class="px-6 py-3"># of Completed</th>
         </tr>
       </thead>
-      <tbody class="text-center">
+      <tbody >
         <tr v-for="document in itemsPaginated" :key="document.id">
-          <td data-label="Title" class="px-2">
+          <td data-label="Title" scope="row" class="px-4 py-1">
             {{ document.title }}
           </td>
-          <td data-label="Due on" class="px-2">
+          <td data-label="Due on" class="px-4 py-1">
             {{ formatDueDate(document.due_date) }}
           </td>
-          <td class="before:hidden lg:w-1 whitespace-nowrap px-2">
-            <BaseButtons type="justify-start lg:justify-end" no-wrap>
+          <td class="px-4 py-1">
+            <BaseButtons  no-wrap>
               <BaseButton roundedFull color="blue" :icon="mdiEye" small @click="viewDocument(document)"/>
               <BaseButton v-if="document.file_path" roundedFull color="teal" :icon="mdiDownload" small :href="route('documents.download', {id: document.id})" />
               <BaseButton roundedFull color="yellow" :icon="mdiFileEditOutline" small :href="route('documents.edit', { id: document.id })" />
             </BaseButtons>
           </td>
-          <td data-label="Completed" class="px-2">
+          <td data-label="Completed" class="px-4 py-1">
             {{ document.completed}}/{{ document.number_of_users }}
           </td>
         </tr>
