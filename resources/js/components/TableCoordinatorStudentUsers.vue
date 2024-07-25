@@ -50,16 +50,14 @@ const pagesList = computed(() => {
         <p>Lorem ipsum dolor sit amet <b>adipiscing elit</b></p>
         <p>This is sample modal</p>
     </CardBoxModal>
-    <div class="relative overflow-x-auto">
-    <table class="w-full text-gray-800 text-left rtl:text-right">
+    <div class="relative overflow-x-auto m-4">
+    <table class="w-full text-gray-800 text-left rtl:text-right my-2">
         <thead class="text-gray-700">
-            <tr>
+            <tr class="border-b">
                 <th v-if="checkable" />
-                <th  scope="col" class="px-6 py-3">Last Name</th>
-                <th  scope="col" class="px-6 py-3">First Name</th>
+                <th  scope="col" class="px-6 py-3">Name</th>
                 <th  scope="col" class="px-6 py-3">Email</th>
                 <th  scope="col" class="px-6 py-3">Block</th>
-                <th  scope="col" class="px-6 py-3">Course</th>
                 <th scope="col" class="px-8 py-3">Progress</th>
                 <th scope="col" class="px-6 py-3">HTE</th>
                 <!-- <th>Action</th> -->
@@ -67,12 +65,9 @@ const pagesList = computed(() => {
             </tr>
         </thead>
         <tbody>
-            <tr v-for="user in itemsPaginated" :key="user.id">
-                <td data-label="Last Name" scope="row" class="px-4 py-1">
-                    {{ user.last_name }}
-                </td>
-                <td data-label="First Name" class="px-4 py-1">
-                    {{ user.first_name }}
+            <tr v-for="user in itemsPaginated" :key="user.id" class="bg-white dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
+                <td data-label="Name" scope="row" class="px-4 py-1 font-semibold">
+                    {{ user.last_name }} , {{ user.first_name }}
                 </td>
                 <td data-label="Email" class="px-4 py-1">
                     {{ user.email }}
@@ -80,9 +75,7 @@ const pagesList = computed(() => {
                 <td data-label="Year Level" class="px-4 py-1">
                     {{ user.block }}
                 </td>
-                <td data-label="Course" class="px-4 py-1">
-                    {{ user.course }}
-                </td>
+
                 <td data-label="Progress" class="px-4 py-1 min-w-ful">
                     <ProgressBar :progress="user.progress" />
                 </td>
@@ -98,7 +91,7 @@ const pagesList = computed(() => {
         </tbody>
     </table>
     </div>
-    <div class="p-3 lg:px-6 border-t border-gray-100 dark:border-slate-800">
+    <div class="p-3 mt-2 lg:px-6 border-t border-gray-100 dark:border-slate-800">
         <BaseLevel>
             <BaseButtons>
                 <BaseButton v-for="page in pagesList" :key="page" :active="page === currentPage" :label="page + 1"

@@ -100,9 +100,9 @@ const formatDueDate = (dueDate) => {
         <p>{{ currentDescription }}</p>
     </CardBoxModal>
     <div class="relative overflow-x-auto">
-    <table class="w-full text-gray-800 text-left rtl:text-right">
+    <table class="my-2 w-full text-gray-800 text-left rtl:text-right">
         <thead class="text-gray-700">
-            <tr>
+            <tr class="border-b">
                 <th scope="col" class="px-4 py-3">Title</th>
                 <th scope="col" class="px-4 py-3">Due on</th>
                 <th scope="col" class="px-4 py-3">Action</th>
@@ -110,7 +110,7 @@ const formatDueDate = (dueDate) => {
             </tr>
         </thead>
         <tbody>
-            <tr v-for="document in itemsPaginated" :key="document.id">
+            <tr v-for="document in itemsPaginated" :key="document.id" class="bg-white dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
                 <td data-label="Title" scope="row" class="px-4 py-1">
                     {{ document.title }}
                 </td>

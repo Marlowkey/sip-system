@@ -78,18 +78,19 @@ const formatDate = (date) => {
 
 <template>
     <div class="relative overflow-x-auto">
-        <table class="w-full text-gray-800 text-left rtl:text-right">
+        <table class="my-2 w-full text-gray-800 text-left rtl:text-right">
             <thead class="text-gray-800 text-left">
-                <tr>
+                <tr class="border-b">
                     <th scope="col" class="px-4 py-3">Date</th>
                     <th scope="col" class="px-4 py-3">Time In (AM)</th>
                     <th scope="col" class="px-4 py-3">Time Out (AM)</th>
                     <th scope="col" class="px-4 py-3">Time In (PM)</th>
                     <th scope="col" class="px-4 py-3">Time Out (PM)</th>
+                    <th scope="col" class="px-4 py-3">Action</th>
                 </tr>
             </thead>
             <tbody>
-                <tr v-for="attendance in itemsPaginated" :key="attendance.id">
+                <tr v-for="attendance in itemsPaginated" :key="attendance.id" class="bg-white dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
                     <td data-label="Date" scope="row" class="px-4 py-1 font-semibold">
                         {{ formatDate(attendance.date) }}
                     </td>
@@ -105,8 +106,8 @@ const formatDate = (date) => {
                     <td data-label="Time Out (PM)" class="px-4 py-1  text-red-900 font-semibold">
                         {{ formatTime(attendance.time_out_pm) }}
                     </td>
-                    <td class="hitespace-nowrap px-2 py-1">
-                        <BaseButtons type="justify-start lg:justify-end" no-wrap>
+                    <td data-label="Action" class="whitespace-nowrap px-2 py-1">
+                        <BaseButtons type="justify-start" no-wrap>
                             <BaseButton roundedFull color="blue" :icon="mdiFileEditOutline"
                                 :href="route('attendances.edit', { id: attendance.id })" small />
                             <BaseButton roundedFull color="red" :icon="mdiDeleteEmptyOutline" small
