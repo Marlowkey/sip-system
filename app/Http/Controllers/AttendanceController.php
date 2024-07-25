@@ -14,11 +14,37 @@ class AttendanceController extends Controller
     public function index()
     {
         $user = auth()->user();
-        $attendances = $user->attendances;
+        $attendance = $user->attendances;
+
+        $attendances = Attendance::with(['user' => function ($query) {
+            $user = auth()->user();
+            $query->where('course', $user->course);
+        }])->get();
+
+        $studentAttendance = $attendances->map(function ($attendance){
+            if ($attendance->user) {
+            return [
+                'id' => $attendance->id,
+                'user_id' => $attendance->user->id,
+                'last_name' => $attendance->user->last_name,
+                'first_name' => $attendance->user->first_name,
+                'course' => $attendance->user->course,
+                'block' => $attendance->user->block,
+                'host_training_establishment' => $attendance->user->host_training_establishment,
+                'date' => $attendance->date,
+                'time_in_am' => $attendance->time_in_am,
+                'time_out_am' => $attendance->time_out_am,
+                'time_in_pm' => $attendance->time_in_pm,
+                'time_out_pm' => $attendance->time_out_pm,
+            ];
+        }
+        return null;
+    })->filter();
 
         return Inertia::render('Attendance/Index', [
             'user' => $user,
-            'attendance' => $attendances,
+            'attendance' => $attendance,
+            'studentAttendance' => $studentAttendance,
         ]);
     }
 

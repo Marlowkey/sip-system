@@ -16,18 +16,21 @@ import BaseButton from '@/components/BaseButton.vue'
 import NotificationBar from '@/components/NotificationBar.vue'
 import TableStudentAttendance from '@/components/TableStudentAttendance.vue'
 import CardBoxComponentEmpty from '@/components/CardBoxComponentEmpty.vue'
+import TableCoordinatorAttendance from '@/components/TableCoordinatorAttendance.vue'
 
 
 const props = defineProps({
     user: Object, // Authenticated user passed as a prop from Inertia
     attendance: Array, // Documents passed as a prop from Inertia
+    studentAttendance: Array, // Student attendance passed as a prop from Inertia
 })
-
-const userRole = props.user.role;
 
 const isItemEmpty = ((item) => {
     return item.length === 0;
 })
+
+const userRole = props.user.role;
+
 </script>
 
 <template>
@@ -54,11 +57,11 @@ const isItemEmpty = ((item) => {
                 {{ $page.props.flash.message }}
             </NotificationBar>
 
-            <SectionTitleLineWithButton :icon="mdiLocationEnter" title="Document Submission" main>
-                <BaseButton roundedFull :icon="mdiPlus" color="whiteDark" routeName="documents.create" />
+            <SectionTitleLineWithButton :icon="mdiLocationEnter" title="Daily Time Record" main>
             </SectionTitleLineWithButton>
-            <CardBoxComponentEmpty v-if="isItemEmpty(props.attendance)" />
-            <CardBox has-table>
+            <CardBoxComponentEmpty v-if="isItemEmpty(props.studentAttendance)" />
+            <CardBox has-table v-else>
+            <TableCoordinatorAttendance :attendance="studentAttendance" />
             </CardBox>
         </SectionMain>
     </LayoutAuthenticated>
