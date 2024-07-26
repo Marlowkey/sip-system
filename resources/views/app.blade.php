@@ -9,6 +9,7 @@
         <link rel="preconnect" href="https://fonts.bunny.net">
 
         <!-- Scripts -->
+        <script src="https://cdn.jsdelivr.net/npm/flowbite@2.4.1/dist/flowbite.min.js"></script>
         @routes
         @vite(['resources/css/app.css', 'resources/js/app.js', "resources/js/Pages/{$page['component']}.vue"])
         @inertiaHead

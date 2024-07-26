@@ -11,15 +11,26 @@ class AttendanceController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
         $user = auth()->user();
+        $date = $request->query('date');
         $attendance = $user->attendances;
 
-        $attendances = Attendance::with(['user' => function ($query) {
+        $request->validate([
+            'date' => 'nullable|date',
+        ]);
+
+        $attendanceQuery = Attendance::with(['user' => function ($query) {
             $user = auth()->user();
             $query->where('course', $user->course);
-        }])->get();
+        }]);
+
+        if($date) {
+            $attendanceQuery->where('date', $date);
+        }
+
+        $attendances = $attendanceQuery->get();
 
         $studentAttendance = $attendances->map(function ($attendance){
             if ($attendance->user) {

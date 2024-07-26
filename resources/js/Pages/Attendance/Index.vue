@@ -1,12 +1,14 @@
 <script setup>
-import { Head } from '@inertiajs/vue3'
-import { computed, ref, onMounted } from 'vue'
+import { Head, useForm, router } from '@inertiajs/vue3'
+import debounce from 'lodash.debounce'
+import { computed, ref, onMounted, watch } from 'vue'
 import { useMainStore } from '@/stores/main.js'
 import {
     mdiLocationEnter,
+    mdiFilterMenuOutline,
     mdiPlus,
     mdiClockCheckOutline,
-    mdiClockOut,
+    mdiFilterMenu,
 } from '@mdi/js'
 import SectionMain from '@/components/SectionMain.vue'
 import CardBox from '@/components/CardBox.vue'
@@ -17,6 +19,9 @@ import NotificationBar from '@/components/NotificationBar.vue'
 import TableStudentAttendance from '@/components/TableStudentAttendance.vue'
 import CardBoxComponentEmpty from '@/components/CardBoxComponentEmpty.vue'
 import TableCoordinatorAttendance from '@/components/TableCoordinatorAttendance.vue'
+import Dropdown from '@/ComponentsBreeze/Dropdown.vue'
+import BaseDivider from '@/components/BaseDivider.vue'
+import FormControl from '@/components/FormControl.vue'
 
 
 const props = defineProps({
@@ -25,6 +30,17 @@ const props = defineProps({
     studentAttendance: Array, // Student attendance passed as a prop from Inertia
 })
 
+const date = ref(new Date().toISOString().substr(0, 10))
+const url = route('attendances.index')
+
+const fetchAttendances = debounce(() => {
+  router.get(url, { date: date.value });
+}, 300);
+
+watch(date, () => {
+  fetchAttendances();
+});
+
 const isItemEmpty = ((item) => {
     return item.length === 0;
 })
@@ -32,10 +48,8 @@ const isItemEmpty = ((item) => {
 const userRole = props.user.role;
 
 </script>
-
 <template>
     <LayoutAuthenticated>
-
         <Head title="Daily Time Record" />
         <SectionMain v-if="userRole === 'student'">
 
@@ -43,10 +57,11 @@ const userRole = props.user.role;
                 {{ $page.props.flash.message }}
             </NotificationBar>
 
-            <SectionTitleLineWithButton :icon="mdiLocationEnter" title="Daily Time Record" main >
-                    <BaseButton roundedFull :icon="mdiClockCheckOutline" color="blue"  routeName="attendances.create"  class="mx-4"/>
-        </SectionTitleLineWithButton>
-        <CardBoxComponentEmpty v-if="isItemEmpty(props.attendance)" />
+            <SectionTitleLineWithButton :icon="mdiLocationEnter" title="Daily Time Record" main>
+                <BaseButton roundedFull :icon="mdiClockCheckOutline" color="blue" routeName="attendances.create"
+                    class="mx-4" />
+            </SectionTitleLineWithButton>
+            <CardBoxComponentEmpty v-if="isItemEmpty(props.attendance)" />
             <CardBox has-table v-else>
                 <TableStudentAttendance :attendance="attendance" />
             </CardBox>
@@ -58,10 +73,11 @@ const userRole = props.user.role;
             </NotificationBar>
 
             <SectionTitleLineWithButton :icon="mdiLocationEnter" title="Daily Time Record" main>
+                    <FormControl v-model="date" borderless type="date" placeholder="Select Date" class="text-sm font-medium"/>
             </SectionTitleLineWithButton>
             <CardBoxComponentEmpty v-if="isItemEmpty(props.studentAttendance)" />
             <CardBox has-table v-else>
-            <TableCoordinatorAttendance :attendance="studentAttendance" />
+                <TableCoordinatorAttendance :attendance="studentAttendance" />
             </CardBox>
         </SectionMain>
     </LayoutAuthenticated>

@@ -1,7 +1,7 @@
 <script setup>
 import { reactive, ref, computed } from 'vue'
 import { useForm } from '@inertiajs/vue3'
-import { mdiBallotOutline, mdiAccount, mdiMail, mdiGithub } from '@mdi/js'
+import { mdiBallotOutline, mdiAccount, mdiMail, mdiFileDocumentAlertOutline   } from '@mdi/js'
 import SectionMain from '@/components/SectionMain.vue'
 import CardBox from '@/components/CardBox.vue'
 import FormCheckRadioGroup from '@/components/FormCheckRadioGroup.vue'
@@ -33,7 +33,6 @@ const form = useForm({
 })
 
 const submit = async () => {
-
     try {
         // Append file to FormData if it exists
         const formData = new FormData()
@@ -75,7 +74,7 @@ const deleteDocument = async (documentId) => {
 <template>
     <LayoutAuthenticated>
         <SectionMain>
-            <SectionTitleLineWithButton :icon="mdiBallotOutline" :title="title" main>
+            <SectionTitleLineWithButton :icon="mdiFileDocumentAlertOutline " :title="title" main>
             </SectionTitleLineWithButton>
             <CardBox isForm @submit.prevent="submit" enctype="multipart/form-data">
                 <FormField label="Title">
