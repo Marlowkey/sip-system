@@ -104,5 +104,6 @@ Route::post('/student-document/completion', [StudentDocumentController::class, '
 Route::get('/documents/download/{document}', [DocumentController::class, 'download'])->name('documents.download');
 
 Route::resource('attendances', AttendanceController::class);
+Route::get('/student-attendance/{id}', [AttendanceController::class, 'showStudentAttendance'])->name('student-attendance.show');
 require __DIR__.'/auth.php';
 
