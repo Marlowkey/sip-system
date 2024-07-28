@@ -1,6 +1,6 @@
 <script setup>
 import { computed, ref, defineProps } from 'vue'
-import { mdiDeleteEmptyOutline, mdiFileEditOutline } from '@mdi/js'
+import {  mdiEyeArrowRightOutline  } from '@mdi/js'
 import { router, usePage } from '@inertiajs/vue3'
 import BaseLevel from '@/components/BaseLevel.vue'
 import BaseButtons from '@/components/BaseButtons.vue'
@@ -12,13 +12,14 @@ import CardBoxComponentEmpty from './CardBoxComponentEmpty.vue'
 
 const props = defineProps({
     attendance: {
-        type: Array,
+        type: [Array, Object],
         required: true,
+        default: () => [],
     }
 })
 
 const user = computed(() => usePage().props.auth.user)
-const items = computed(() => props.attendance ? props.attendance : [])
+const items = computed(() => Array.isArray(props.attendance) ? props.attendance : Object.values(props.attendance))
 const perPage = ref(10)
 const currentPage = ref(0)
 
@@ -28,8 +29,13 @@ let form = useForm({
     is_completed: false,
 })
 
+console.log('Attendance Props:', props.attendance);
+console.log('Computed Items:', items.value);
+
 const itemsPaginated = computed(() =>
-    items.value.slice(perPage.value * currentPage.value, perPage.value * (currentPage.value + 1))
+    Array.isArray(items.value)
+        ? items.value.slice(perPage.value * currentPage.value, perPage.value * (currentPage.value + 1))
+        : []
 )
 
 const numPages = computed(() => Math.ceil(items.value.length / perPage.value))
@@ -98,10 +104,9 @@ const formatDate = (date) => {
                     </td>
                     <td data-label="Action" class="hitespace-nowrap px-2 py-1">
                         <BaseButtons type="justify-start" no-wrap>
-                            <BaseButton roundedFull color="blue" :icon="mdiFileEditOutline" small
+                            <BaseButton roundedFull color="blue" :icon="mdiEyeArrowRightOutline " small
+                            :href="route('student-attendance.show', { id: attendance.user_id })"
                               />
-                            <BaseButton roundedFull color="red" :icon="mdiDeleteEmptyOutline" small
-                             />
                         </BaseButtons>
                     </td>
                 </tr>
