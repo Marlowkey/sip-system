@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Attendance;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
@@ -26,12 +27,12 @@ class AttendanceController extends Controller
             $query->where('course', $user->course);
         }]);
 
+
         if($date) {
             $attendanceQuery->where('date', $date);
         }
 
         $attendances = $attendanceQuery->get();
-
         $studentAttendance = $attendances->map(function ($attendance){
             if ($attendance->user) {
             return [
@@ -101,14 +102,6 @@ class AttendanceController extends Controller
     }
 
     /**
-     * Display the specified resource.
-     */
-    public function show(Attendance $attendance)
-    {
-        //
-    }
-
-    /**
      * Show the form for editing the specified resource.
      */
     public function edit($id)
@@ -137,5 +130,16 @@ class AttendanceController extends Controller
         $attendance->delete();
 
         return redirect()->route('attendances.index')->with('message', 'Attendance deleted successfully.');
+    }
+
+    public function showStudentAttendance ( $id)
+    {
+        $user = User::findOrFail($id);
+        $attendance = $user->attendances;
+
+        return Inertia::render('Attendance/Show', [
+            'user' => $user,
+            'attendance' => $attendance,
+        ]);
     }
 }

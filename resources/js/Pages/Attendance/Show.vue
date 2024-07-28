@@ -27,7 +27,6 @@ import FormControl from '@/components/FormControl.vue'
 const props = defineProps({
     user: Object, // Authenticated user passed as a prop from Inertia
     attendance: Array, // Documents passed as a prop from Inertia
-    studentAttendance: Array, // Student attendance passed as a prop from Inertia
 })
 
 const date = ref(new Date().toISOString().substr(0, 10))
@@ -35,7 +34,7 @@ const url = route('attendances.index')
 
 const fetchAttendances = debounce(() => {
   router.get(url, { date: date.value });
-}, 1500);
+}, 300);
 
 watch(date, () => {
   fetchAttendances();
@@ -47,37 +46,25 @@ const isItemEmpty = ((item) => {
 
 const userRole = props.user.role;
 
+const title = computed(() => {
+    if (props.user) {
+        return 'Daily Time Record' + ' - ' + props.user.last_name + ', ' + props.user.first_name;
+}
+})
+
 </script>
 <template>
     <LayoutAuthenticated>
         <Head title="Daily Time Record" />
-        <SectionMain v-if="userRole === 'student'">
-
+        <SectionMain>
             <NotificationBar v-if="$page.props.flash.message" icon="mdiAlert" color="info" class="m-2">
                 {{ $page.props.flash.message }}
             </NotificationBar>
 
-            <SectionTitleLineWithButton :icon="mdiLocationEnter" title="Daily Time Record" main>
-                <BaseButton roundedFull :icon="mdiClockCheckOutline" color="blue" routeName="attendances.create"
-                    class="mx-4" />
-            </SectionTitleLineWithButton>
+            <SectionTitleLineWithButton :icon="mdiLocationEnter" :title="title" main />
             <CardBoxComponentEmpty v-if="isItemEmpty(props.attendance)" />
             <CardBox has-table v-else>
-                <TableStudentAttendance :attendance="attendance" />
-            </CardBox>
-        </SectionMain>
-
-        <SectionMain v-else-if="userRole === 'coordinator'">
-            <NotificationBar v-if="$page.props.flash.message" icon="mdiAlert" color="info" class="m-2">
-                {{ $page.props.flash.message }}
-            </NotificationBar>
-
-            <SectionTitleLineWithButton :icon="mdiLocationEnter" title="Daily Time Record" main>
-                    <FormControl v-model="date" borderless type="date" placeholder="Select Date" class="text-sm font-medium"/>
-            </SectionTitleLineWithButton>
-            <CardBoxComponentEmpty v-if="isItemEmpty(props.studentAttendance)" />
-            <CardBox has-table v-else>
-                <TableCoordinatorAttendance :attendance="studentAttendance" />
+                <TableStudentAttendance :attendance="attendance" :user="user" />
             </CardBox>
         </SectionMain>
     </LayoutAuthenticated>
