@@ -20,7 +20,7 @@ const props = defineProps({
 const items = computed(() => props.users ? props.users : [])
 const isModalActive = ref(false)
 const isModalDangerActive = ref(false)
-const perPage = ref(5)
+const perPage = ref(15)
 const currentPage = ref(0)
 
 const itemsPaginated = computed(() =>

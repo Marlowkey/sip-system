@@ -104,7 +104,7 @@ const submit = () => {
           <BaseButtons>
             <BaseButton
               type="submit"
-              color="contrast"
+              color="dark"
               label="Login"
               :class="{ 'opacity-25': form.processing }"
               :disabled="form.processing"
@@ -112,8 +112,8 @@ const submit = () => {
             <BaseButton
               v-if="canResetPassword"
               route-name="password.request"
-              color="white"
-              outline
+              color="light"
+              
               label="Remind"
             />
           </BaseButtons>

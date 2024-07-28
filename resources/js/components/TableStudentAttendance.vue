@@ -11,7 +11,9 @@ import CardBoxComponentEmpty from './CardBoxComponentEmpty.vue'
 
 
 const props = defineProps({
-    checkable: Boolean,
+    user: {
+        type: Object,
+    },
     attendance: {
         type: Array,
         required: true,
@@ -23,11 +25,6 @@ const items = computed(() => props.attendance ? props.attendance : [])
 const perPage = ref(10)
 const currentPage = ref(0)
 
-let form = useForm({
-    user_id: user.value.id,
-    document_id: null,
-    is_completed: false,
-})
 
 const itemsPaginated = computed(() =>
     items.value.slice(perPage.value * currentPage.value, perPage.value * (currentPage.value + 1))
@@ -74,6 +71,8 @@ const formatDate = (date) => {
     return format(parse(date, 'yyyy-MM-dd', new Date()), 'MMMM dd, yyyy');
 }
 
+const isUserCoordinator = computed(() => user.value.role === 'coordinator')
+
 </script>
 
 <template>
@@ -86,27 +85,27 @@ const formatDate = (date) => {
                     <th scope="col" class="px-4 py-3">Time Out (AM)</th>
                     <th scope="col" class="px-4 py-3">Time In (PM)</th>
                     <th scope="col" class="px-4 py-3">Time Out (PM)</th>
-                    <th scope="col" class="px-4 py-3">Action</th>
+                    <th v-if="!!isUserCoordinator.value" scope="col" class="px-4 py-3">Action</th>
                 </tr>
             </thead>
             <tbody>
                 <tr v-for="attendance in itemsPaginated" :key="attendance.id" class="bg-white dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
-                    <td data-label="Date" scope="row" class="px-4 py-1 font-semibold">
+                    <td data-label="Date" scope="row" class="px-4 py-2 font-semibold">
                         {{ formatDate(attendance.date) }}
                     </td>
-                    <td data-label="Time In (AM)" class="px-4 py-1 text-green-900 font-semibold">
+                    <td data-label="Time In (AM)" class="px-4 py-2 text-green-900 font-semibold">
                         {{ formatTime(attendance.time_in_am) }}
                     </td>
-                    <td data-label="Time Out (AM)" class="px-4 py-1  text-red-900 font-semibold">
+                    <td data-label="Time Out (AM)" class="px-4 py-2  text-red-900 font-semibold">
                         {{ formatTime(attendance.time_out_am) }}
                     </td>
-                    <td data-label="Time In (PM)" class="px-4 py-1 text-green-900 font-semibold">
+                    <td data-label="Time In (PM)" class="px-4 py-2 text-green-900 font-semibold">
                         {{ formatTime(attendance.time_in_pm) }}
                     </td>
-                    <td data-label="Time Out (PM)" class="px-4 py-1  text-red-900 font-semibold">
+                    <td data-label="Time Out (PM)" class="px-4 py-2  text-red-900 font-semibold">
                         {{ formatTime(attendance.time_out_pm) }}
                     </td>
-                    <td data-label="Action" class="whitespace-nowrap px-2 py-1">
+                    <td v-if="!!isUserCoordinator.value" data-label="Action" class="whitespace-nowrap px-2 py-2">
                         <BaseButtons type="justify-start" no-wrap>
                             <BaseButton roundedFull color="blue" :icon="mdiFileEditOutline"
                                 :href="route('attendances.edit', { id: attendance.id })" small />
