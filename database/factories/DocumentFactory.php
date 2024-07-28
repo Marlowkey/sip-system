@@ -20,6 +20,7 @@ class DocumentFactory extends Factory
             'title' => $this->faker->sentence,
             'description' => $this->faker->paragraph,
             'due_date' => $this->faker->optional()->date,
+            'file_path' => null,
             'created_at' => now(),
             'updated_at' => now(),
         ];

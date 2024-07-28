@@ -2,17 +2,17 @@
 
 namespace Database\Seeders;
 
-use App\Models\Document;
-use Illuminate\Database\Seeder;
+use Database\Factories\AttendanceFactory;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use Illuminate\Database\Seeder;
 
-class DocumentSeeder extends Seeder
+class AttendanceSeeder extends Seeder
 {
     /**
      * Run the database seeds.
      */
     public function run(): void
     {
-        Document::factory(20)->create();
+        AttendanceFactory::new()->count(30)->create();
     }
 }
