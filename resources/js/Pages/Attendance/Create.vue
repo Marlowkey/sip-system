@@ -43,12 +43,18 @@ const form = useForm({
 const submit = async () => {
 
     try {
-        await form.post(route('attendances.store'), {
-        preserveScroll: true,
-    })
+        if (isEditMode.value) {
+            await form.put(route('attendances.update', attendanceId.value), {
+                preserveScroll: true,
+            });
+        } else {
+            await form.post(route('attendances.store'), {
+                preserveScroll: true,
+            });
+        }
         // Show success notification
     } catch (error) {
-        console.error('Error submitting form:', error)
+        console.error('Error submitting form:', error);
         // Show error notification
     }
 }
@@ -78,21 +84,23 @@ const deleteAttendance = async (documentId) => {
             </SectionTitleLineWithButton>
             <CardBox isForm @submit.prevent="submit">
                 <FormField label="Date">
-                    <FormControl  v-model="form.date" type="date" />
+                    <FormControl v-model="form.date" type="date" />
                 </FormField>
                 <InputError :message="form.errors.date" />
 
                 <FormField label="Time In/Out (AM)">
-                    <FormControl v-model="form.time_in_am" type="time" :icon="mdiCalendarPlus" class="text-green-800"/>
-                    <FormControl v-model="form.time_out_am" type="time" :icon="mdiCalendarRemove" class="text-red-800"/>
+                    <FormControl v-model="form.time_in_am" type="time" :icon="mdiCalendarPlus" class="text-green-800" />
+                    <FormControl v-model="form.time_out_am" type="time" :icon="mdiCalendarRemove"
+                        class="text-red-800" />
                 </FormField>
                 <InputError :message="form.errors.time_in_am" />
                 <InputError :message="form.errors.time_out_am" />
                 <BaseDivider />
 
                 <FormField label="Time In/Out (PM)">
-                    <FormControl v-model="form.time_in_pm" type="time" :icon="mdiCalendarPlus" class="text-green-800"/>
-                    <FormControl v-model="form.time_out_pm" type="time" :icon="mdiCalendarRemove" class="text-red-800"/>
+                    <FormControl v-model="form.time_in_pm" type="time" :icon="mdiCalendarPlus" class="text-green-800" />
+                    <FormControl v-model="form.time_out_pm" type="time" :icon="mdiCalendarRemove"
+                        class="text-red-800" />
                 </FormField>
                 <InputError :message="form.errors.time_in_pm" />
                 <InputError :message="form.errors.time_out_pm" />
