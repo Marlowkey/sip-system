@@ -10,6 +10,7 @@ use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use PhpParser\Node\Expr\FuncCall;
 
 class User extends Authenticatable
 {
@@ -45,6 +46,16 @@ class User extends Authenticatable
         ];
     }
 
+        /**
+     * Get the attendances for the user.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function attendances(): HasMany
+    {
+        return $this->hasMany(Attendance::class);
+    }
+
     public function documents()
     {
         return $this->belongsToMany(Document::class, 'student_document')
@@ -52,10 +63,6 @@ class User extends Authenticatable
             ->withTimestamps();
     }
 
-    public function attendances(): HasMany
-    {
-        return $this->hasMany(Attendance::class);
-    }
     public function isStudent()
     {
         return $this->role === 'student';
@@ -80,14 +87,11 @@ class User extends Authenticatable
     {
         $query = $this->student()
             ->orderBy('last_name')
+            ->where('course', $this->course)
             ->get();
-
-        if ($this->isCoordinator()) {
-            $query->where('course', $this->course);
-        }
-
         return $query;
     }
+
 
     public function getProgress()
     {
