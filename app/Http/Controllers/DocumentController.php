@@ -2,57 +2,28 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\User;
 use Inertia\Inertia;
-use Inertia\Response;
 use App\Models\Document;
+use Illuminate\Contracts\Cache\Store;
 use Illuminate\Http\Request;
-use App\Models\StudentDocument;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Redirect;
+use  App\Http\Requests\Document\StoreRequest;
 
 
 class DocumentController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
+    protected Document $document;
+
+    public function __construct(Document $document)
+    {
+        $this->document = $document;
+    }
     public function index()
     {
         $user = auth()->user();
-        $documentAll = Document::all();
-
-
-        // Fetch documents with users and their completion status
-        $documents = Document::with(['users' => function ($query) {
-            $query->where('user_id', auth()->id());
-        }])->get();
-
-
-        $documentWithNumberOfCompleted = $documentAll->map(function ($document) {
-            $user = auth()->user();
-
-            $studentUsers = User::where('role', 'student')
-            ->where('course', $user->course)
-            ->count();
-
-            $completedDocuments = $document->users->filter(function ($user) {
-                return $user->pivot->is_completed;
-            })
-            ->where('course', $user->course)
-            ->count();
-
-            return [
-                'id' => $document->id,
-                'title' => $document->title,
-                'description' => $document->description,
-                'file_path' => $document->file_path,
-                'due_date' => $document->due_date,
-                'completed' => $completedDocuments,
-                'number_of_users' => $studentUsers,
-            ];
-        });
+        $documents = Document::getDocumentsForUser($user->id);
+        $documentWithNumberOfCompleted = $this->document->getDocumentsWithNumberOfCompleted($user);
 
         return Inertia::render('Document/Index', [
             'user' => $user,
@@ -72,27 +43,21 @@ class DocumentController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(StoreRequest $request)
     {
-        $request->validate([
-            'title' => 'required|string|max:255',
-            'due_date' => 'required|date',
-            'description' => 'nullable|string',
-            'file' => 'nullable|mimes:pdf,doc,docx,jpg,jpeg,png|max:2048',
-        ]);
+        $validated = $request->validated();
 
         $document = new Document();
-        $document->title = $request->title;
-        $document->due_date = $request->due_date;
-        $document->description = $request->description;
+        $document->title = $validated['title'];
+        $document->due_date = $validated['due_date'];
+        $document->description = $validated['description'];
 
-        if ($request->hasFile('file')) {
-            $file = $request->file('file');
+        if ($validated['file']) {
+            $file = $validated['file'];
             $fileName = time() . '_' . $file->getClientOriginalName();
             $file->storeAs('public/documents', $fileName);
             $document->file_path = 'documents/' . $fileName;
         }
-
         $document->save();
 
         return redirect()->route('documents.index')->with('success', 'Document created successfully.');
@@ -121,28 +86,23 @@ class DocumentController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, $id)
+    public function update(StoreRequest $request, $id)
     {
-        // Validate the incoming request
-        $request->validate([
-            'title' => 'required|string|max:255',
-            'due_date' => 'required|date',
-            'description' => 'nullable|string',
-            'file' => 'nullable|mimes:pdf,doc,docx,jpg,jpeg,png|max:2048',
-        ]);
+        $validated = $request->validated();
 
-        $document = Document::findOrFail($id);
-        $document->title = $request->title;
-        $document->due_date = $request->due_date;
-        $document->description = $request->description;
+        $document = new Document();
+        $document->title = $validated['title'];
+        $document->due_date = $validated['due_date'];
+        $document->description = $validated['description'];
 
-        if ($request->hasFile('file')) {
-            $file = $request->file('file');
+        if ($validated['file']) {
+            $file = $validated['file'];
             $fileName = time() . '_' . $file->getClientOriginalName();
             $file->storeAs('public/documents', $fileName);
             $document->file_path = 'documents/' . $fileName;
         }
         $document->save();
+        
         return Redirect::route('documents.index')->with('message', 'Document updated successfully.');
     }
 
