@@ -104,21 +104,22 @@ const submit = () => {
           <BaseButtons>
             <BaseButton
               type="submit"
-              color="dark"
+              color="borderBlue"
               label="Login"
               :class="{ 'opacity-25': form.processing }"
               :disabled="form.processing"
             />
-            <BaseButton
+            <!-- <BaseButton
               v-if="canResetPassword"
               route-name="password.request"
-              color="light"
-              
+              color="dark"
+
               label="Remind"
-            />
+            /> -->
           </BaseButtons>
           <Link
             :href="route('register')"
+            class="font-semibold underlineN"
           >
             Register
           </Link>

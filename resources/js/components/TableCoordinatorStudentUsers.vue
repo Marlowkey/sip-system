@@ -51,35 +51,35 @@ const pagesList = computed(() => {
         <p>This is sample modal</p>
     </CardBoxModal>
     <div class="relative overflow-x-auto m-4">
-    <table class="w-full text-gray-800 text-left rtl:text-right my-2">
+    <table class="w-full text-gray-800 text-left rtl:text-right">
         <thead class="text-gray-700">
             <tr class="border-b">
                 <th v-if="checkable" />
-                <th  scope="col" class="px-6 py-3">Name</th>
-                <th  scope="col" class="px-6 py-3">Email</th>
-                <th  scope="col" class="px-6 py-3">Block</th>
+                <th  scope="col" class="px-4 py-3">Name</th>
+                <th  scope="col" class="px-4 py-3">Email</th>
+                <th  scope="col" class="px-4 py-3">Block</th>
                 <th scope="col" class="px-8 py-3">Progress</th>
                 <th scope="col" class="px-6 py-3">HTE</th>
                 <!-- <th>Action</th> -->
 
             </tr>
         </thead>
-        <tbody>
+        <tbody class="text-gray-600 font-medium">
             <tr v-for="user in itemsPaginated" :key="user.id" class="bg-white dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
-                <td data-label="Name" scope="row" class="px-4 py-1 font-semibold">
+                <td data-label="Name" scope="row" class="px-4 py-2 font-semibold">
                     {{ user.last_name }} , {{ user.first_name }}
                 </td>
-                <td data-label="Email" class="px-4 py-1">
+                <td data-label="Email" class="px-4 py-2">
                     {{ user.email }}
                 </td>
-                <td data-label="Year Level" class="px-4 py-1">
+                <td data-label="Year Level" class="px-4 py-2">
                     {{ user.block }}
                 </td>
 
-                <td data-label="Progress" class="px-4 py-1 min-w-ful">
+                <td data-label="Progress" class="px-4 py-2 min-w-ful">
                     <ProgressBar :progress="user.progress" />
                 </td>
-                <td data-label="HTE" class="px-4 py-1">
+                <td data-label="HTE" class="px-4 py-2">
                     {{ user.host_training_establishment }}
                 </td>
                 <!-- <td class="before:hidden lg:w-1 whitespace-nowrap text-center px-6">

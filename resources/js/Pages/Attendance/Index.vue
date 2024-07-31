@@ -33,12 +33,13 @@ const props = defineProps({
 const date = ref(new Date().toISOString().substr(0, 10))
 const url = route('attendances.index')
 
+
 const fetchAttendances = debounce(() => {
-  router.get(url, { date: date.value });
+    router.get(url, { date: date.value });
 }, 1500);
 
 watch(date, () => {
-  fetchAttendances();
+    fetchAttendances();
 });
 
 const isItemEmpty = ((item) => {
@@ -50,6 +51,7 @@ const userRole = props.user.role;
 </script>
 <template>
     <LayoutAuthenticated>
+
         <Head title="Daily Time Record" />
         <SectionMain v-if="userRole === 'student'">
 
@@ -73,7 +75,8 @@ const userRole = props.user.role;
             </NotificationBar>
 
             <SectionTitleLineWithButton :icon="mdiLocationEnter" title="Daily Time Record" main>
-                    <FormControl v-model="date" borderless type="date" placeholder="Select Date" class="text-sm font-medium"/>
+                <FormControl v-model="date" borderless type="date" placeholder="Select Date"
+                    class="mx-2 text-sm font-medium" />
             </SectionTitleLineWithButton>
             <CardBoxComponentEmpty v-if="isItemEmpty(props.studentAttendance)" />
             <CardBox has-table v-else>

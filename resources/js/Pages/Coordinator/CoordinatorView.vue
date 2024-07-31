@@ -1,12 +1,11 @@
 <script setup>
 import { Head } from '@inertiajs/vue3'
 import { computed, ref, onMounted } from 'vue'
-import { useMainStore } from '@/stores/main.js'
 import {
   mdiAccountMultiple,
   mdiCartOutline,
   mdiChartTimelineVariant,
-  mdiMonitorCellphone,
+  mdiAccountGroup ,
 } from '@mdi/js'
 
 import LayoutAuthenticated from '@/layouts/LayoutAuthenticated.vue'
@@ -14,10 +13,6 @@ import SectionMain from '@/components/SectionMain.vue'
 import CardBoxWidget from '@/components/CardBoxWidget.vue'
 import CardBox from '@/components/CardBox.vue'
 import TableCoordinatorStudentUsers from '@/components/TableCoordinatorStudentUsers.vue'
-import NotificationBar from '@/components/NotificationBar.vue'
-import BaseButton from '@/components/BaseButton.vue'
-import CardBoxTransaction from '@/components/CardBoxTransaction.vue'
-import CardBoxClient from '@/components/CardBoxClient.vue'
 import SectionTitleLineWithButton from '@/components/SectionTitleLineWithButton.vue'
 
 const props = defineProps({
@@ -26,8 +21,6 @@ const props = defineProps({
 })
 
 const title = computed(() => props.user.course + ' Student Interns');
-
-    const mainStore = useMainStore()
 
 </script>
 
@@ -44,7 +37,7 @@ const title = computed(() => props.user.course + ' Student Interns');
           color="text-emerald-500"
           :icon="mdiAccountMultiple"
           :number="512"
-          label="Clients"
+          label="Test"
         />
         <CardBoxWidget
 
@@ -52,7 +45,7 @@ const title = computed(() => props.user.course + ' Student Interns');
           :icon="mdiCartOutline"
           :number="7770"
 
-          label="Sales"
+          label="Test"
         />
         <CardBoxWidget
 
@@ -60,11 +53,12 @@ const title = computed(() => props.user.course + ' Student Interns');
           :icon="mdiChartTimelineVariant"
           :number="256"
 
-          label="Performance"
+          label="Test"
         />
       </div>
 
-      <SectionTitleLineWithButton :icon="mdiAccountMultiple" :title="title" />
+      <SectionTitleLineWithButton :icon="mdiAccountGroup " :title="title" >
+        </SectionTitleLineWithButton>
       <CardBox has-table >
         <TableCoordinatorStudentUsers :users="users"/>
       </CardBox>

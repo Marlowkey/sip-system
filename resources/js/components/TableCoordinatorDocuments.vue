@@ -19,6 +19,8 @@ const props = defineProps({
     }
 })
 
+
+
 const user = computed(() => usePage().props.auth.user)
 const items = computed(() => props.document ? props.document : [])
 const isModalActive = ref(false)
@@ -81,13 +83,13 @@ const formatDueDate = (dueDate) => {
         <table class="w-full text-left rtl:text-right mb-2">
             <thead class="text-gray-700">
                 <tr class="border-b">
-                    <th scope="col" class="px-6 py-3">Title</th>
-                    <th scope="col" class="px-6 py-3">Due on</th>
-                    <th scope="col" class="px-6 py-3">Action</th>
-                    <th scope="col" class="px-6 py-3"># of Completed</th>
+                    <th scope="col" class="px-4 py-3">Title</th>
+                    <th scope="col" class="px-4 py-3">Due on</th>
+                    <th scope="col" class="px-4 py-3">Action</th>
+                    <th scope="col" class="px-4 py-3"># of Completed</th>
                 </tr>
             </thead>
-            <tbody>
+            <tbody class="text-gray-600 font-medium">
                 <tr v-for="document in itemsPaginated" :key="document.id" class="bg-white dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
                     <td data-label="Title" scope="row" class="px-4 py-1">
                         {{ document.title }}

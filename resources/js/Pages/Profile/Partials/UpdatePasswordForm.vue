@@ -89,7 +89,7 @@ const updatePassword = () => {
             </div>
 
             <div class="flex items-center gap-4">
-                <BaseButton label="Save" color="lightDark" :disabled="form.processing" type="submit"/>
+                <BaseButton  label="Save" color="light" :disabled="form.processing" type="submit" small/>
 
                 <Transition
                     enter-active-class="transition ease-in-out"

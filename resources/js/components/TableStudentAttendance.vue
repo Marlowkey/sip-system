@@ -85,7 +85,7 @@ const isUserCoordinator = computed(() => user.value.role === 'coordinator')
                     <th scope="col" class="px-4 py-3">Time Out (AM)</th>
                     <th scope="col" class="px-4 py-3">Time In (PM)</th>
                     <th scope="col" class="px-4 py-3">Time Out (PM)</th>
-                    <th v-if="!!isUserCoordinator.value" scope="col" class="px-4 py-3">Action</th>
+                    <th v-if="!isUserCoordinator.value" scope="col" class="px-4 py-3">Action</th>
                 </tr>
             </thead>
             <tbody>
@@ -105,7 +105,7 @@ const isUserCoordinator = computed(() => user.value.role === 'coordinator')
                     <td data-label="Time Out (PM)" class="px-4 py-2  text-red-900 font-semibold">
                         {{ formatTime(attendance.time_out_pm) }}
                     </td>
-                    <td v-if="!!isUserCoordinator.value" data-label="Action" class="whitespace-nowrap px-2 py-2">
+                    <td v-if="!isUserCoordinator.value" data-label="Action" class="whitespace-nowrap px-2 py-2">
                         <BaseButtons type="justify-start" no-wrap>
                             <BaseButton roundedFull color="blue" :icon="mdiFileEditOutline"
                                 :href="route('attendances.edit', { id: attendance.id })" small />

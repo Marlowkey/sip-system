@@ -45,21 +45,19 @@ const transactionBarItems = computed(() => mainStore.history)
           color="text-emerald-500"
           :icon="mdiAccountMultiple"
           :number="512"
-          label="Clients"
+          label="Test"
         />
         <CardBoxWidget
           color="text-blue-500"
           :icon="mdiCartOutline"
           :number="7770"
-          prefix="$"
-          label="Sales"
+          label="Test"
         />
         <CardBoxWidget
           color="text-red-500"
           :icon="mdiChartTimelineVariant"
           :number="256"
-          suffix="%"
-          label="Performance"
+          label="Test"
         />
       </div>
 

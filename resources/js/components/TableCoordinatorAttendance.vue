@@ -1,6 +1,6 @@
 <script setup>
 import { computed, ref, defineProps } from 'vue'
-import {  mdiEyeArrowRightOutline  } from '@mdi/js'
+import { mdiEyeArrowRightOutline } from '@mdi/js'
 import { router, usePage } from '@inertiajs/vue3'
 import BaseLevel from '@/components/BaseLevel.vue'
 import BaseButtons from '@/components/BaseButtons.vue'
@@ -8,6 +8,8 @@ import BaseButton from '@/components/BaseButton.vue'
 import { useForm } from '@inertiajs/vue3'
 import { format, parse } from 'date-fns';
 import CardBoxComponentEmpty from './CardBoxComponentEmpty.vue'
+import FormControl from '@/components/FormControl.vue'
+import NavBarItemPlain from '@/components/NavBarItemPlain.vue'
 
 
 const props = defineProps({
@@ -68,10 +70,12 @@ const formatDate = (date) => {
 </script>
 
 <template>
-    <div class="relative overflow-x-auto">
+
+    <div class="relative overflow-x-auto my-2">
         <table class="my-2 w-full text-gray-800 text-left rtl:text-right">
             <thead class="text-gray-800 text-left">
-                <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
+                <tr
+                    class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
                     <th scope="col" class="px-4 py-3">Date</th>
                     <th scope="col" class="px-4 py-3">Name</th>
                     <th scope="col" class="px-4 py-3">Time In (AM)</th>
@@ -83,7 +87,8 @@ const formatDate = (date) => {
                 </tr>
             </thead>
             <tbody>
-                <tr v-for="attendance in itemsPaginated" :key="attendance.id" class="bg-white dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
+                <tr v-for="attendance in itemsPaginated" :key="attendance.id"
+                    class="bg-white dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
                     <td data-label="Date" scope="row" class="px-4 py-1 font-semibold">
                         {{ formatDate(attendance.date) }}
                     </td>
@@ -104,9 +109,8 @@ const formatDate = (date) => {
                     </td>
                     <td data-label="Action" class="hitespace-nowrap px-2 py-1">
                         <BaseButtons type="justify-start" no-wrap>
-                            <BaseButton roundedFull color="blue" :icon="mdiEyeArrowRightOutline " small
-                            :href="route('student-attendance.show', { id: attendance.user_id })"
-                              />
+                            <BaseButton roundedFull color="blue" :icon="mdiEyeArrowRightOutline" small
+                                :href="route('student-attendance.show', { id: attendance.user_id })" />
                         </BaseButtons>
                     </td>
                 </tr>
