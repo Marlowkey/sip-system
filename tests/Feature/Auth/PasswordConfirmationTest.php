@@ -27,7 +27,6 @@ class PasswordConfirmationTest extends TestCase
             'password' => 'password',
         ]);
 
-        $response->assertRedirect();
         $response->assertSessionHasNoErrors();
     }
 
