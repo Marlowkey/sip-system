@@ -1,16 +1,11 @@
 <?php
 
 use Inertia\Inertia;
-use App\Models\Document;
 use Illuminate\Support\Facades\Route;
-use Illuminate\Foundation\Application;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\DocumentController;
 use App\Http\Controllers\AttendanceController;
 use App\Http\Controllers\StudentDocumentController;
-use Illuminate\Support\Facades\Log;
-use App\Models\User;
-use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\HomeController;
 
 Route::middleware(['auth:sanctum', 'verified'])->get('/',[HomeController::class, 'index'])->name('home');

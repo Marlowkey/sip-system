@@ -30,7 +30,11 @@ const props = defineProps({
     studentAttendance: Array, // Student attendance passed as a prop from Inertia
 })
 
-const date = ref(new Date().toISOString().substr(0, 10))
+const getDateNow = () => {
+    return new Date().toISOString().substr(0, 10)
+}
+
+const date = ref(getDateNow())
 const url = route('attendances.index')
 
 
@@ -38,8 +42,10 @@ const fetchAttendances = debounce(() => {
     router.get(url, { date: date.value });
 }, 1500);
 
-watch(date, () => {
-    fetchAttendances();
+watch(date, (newDate, oldate) => {
+    if (newDate !== oldDate) {
+        fetchAttendances();
+    }
 });
 
 const isItemEmpty = ((item) => {

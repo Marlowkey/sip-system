@@ -28,8 +28,10 @@ const props = defineProps({
     user: Object, // Authenticated user passed as a prop from Inertia
     attendance: Array, // Documents passed as a prop from Inertia
 })
-
-const date = ref(new Date().toISOString().substr(0, 10))
+const getDateNow = () => {
+    return new Date().toISOString().substr(0, 10)
+}
+const date = ref(getDateNow())
 const url = route('attendances.index')
 
 const fetchAttendances = debounce(() => {
