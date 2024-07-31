@@ -18,4 +18,11 @@ class Document extends Model
                     ->withPivot('is_completed')
                     ->withTimestamps();
     }
+
+    public static function getDocumentsForUser($id)
+    {
+        return self::with(['users' => function ($query) use($id) {
+            $query->where('user_id', $id);
+        }])->get();
+    }
 }

@@ -7,6 +7,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
+
 class AttendanceController extends Controller
 {
     /**
@@ -16,6 +17,7 @@ class AttendanceController extends Controller
     {
         $user = auth()->user();
         $date = $request->query('date');
+        $search = $request->query('search');
         $attendance = $user->attendances;
 
         $request->validate([
@@ -24,34 +26,40 @@ class AttendanceController extends Controller
 
         $attendanceQuery = Attendance::with(['user' => function ($query) {
             $user = auth()->user();
+            $query->where('role', 'student');
             $query->where('course', $user->course);
+            $query->orderBy('last_name');
         }]);
 
 
-        if($date) {
+        if ($date) {
             $attendanceQuery->where('date', $date);
+        } else {
+            $attendanceQuery->where('date', now()->toDateString());
         }
 
+
+
         $attendances = $attendanceQuery->get();
-        $studentAttendance = $attendances->map(function ($attendance){
+        $studentAttendance = $attendances->map(function ($attendance) {
             if ($attendance->user) {
-            return [
-                'id' => $attendance->id,
-                'user_id' => $attendance->user->id,
-                'last_name' => $attendance->user->last_name,
-                'first_name' => $attendance->user->first_name,
-                'course' => $attendance->user->course,
-                'block' => $attendance->user->block,
-                'host_training_establishment' => $attendance->user->host_training_establishment,
-                'date' => $attendance->date,
-                'time_in_am' => $attendance->time_in_am,
-                'time_out_am' => $attendance->time_out_am,
-                'time_in_pm' => $attendance->time_in_pm,
-                'time_out_pm' => $attendance->time_out_pm,
-            ];
-        }
-        return null;
-    })->filter();
+                return [
+                    'id' => $attendance->id,
+                    'user_id' => $attendance->user->id,
+                    'last_name' => $attendance->user->last_name,
+                    'first_name' => $attendance->user->first_name,
+                    'course' => $attendance->user->course,
+                    'block' => $attendance->user->block,
+                    'host_training_establishment' => $attendance->user->host_training_establishment,
+                    'date' => $attendance->date,
+                    'time_in_am' => $attendance->time_in_am,
+                    'time_out_am' => $attendance->time_out_am,
+                    'time_in_pm' => $attendance->time_in_pm,
+                    'time_out_pm' => $attendance->time_out_pm,
+                ];
+            }
+            return null;
+        })->filter();
 
         return Inertia::render('Attendance/Index', [
             'user' => $user,
@@ -85,7 +93,7 @@ class AttendanceController extends Controller
             'time_out_pm' => 'nullable',
         ]);
 
-     Attendance::updateOrCreate(
+        Attendance::updateOrCreate(
             [
                 'user_id' => $request->user_id,
                 'date' => $request->date,
@@ -94,11 +102,11 @@ class AttendanceController extends Controller
                 'time_in_am' => $request->time_in_am,
                 'time_out_am' => $request->time_out_am,
                 'time_in_pm' => $request->time_in_pm,
-                'time_out_pm' => $request->time_out_pm,           ]
+                'time_out_pm' => $request->time_out_pm,
+            ]
         );
 
         return redirect()->route('attendances.index')->with('message', 'Attendance recorded successfully.');
-
     }
 
     /**
@@ -132,7 +140,7 @@ class AttendanceController extends Controller
         return redirect()->route('attendances.index')->with('message', 'Attendance deleted successfully.');
     }
 
-    public function showStudentAttendance ( $id)
+    public function showStudentAttendance($id)
     {
         $user = User::findOrFail($id);
         $attendance = $user->attendances;
