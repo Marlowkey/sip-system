@@ -4,21 +4,21 @@ namespace App\Http\Controllers;
 
 use Inertia\Inertia;
 use App\Models\Document;
-use Illuminate\Contracts\Cache\Store;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Storage;
+use App\Services\DocumentService;
 use Illuminate\Support\Facades\Redirect;
 use  App\Http\Requests\Document\StoreRequest;
-
 
 class DocumentController extends Controller
 {
     protected Document $document;
+    protected DocumentService $documentService;
 
-    public function __construct(Document $document)
+    public function __construct(Document $document, DocumentService $documentService)
     {
         $this->document = $document;
+        $this->documentService = $documentService;
     }
+
     public function index()
     {
         $user = auth()->user();
@@ -46,19 +46,7 @@ class DocumentController extends Controller
     public function store(StoreRequest $request)
     {
         $validated = $request->validated();
-
-        $document = new Document();
-        $document->title = $validated['title'];
-        $document->due_date = $validated['due_date'];
-        $document->description = $validated['description'];
-
-        if ($validated['file']) {
-            $file = $validated['file'];
-            $fileName = time() . '_' . $file->getClientOriginalName();
-            $file->storeAs('public/documents', $fileName);
-            $document->file_path = 'documents/' . $fileName;
-        }
-        $document->save();
+        $this->documentService->storeDocument($validated);
 
         return redirect()->route('documents.index')->with('success', 'Document created successfully.');
     }
@@ -88,21 +76,10 @@ class DocumentController extends Controller
      */
     public function update(StoreRequest $request, $id)
     {
+        $document = Document::findOrFail($id);
         $validated = $request->validated();
+        $this->documentService->updateDocument($document, $validated);
 
-        $document = new Document();
-        $document->title = $validated['title'];
-        $document->due_date = $validated['due_date'];
-        $document->description = $validated['description'];
-
-        if ($validated['file']) {
-            $file = $validated['file'];
-            $fileName = time() . '_' . $file->getClientOriginalName();
-            $file->storeAs('public/documents', $fileName);
-            $document->file_path = 'documents/' . $fileName;
-        }
-        $document->save();
-        
         return Redirect::route('documents.index')->with('message', 'Document updated successfully.');
     }
 
@@ -112,28 +89,15 @@ class DocumentController extends Controller
     public function destroy($id)
     {
         $document = Document::findOrFail($id);
-
-        // Delete file if it exists
-        if ($document->file_path) {
-            Storage::delete('public/' . $document->file_path);
-        }
-        $document->delete();
+        $this->documentService->deleteDocument($document);
         return Redirect::route('documents.index')->with('message', 'Document deleted successfully.');
     }
 
     public function download(Document $document)
     {
-        $filePath = public_path('storage/' . $document->file_path); // Get public path
+        $filePath = $this->documentService->getUploadFilePath($document);
+        $fileName = $this->documentService->getUploadFileName($document, $filePath);
 
-        if (file_exists($filePath)) {
-            // Get the file extension
-            $extension = pathinfo($filePath, PATHINFO_EXTENSION);
-
-            // Set the downloaded file name with extension
-            $fileName = $document->title . '.' . $extension;
-
-            // Return the file as a downloadable response
-            return response()->download($filePath, $fileName);
-        }
+        return response()->download($filePath, $fileName);
     }
 }
