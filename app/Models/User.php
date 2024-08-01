@@ -46,7 +46,7 @@ class User extends Authenticatable
         ];
     }
 
-        /**
+    /**
      * Get the attendances for the user.
      *
      * @return \Illuminate\Database\Eloquent\Relations\HasMany

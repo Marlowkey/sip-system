@@ -2,28 +2,27 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\Document\StudentDocumentUpdateRequest;
 use Illuminate\Http\Request;
 use App\Models\StudentDocument;
 
 class StudentDocumentController extends Controller
 {
-    public function updateCompletionStatus(Request $request)
+    public function updateCompletionStatus(StudentDocumentUpdateRequest $request)
     {
-        $request->validate([
-            'user_id' => 'required|exists:users,id',
-            'document_id' => 'required|exists:documents,id',
-            'is_completed' => 'required|boolean',
-        ]);
+        $validated = $request->validated();
 
         $studentDocument = StudentDocument::updateOrCreate(
             [
-                'user_id' => $request->user_id,
-                'document_id' => $request->document_id,
+                'user_id' => $validated['user_id'],
+                'document_id' => $validated['document_id'],
             ],
             [
-                'is_completed' => $request->is_completed,
+                'is_completed' => $validated['is_completed'],
             ]
         );
+
         return redirect()->back()->with('message', 'Document completion status updated successfully.');
     }
 }
+

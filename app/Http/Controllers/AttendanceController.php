@@ -7,6 +7,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use App\Http\Requests\Attendance\StoreRequest;
+use App\Http\Requests\Attendance\IndexRequest;
 use Illuminate\Support\Facades\Auth;
 
 
@@ -22,21 +23,20 @@ class AttendanceController extends Controller
         $this->attendance = $attendance;
         $this->user = $user;
     }
-    public function index(Request $request)
+    public function index(IndexRequest $request)
     {
         $user = auth()->user();
         $attendance = $user->attendances;
 
-        $date = $request->query('date');
-        $request->validate([
-            'date' => 'nullable|date',
-        ]);
+        $date = $request->validated()['date'] ?? null;
+
         $studentAttendance = $this->attendance->getStudentAttendances($user, $date);
 
         return Inertia::render('Attendance/Index', [
             'user' => $user,
             'attendance' => $attendance,
             'studentAttendance' => $studentAttendance,
+            'date' => $date,
         ]);
     }
 
@@ -86,8 +86,7 @@ class AttendanceController extends Controller
      */
     public function destroy($id)
     {
-        $attendance = Attendance::findOrFail($id);
-        $attendance->delete();
+        Attendance::findOrFail($id)->delete();
 
         return redirect()->route('attendances.index')->with('message', 'Attendance deleted successfully.');
     }
