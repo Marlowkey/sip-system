@@ -54,4 +54,27 @@ class Attendance extends Model
         })->filter();
     }
 
+    public function getStudentAttendancesForStudent($user, $month = null)
+    {
+        $query = $user->attendances();
+
+        if ($month) {
+            // Split the month into year and month components
+            $dateComponents = explode('-', $month);
+            if (count($dateComponents) == 2) {
+                $year = $dateComponents[0];
+                $month = $dateComponents[1];
+
+                $query->whereYear('date', $year)
+                      ->whereMonth('date', $month);
+            } else {
+                // Handle invalid month format
+                throw new \Exception('Invalid month format. Expected format: YYYY-MM');
+            }
+        } else {
+            $query->whereDate('date', now()->toDateString());
+        }
+
+        return $query->get();
+    }
 }

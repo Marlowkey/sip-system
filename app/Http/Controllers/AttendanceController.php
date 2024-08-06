@@ -26,10 +26,11 @@ class AttendanceController extends Controller
     public function index(IndexRequest $request)
     {
         $user = auth()->user();
-        $attendance = $user->attendances;
+
+        $month = $request->validated()['month'] ?? null;
+        $attendance = $this->attendance->getStudentAttendancesForStudent($user, $month);
 
         $date = $request->validated()['date'] ?? null;
-
         $studentAttendance = $this->attendance->getStudentAttendances($user, $date);
 
         return Inertia::render('Attendance/Index', [
@@ -37,6 +38,7 @@ class AttendanceController extends Controller
             'attendance' => $attendance,
             'studentAttendance' => $studentAttendance,
             'date' => $date,
+            'month' => $month,
         ]);
     }
 

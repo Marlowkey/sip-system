@@ -5,10 +5,7 @@ import { computed, ref, onMounted, watch } from 'vue'
 import { useMainStore } from '@/stores/main.js'
 import {
     mdiLocationEnter,
-    mdiFilterMenuOutline,
-    mdiPlus,
     mdiClockCheckOutline,
-    mdiFilterMenu,
 } from '@mdi/js'
 import SectionMain from '@/components/SectionMain.vue'
 import CardBox from '@/components/CardBox.vue'
@@ -19,8 +16,7 @@ import NotificationBar from '@/components/NotificationBar.vue'
 import TableStudentAttendance from '@/components/TableStudentAttendance.vue'
 import CardBoxComponentEmpty from '@/components/CardBoxComponentEmpty.vue'
 import TableCoordinatorAttendance from '@/components/TableCoordinatorAttendance.vue'
-import Dropdown from '@/ComponentsBreeze/Dropdown.vue'
-import BaseDivider from '@/components/BaseDivider.vue'
+
 import FormControl from '@/components/FormControl.vue'
 
 
@@ -29,23 +25,39 @@ const props = defineProps({
     attendance: Array, // Documents passed as a prop from Inertia
     studentAttendance: Array, // Student attendance passed as a prop from Inertia
     date: String, // Date passed as a prop from Inertia
+    month: String, // Month passed as a prop from Inertia
 })
 
 const getDateNow = () => {
     return new Date().toISOString().substr(0, 10)
 }
 
-const date = ref(props.date??getDateNow())
+const getMonthNow = () => {
+    return new Date().toISOString().substr(0, 7)
+}
+
+const date = ref(props.date ?? getDateNow())
+const month = ref(props.month ?? getMonthNow())
 const url = route('attendances.index')
 
 
-const fetchAttendances = debounce(() => {
+const fetchAttendancesForCoordinator = debounce(() => {
     router.get(url, { date: date.value });
+}, 1500);
+
+const fetchAttendancesForStudent = debounce(() => {
+    router.get(url, { month: month.value });
 }, 1500);
 
 watch(date, (newDate, oldDate) => {
     if (newDate !== oldDate) {
-        fetchAttendances();
+        fetchAttendancesForCoordinator();
+    }
+});
+
+watch(month, (newMonth, oldMonth) => {
+    if (newMonth !== oldMonth) {
+        fetchAttendancesForStudent();
     }
 });
 
@@ -67,8 +79,15 @@ const userRole = props.user.role;
             </NotificationBar>
 
             <SectionTitleLineWithButton :icon="mdiLocationEnter" title="Daily Time Record" main>
-                <BaseButton roundedFull :icon="mdiClockCheckOutline" color="blue" routeName="attendances.create"
-                    class="mx-4" />
+                <div class="flex mx-6">
+                    <FormControl v-model="month" borderless type="month" placeholder="Select Date"
+                        class="justify-end text-sm font-medium" />
+                    <div class="justify-end content-center	mx-2">
+                        <BaseButton roundedFull :icon="mdiClockCheckOutline" color="blue"
+                            routeName="attendances.create" class="p-2 mx-1" />
+                    </div>
+                </div>
+
             </SectionTitleLineWithButton>
             <CardBoxComponentEmpty v-if="isItemEmpty(props.attendance)" />
             <CardBox has-table v-else>

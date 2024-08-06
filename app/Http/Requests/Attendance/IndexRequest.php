@@ -19,6 +19,7 @@ class IndexRequest extends FormRequest
     {
         return [
             'date' => 'nullable|date',
+            'month' => 'nullable|date_format:Y-m',
         ];
     }
 }
