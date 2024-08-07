@@ -14,32 +14,33 @@ import SectionMain from '@/components/SectionMain.vue'
 import CardBox from '@/components/CardBox.vue'
 import SectionTitleLineWithButton from '@/components/SectionTitleLineWithButton.vue'
 import LayoutAuthenticated from '@/layouts/LayoutAuthenticated.vue'
-import BaseButton from '@/components/BaseButton.vue'
 import NotificationBar from '@/components/NotificationBar.vue'
 import TableStudentAttendance from '@/components/TableStudentAttendance.vue'
 import CardBoxComponentEmpty from '@/components/CardBoxComponentEmpty.vue'
-import TableCoordinatorAttendance from '@/components/TableCoordinatorAttendance.vue'
-import Dropdown from '@/ComponentsBreeze/Dropdown.vue'
-import BaseDivider from '@/components/BaseDivider.vue'
 import FormControl from '@/components/FormControl.vue'
 
 
 const props = defineProps({
     user: Object, // Authenticated user passed as a prop from Inertia
     attendance: Array, // Documents passed as a prop from Inertia
+    month: String, // Month passed as a prop from Inertia
 })
-const getDateNow = () => {
-    return new Date().toISOString().substr(0, 10)
+
+const getMonthNow = () => {
+    return new Date().toISOString().substr(0, 7)
 }
-const date = ref(getDateNow())
-const url = route('attendances.index')
 
-const fetchAttendances = debounce(() => {
-  router.get(url, { date: date.value });
-}, 300);
+const month = ref(props.month ?? getMonthNow())
+const url = route('student-attendance.show', { id: props.user.id })
 
-watch(date, () => {
-  fetchAttendances();
+const fetchAttendancesForStudent = debounce(() => {
+    router.get(url, { month: month.value });
+}, 1500);
+
+watch(month, (newMonth, oldMonth) => {
+    if (newMonth !== oldMonth) {
+        fetchAttendancesForStudent();
+    }
 });
 
 const isItemEmpty = ((item) => {
@@ -63,7 +64,10 @@ const title = computed(() => {
                 {{ $page.props.flash.message }}
             </NotificationBar>
 
-            <SectionTitleLineWithButton :icon="mdiLocationEnter" :title="title" main />
+            <SectionTitleLineWithButton :icon="mdiLocationEnter" :title="title" main>
+                <FormControl v-model="month" borderless type="month" placeholder="Select Date"
+                class="justify-end text-sm font-medium" />
+            </SectionTitleLineWithButton>
             <CardBoxComponentEmpty v-if="isItemEmpty(props.attendance)" />
             <CardBox has-table v-else>
                 <TableStudentAttendance :attendance="attendance" :user="user" />

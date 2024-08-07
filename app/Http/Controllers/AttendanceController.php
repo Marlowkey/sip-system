@@ -2,13 +2,14 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Attendance;
 use App\Models\User;
-use Illuminate\Http\Request;
 use Inertia\Inertia;
-use App\Http\Requests\Attendance\StoreRequest;
-use App\Http\Requests\Attendance\IndexRequest;
+use App\Models\Attendance;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use App\Http\Requests\Attendance\ShowRequest;
+use App\Http\Requests\Attendance\IndexRequest;
+use App\Http\Requests\Attendance\StoreRequest;
 
 
 
@@ -93,14 +94,17 @@ class AttendanceController extends Controller
         return redirect()->route('attendances.index')->with('message', 'Attendance deleted successfully.');
     }
 
-    public function showStudentAttendance($id)
+    public function showStudentAttendance(ShowRequest $request, $id)
     {
         $user = User::findOrFail($id);
-        $attendance = $user->attendances;
+        $month = $request->validated()['month'] ?? null;
 
+        $attendance = $this->attendance->getStudentAttendancesForStudent($user, $month);
         return Inertia::render('Attendance/Show', [
             'user' => $user,
             'attendance' => $attendance,
+            'month' => $month,
         ]);
     }
 }
+
