@@ -78,9 +78,10 @@ class AttendanceController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(StoreRequest $request)
+    public function update(StoreRequest $request, $id)
     {
-        Auth::user()->attendances()->update($request->validated());
+        $attendance = Attendance::findOrFail($id);
+        $attendance->update($request->validated());
         return redirect()->route('attendances.index')->with('message', 'Attendance updated successfully.');
     }
 
