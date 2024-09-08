@@ -42,7 +42,7 @@ const title = computed(() => props.user.course + ' Student Interns');
         <CardBoxWidget
 
           color="text-blue-500"
-          :icon="mdiCartOutline"
+          :icon="mdiAccountMultiple"
           :number="7770"
 
           label="Test"
@@ -50,7 +50,7 @@ const title = computed(() => props.user.course + ' Student Interns');
         <CardBoxWidget
 
           color="text-red-500"
-          :icon="mdiChartTimelineVariant"
+          :icon="mdiAccountMultiple"
           :number="256"
 
           label="Test"

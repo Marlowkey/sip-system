@@ -49,13 +49,13 @@ const transactionBarItems = computed(() => mainStore.history)
         />
         <CardBoxWidget
           color="text-blue-500"
-          :icon="mdiCartOutline"
+          :icon="mdiAccountMultiple"
           :number="7770"
           label="Test"
         />
         <CardBoxWidget
           color="text-red-500"
-          :icon="mdiChartTimelineVariant"
+          :icon="mdiAccountMultiple"
           :number="256"
           label="Test"
         />
