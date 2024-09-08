@@ -13,6 +13,11 @@ return new class extends Migration
     {
         Schema::create('journals', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('user_id')->constrained()->onDelete('cascade');
+            $table->string('title');
+            $table->date('date');
+            $table->text('content');
+            $table->string('image_path')->nullable();
             $table->timestamps();
         });
     }
