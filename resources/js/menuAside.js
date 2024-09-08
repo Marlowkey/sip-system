@@ -24,8 +24,8 @@ export default [
       icon: mdiTable
     },
     {
-      route: 'forms',
-      label: 'Forms',
+      route: 'journals.index',
+      label: 'Journal',
       icon: mdiSquareEditOutline
     },
     {

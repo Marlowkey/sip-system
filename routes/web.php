@@ -2,11 +2,12 @@
 
 use Inertia\Inertia;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\HomeController;
+use App\Http\Controllers\JournalController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\DocumentController;
 use App\Http\Controllers\AttendanceController;
 use App\Http\Controllers\StudentDocumentController;
-use App\Http\Controllers\HomeController;
 
 Route::middleware(['auth:sanctum', 'verified'])->get('/',[HomeController::class, 'index'])->name('home');
 
@@ -14,9 +15,7 @@ Route::get('/tables', function () {
     return Inertia::render('TablesView');
 })->name('tables');
 
-Route::get('/forms', function () {
-    return Inertia::render('FormsView');
-})->name('forms');
+
 
 Route::get('/error', function () {
     return Inertia::render('ErrorView');
@@ -34,4 +33,7 @@ Route::get('/documents/download/{document}', [DocumentController::class, 'downlo
 
 Route::resource('attendances', AttendanceController::class);
 Route::get('/student-attendance/{id}', [AttendanceController::class, 'showStudentAttendance'])->name('student-attendance.show');
+
+
+Route::resource('/journals', JournalController::class);
 require __DIR__ . '/auth.php';

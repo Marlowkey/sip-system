@@ -31,7 +31,7 @@ import {
         icon: mdiCalendarBadge
       },
       {
-        route: 'forms',
+        route: 'journals.index',
         label: 'Journal',
         icon: mdiSquareEditOutline
       },

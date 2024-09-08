@@ -24,8 +24,8 @@ import {
         label: 'DTR',
       },
       {
-        route: 'forms',
-        label: 'Forms',
+        route: 'journals.index',
+        label: 'Journal',
         icon: mdiSquareEditOutline
       },
       {

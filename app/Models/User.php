@@ -3,14 +3,15 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+use App\Models\Journal;
 use App\Models\Document;
+use PhpParser\Node\Expr\FuncCall;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
-use PhpParser\Node\Expr\FuncCall;
 
 class User extends Authenticatable
 {
@@ -61,6 +62,12 @@ class User extends Authenticatable
         return $this->belongsToMany(Document::class, 'student_document')
             ->withPivot('is_completed')
             ->withTimestamps();
+    }
+
+
+    public function journals(): HasMany
+    {
+        return $this->hasMany(Journal::class);
     }
 
     public function isStudent()
