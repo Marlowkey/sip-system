@@ -19,7 +19,7 @@ class AttendanceFactory extends Factory
     {
         return [
             'user_id' => User::factory(),
-            'date' => $this->faker->dateTimeThisYear('+6 months'),
+            'date' => $this->faker->dateTimeThisYear('+7 months'),
             'time_in_am' => $this->faker->time(),
             'time_out_am' => $this->faker->time(),
             'time_in_pm' => $this->faker->time(),

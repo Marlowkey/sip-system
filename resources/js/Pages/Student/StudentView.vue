@@ -18,7 +18,7 @@ import CardBox from '@/components/CardBox.vue'
 import NotificationBar from '@/components/NotificationBar.vue'
 import BaseButton from '@/components/BaseButton.vue'
 import CardBoxTransaction from '@/components/CardBoxTransaction.vue'
-import CardBoxClient from '@/components/CardBoxClient.vue'
+import CardBoxClient from '@/components/CardBoxJournal.vue'
 import SectionTitleLineWithButton from '@/components/SectionTitleLineWithButton.vue'
 import TableStudentDocuments from '@/components/TableStudentDocuments.vue'
 

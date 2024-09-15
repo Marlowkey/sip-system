@@ -58,7 +58,7 @@ const pagesList = computed(() => {
                 <th  scope="col" class="px-4 py-3">Name</th>
                 <th  scope="col" class="px-4 py-3">Email</th>
                 <th  scope="col" class="px-4 py-3">Block</th>
-                <th scope="col" class="px-8 py-3">Progress</th>
+                <th scope="col" class="px-8 py-3">SIP Requirements Progress</th>
                 <th scope="col" class="px-6 py-3">HTE</th>
                 <!-- <th>Action</th> -->
 

@@ -11,8 +11,6 @@ use App\Http\Requests\Attendance\ShowRequest;
 use App\Http\Requests\Attendance\IndexRequest;
 use App\Http\Requests\Attendance\StoreRequest;
 
-
-
 class AttendanceController extends Controller
 {
 
@@ -69,7 +67,6 @@ class AttendanceController extends Controller
     public function edit($id)
     {
         $attendance = Attendance::findOrFail($id);
-
         return Inertia::render('Attendance/Create', [
             'attendance' => $attendance,
         ]);
@@ -78,7 +75,7 @@ class AttendanceController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(StoreRequest $request, $id)
+    public function update(StoreRequest $request, int $id)
     {
         $attendance = Attendance::findOrFail($id);
         $attendance->update($request->validated());
@@ -88,7 +85,7 @@ class AttendanceController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy($id)
+    public function destroy(int $id)
     {
         Attendance::findOrFail($id)->delete();
 

@@ -13,6 +13,7 @@ import LayoutAuthenticated from '@/layouts/LayoutAuthenticated.vue'
 import BaseButton from '@/components/BaseButton.vue'
 import NotificationBar from '@/components/NotificationBar.vue'
 import CardBoxComponentEmpty from '@/components/CardBoxComponentEmpty.vue'
+import CardBoxJournal from '@/components/CardBoxJournal.vue'
 
 
 const props = defineProps({
@@ -24,6 +25,7 @@ const userRole = props.user.role;
 
 <template>
     <LayoutAuthenticated>
+
         <Head title="Journals" />
         <SectionMain v-if="userRole === 'student'">
 
@@ -31,9 +33,18 @@ const userRole = props.user.role;
                 {{ $page.props.flash.message }}
             </NotificationBar>
 
-            <SectionTitleLineWithButton :icon="mdiAccountFile" title="Journal Entries" main />
-            <CardBox>
-            </CardBox>
+            <SectionTitleLineWithButton :icon="mdiAccountFile" title="Journal Entries" main>
+                <BaseButton roundedFull :icon="mdiPlus" color="whiteDark"/>
+            </SectionTitleLineWithButton>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-4">
+                <CardBoxJournal :title="'Test'" :date="'Now'" :text="'text'" :type="'type'" />
+                <CardBoxJournal :title="'Test'" :date="'Now'" :text="'text'" :type="'type'" />
+                <CardBoxJournal :title="'Test'" :date="'Now'" :text="'text'" :type="'type'" />
+                <CardBoxJournal :title="'Test'" :date="'Now'" :text="'text'" :type="'type'" />
+                <CardBoxJournal :title="'Test'" :date="'Now'" :text="'text'" :type="'type'" />
+                <CardBoxJournal :title="'Test'" :date="'Now'" :text="'text'" :type="'type'" />
+
+            </div>
         </SectionMain>
 
         <SectionMain v-else-if="userRole === 'coordinator'">
