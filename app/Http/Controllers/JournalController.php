@@ -2,11 +2,24 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
 use Inertia\Inertia;
+use App\Models\Journal;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use App\Http\Requests\Journal\StoreRequest;
 
 class JournalController extends Controller
 {
+
+    protected Journal $journal;
+    protected User $user;
+
+    public function __construct(Journal $journal, User $user)
+    {
+        $this->journal = $journal;
+        $this->user = $user;
+    }
     /**
      * Display a listing of the resource.
      */
@@ -23,23 +36,30 @@ class JournalController extends Controller
      */
     public function create()
     {
-        //
+        $user = auth()->user();
+        return Inertia::render('Journal/Create', [
+            'user' => $user,
+        ]);
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(StoreRequest $request)
     {
-        //
+        Auth::user()->journals()->create($request->validated());
+        return redirect()->route('attendances.index')->with('message', 'Journal entry recorded successfully.');
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(int $id)
     {
-        //
+        $journal = Journal::findOrFail($id);
+        return Inertia::render('Journal/Show', [
+            'journal' => $journal,
+        ]);
     }
 
     /**
@@ -47,22 +67,32 @@ class JournalController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        $journal = Journal::findOrFail($id);
+        return Inertia::render('Journal/Create', [
+            'journal' => $journal,
+        ]);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(StoreRequest $request, int $id)
     {
-        //
+        $journal = Journal::findOrFail($id);
+        $journal->update($request->validated());
+        return redirect()->route('journals.index')->with('message', 'Journal updated successfully.');
+
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(int $id)
     {
-        //
+        Journal::findOrFail($id)->delete();
+
+        return redirect()->route('journals.index')->with('message', 'Journal deleted successfully.');
     }
+
+    
 }
