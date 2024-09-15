@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use App\Services\JournalService;
 use Inertia\Inertia;
 use App\Models\Journal;
 use Illuminate\Http\Request;
@@ -13,12 +14,12 @@ class JournalController extends Controller
 {
 
     protected Journal $journal;
-    protected User $user;
+    protected JournalService $journalService;
 
-    public function __construct(Journal $journal, User $user)
+    public function __construct(Journal $journal, JournalService $journalService)
     {
         $this->journal = $journal;
-        $this->user = $user;
+        $this->journalService = $journalService;
     }
     /**
      * Display a listing of the resource.
@@ -47,8 +48,9 @@ class JournalController extends Controller
      */
     public function store(StoreRequest $request)
     {
-        Auth::user()->journals()->create($request->validated());
-        return redirect()->route('attendances.index')->with('message', 'Journal entry recorded successfully.');
+        $validated = $request->validated();
+        $this->journalService->storeDocument($validated);
+        return redirect()->route('journals.index')->with('message', 'Journal entry recorded successfully.');
     }
 
     /**
@@ -94,5 +96,5 @@ class JournalController extends Controller
         return redirect()->route('journals.index')->with('message', 'Journal deleted successfully.');
     }
 
-    
+
 }
