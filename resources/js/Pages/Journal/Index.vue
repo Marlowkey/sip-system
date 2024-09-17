@@ -17,7 +17,8 @@ import CardBoxJournal from '@/components/CardBoxJournal.vue'
 
 
 const props = defineProps({
-    user: Object, // Authenticated user passed as a prop from Inertia
+    user: Object,
+    journal: Array,
 })
 
 const userRole = props.user.role;
@@ -37,13 +38,7 @@ const userRole = props.user.role;
                 <BaseButton roundedFull :icon="mdiPlus" color="whiteDark" routeName="journals.create"/>
             </SectionTitleLineWithButton>
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-4">
-                <CardBoxJournal :title="'Test'" :date="'Now'" :text="'text'" :type="'type'" />
-                <CardBoxJournal :title="'Test'" :date="'Now'" :text="'text'" :type="'type'" />
-                <CardBoxJournal :title="'Test'" :date="'Now'" :text="'text'" :type="'type'" />
-                <CardBoxJournal :title="'Test'" :date="'Now'" :text="'text'" :type="'type'" />
-                <CardBoxJournal :title="'Test'" :date="'Now'" :text="'text'" :type="'type'" />
-                <CardBoxJournal :title="'Test'" :date="'Now'" :text="'text'" :type="'type'" />
-
+                <CardBoxJournal v-for="item in journal" :key="item.id" :title="item.title" :date="item.date" :text="item.content" :type="'type'" />
             </div>
         </SectionMain>
 

@@ -27,8 +27,11 @@ class JournalController extends Controller
     public function index()
     {
         $user = auth()->user();
+        $journal = Journal::getJournalsForUser($user->id);
+
         return Inertia::render('Journal/Index', [
             'user' => $user,
+            'journal' => $journal,
         ]);
     }
 

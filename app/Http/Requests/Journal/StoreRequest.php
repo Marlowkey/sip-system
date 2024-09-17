@@ -25,6 +25,7 @@ class StoreRequest extends FormRequest
             'title' => ['required', 'string', 'max:500'],
             'content' => ['required', 'string'],
             'date' => ['required', 'date'],
+            'week' => ['required', 'integer'],
             'image_path' => 'nullable|mimes:jpg,jpeg,png|max:2048',
         ];
     }

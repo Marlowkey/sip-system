@@ -16,4 +16,13 @@ class Journal extends Model
         return $this->belongsTo(User::class);
     }
 
+    public static function getJournalsForUser(int $userId)
+    {
+       $user =  User::findOrFail($userId);
+        if ($user->role === 'student') {
+            return $user->journals()->orderBy('created_at', 'desc')->get();
+        } else {
+            return Journal::orderBy('created_at', 'desc')->get();
+        }
+    }
 }

@@ -28,6 +28,7 @@ const title = computed(() => isEditMode.value ? 'Edit Journal' : 'Create Journal
 const form = useForm({
     title: props.journal?.title || '',
     date: props.journal?.date || '',
+    week: props.journal?.week || '',
     content: props.journal?.content || '',
     image_path: null,
 })
@@ -86,7 +87,10 @@ const deleteJournal = async (journalId) => {
                     <FormControl v-model="form.date" type="date" />
                 </FormField>
                 <InputError :message="form.errors.date" />
-
+                <FormField label="Week">
+                    <FormControl v-model="form.week" type="number" />
+                </FormField>
+                <InputError :message="form.errors.week" />
                 <BaseDivider />
 
                 <FormField label="Content" help="Describe the your experience.">

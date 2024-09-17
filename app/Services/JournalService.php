@@ -42,6 +42,7 @@ class JournalService
         $this->journal->user_id = auth()->id();
         $this->journal->title = $validatedData['title'];
         $this->journal->date = $validatedData['date'];
+        $this->journal->week = $validatedData['week'];
         $this->journal->content = $validatedData['content'];
 
         if (isset($validatedData['image_path']) && $validatedData['image_path'] instanceof UploadedFile) {
