@@ -3,13 +3,19 @@
 use Inertia\Inertia;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\BotManController;
 use App\Http\Controllers\JournalController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\DocumentController;
 use App\Http\Controllers\AttendanceController;
 use App\Http\Controllers\StudentDocumentController;
 
-Route::middleware(['auth:sanctum', 'verified'])->get('/',[HomeController::class, 'index'])->name('home');
+
+Route::get('/', function () {
+    return view('welcome');
+});
+
+Route::middleware(['auth:sanctum', 'verified'])->get('/home',[HomeController::class, 'index'])->name('home');
 
 Route::get('/tables', function () {
     return Inertia::render('TablesView');
@@ -36,4 +42,6 @@ Route::get('/student-attendance/{id}', [AttendanceController::class, 'showStuden
 
 
 Route::resource('/journals', JournalController::class);
+Route::match(['get', 'post'], '/botman', [BotManController::class, 'handle']);
+
 require __DIR__ . '/auth.php';
