@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
-use App\Services\JournalService;
 use Inertia\Inertia;
 use App\Models\Journal;
 use Illuminate\Http\Request;
@@ -14,12 +13,10 @@ class JournalController extends Controller
 {
 
     protected Journal $journal;
-    protected JournalService $journalService;
 
-    public function __construct(Journal $journal, JournalService $journalService)
+    public function __construct(Journal $journal)
     {
         $this->journal = $journal;
-        $this->journalService = $journalService;
     }
     /**
      * Display a listing of the resource.
@@ -52,18 +49,27 @@ class JournalController extends Controller
     public function store(StoreRequest $request)
     {
         $validated = $request->validated();
-        $this->journalService->storeDocument($validated);
+
+        if ($request->hasFile('image_path')) {
+            $image_path = $request->file('image_path')->store('journals', 'public');
+            $validated['image_path'] = $image_path;
+        }
+
+        Auth::user()->journals()->create($validated);
         return redirect()->route('journals.index')->with('message', 'Journal entry recorded successfully.');
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(int $id)
+    public function show(string $id)
     {
+        $user = auth()->user();
         $journal = Journal::findOrFail($id);
+
         return Inertia::render('Journal/Show', [
             'journal' => $journal,
+            'user' => $user,
         ]);
     }
 
@@ -84,9 +90,18 @@ class JournalController extends Controller
     public function update(StoreRequest $request, int $id)
     {
         $journal = Journal::findOrFail($id);
-        $journal->update($request->validated());
-        return redirect()->route('journals.index')->with('message', 'Journal updated successfully.');
+        $data = $request->validated();
 
+        if ($request->hasFile('image_path')) {
+            $image_path = $request->file('image_path')->store('journals', 'public');
+            $data['image_path'] = $image_path;
+        } else {
+            unset($data['image_path']);
+        }
+
+        $journal->update($data);
+
+        return redirect()->route('journals.index')->with('message', 'Journal updated successfully.');
     }
 
     /**
