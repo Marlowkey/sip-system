@@ -30,6 +30,7 @@
                         displayMessageTime: false,
                     };
                 </script>
+                        @routes
                 <script src='https://cdn.jsdelivr.net/npm/botman-web-widget@0/build/js/widget.js'></script>
     </head>
     <body class="font-sans antialiased dark:bg-black dark:text-white/50">
