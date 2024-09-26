@@ -42,6 +42,8 @@ Route::get('/student-attendance/{id}', [AttendanceController::class, 'showStuden
 
 
 Route::resource('/journals', JournalController::class);
+// Route::get('/journals/{id}', [JournalController::class, 'show'])->name('journals.show');
+
 Route::match(['get', 'post'], '/botman', [BotManController::class, 'handle']);
 
 require __DIR__ . '/auth.php';
