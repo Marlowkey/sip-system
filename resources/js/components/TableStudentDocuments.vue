@@ -114,7 +114,7 @@ const formatDueDate = (dueDate) => {
                 <td data-label="Title" scope="row" class="px-4 py-1">
                     {{ document.title }}
                 </td>
-                <td data-label="Due on" class="px-4 py-1">
+                <td data-label="Due on" class="px-4 py-1 text-red-800">
                     {{ formatDueDate(document.due_date) }}
                 </td>
                 <td class="px-4 py-1 whitespace-nowrap">

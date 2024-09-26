@@ -23,7 +23,11 @@ const props = defineProps({
   type: {
     type: String,
     default: null
-  }
+  },
+  href: {
+    type: String,
+    required: true
+  },
 })
 
 const pillType = computed(() => {
@@ -44,13 +48,14 @@ const pillIcon = computed(() => {
 })
 
 const pillText = computed(() => props.text ?? `${props.progress}%`)
+
 </script>
 
 <template>
   <CardBox isHoverable>
     <BaseLevel>
       <BaseLevel type="justify-start">
-        <BaseButton rounded-full :icon="mdiFolderText" color="blue" class="h-12 w-12"/>
+        <BaseButton rounded-full :icon="mdiFolderText" color="blue" class="h-12 w-12"  Table :href="href"/>
         <div class="mx-8 text-center md:text-left overflow-hidden">
           <h4 class="text-xl text-ellipsis">
             {{ title }}

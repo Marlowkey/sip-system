@@ -14,6 +14,7 @@ import BaseButton from '@/components/BaseButton.vue'
 import NotificationBar from '@/components/NotificationBar.vue'
 import CardBoxComponentEmpty from '@/components/CardBoxComponentEmpty.vue'
 import CardBoxJournal from '@/components/CardBoxJournal.vue'
+import CardBoxJournalView from '@/components/CardBoxJournalView.vue'
 
 
 const props = defineProps({
@@ -22,6 +23,7 @@ const props = defineProps({
 })
 
 const userRole = props.user.role;
+
 </script>
 
 <template>
@@ -29,16 +31,24 @@ const userRole = props.user.role;
 
         <Head title="Journals" />
         <SectionMain v-if="userRole === 'student'">
-
             <NotificationBar v-if="$page.props.flash.message" icon="mdiAlert" color="info" class="m-2">
                 {{ $page.props.flash.message }}
             </NotificationBar>
 
             <SectionTitleLineWithButton :icon="mdiAccountFile" title="Journal Entries" main>
-                <BaseButton roundedFull :icon="mdiPlus" color="whiteDark" routeName="journals.create"/>
+                <BaseButton roundedFull :icon="mdiPlus" color="whiteDark" routeName="journals.create" />
             </SectionTitleLineWithButton>
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-4">
-                <CardBoxJournal v-for="item in journal" :key="item.id" :title="item.title" :date="item.date" :text="item.content" :type="'type'" />
+                <CardBoxJournal
+                v-for="item in journal"
+                :key="item.id"
+                :title="item.title"
+                :date="item.date"
+                :text="'Test'"
+                :type="'type'"
+                :href="route('journals.show', { id: item.id})"
+                 />
+                 <!-- <CardBoxJournalView v-for="item in journal" :key="item.id" :title="item.title" :date="item.date" :content="item.content" :image_path="item.image_path" /> -->
             </div>
         </SectionMain>
 

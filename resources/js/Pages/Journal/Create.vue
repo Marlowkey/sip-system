@@ -30,7 +30,7 @@ const form = useForm({
     date: props.journal?.date || '',
     week: props.journal?.week || '',
     content: props.journal?.content || '',
-    image_path: null,
+    image_path: '',
 })
 
 const submit = async () => {
@@ -45,7 +45,7 @@ const submit = async () => {
         }
 
         if (isEditMode.value) {
-            await form.put(route('journals.update', documentId.value), formData)
+            await form.put(route('journals.update', journalId.value), formData)
         } else {
             await form.post(route('journals.store'), formData)
         }
@@ -64,7 +64,7 @@ const handleFileUpload = (event) => {
 const deleteJournal = async (journalId) => {
     try {
         const form = useForm({})
-        await form.delete(route('journals.destroy', documentId))
+        await form.delete(route('journals.destroy', journalId))
         // Show success notification
     } catch (error) {
         console.error('Error deleting journal:', error)
@@ -98,7 +98,7 @@ const deleteJournal = async (journalId) => {
                 </FormField>
                 <InputError :message="form.errors.content" />
 
-                <FormField v-if="!isEditMode" label="Image" help="Upload an image file">
+                <FormField  label="Update image" help="Upload an image file">
                     <FormControl type="file" @change="handleFileUpload"/>
                 </FormField>
                 <InputError :message="form.errors.image_path" />
