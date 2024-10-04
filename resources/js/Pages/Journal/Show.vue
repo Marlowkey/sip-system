@@ -54,9 +54,17 @@ const userRole = props.user.role;
             </NotificationBar>
 
             <SectionTitleLineWithButton :icon="mdiAccountFile" title="Journal Entries" main>
-                <BaseButton roundedFull :icon="mdiPlus" color="whiteDark" routeName="documents.create" />
             </SectionTitleLineWithButton>
             <CardBox>
+                <CardBoxJournalView
+                :id="journal.id"
+                :title="journal.title"
+                :date="journal.date"
+                :content="journal.content"
+                :image_path="journal.image_path"
+                :week="journal.week"
+                :user="journal.userRole"
+                />
             </CardBox>
         </SectionMain>
 

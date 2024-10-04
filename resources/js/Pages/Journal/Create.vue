@@ -58,7 +58,6 @@ const submit = async () => {
 
 const handleFileUpload = (event) => {
     form.image_path = event.target.files[0]
-    form.image_path = file
 }
 
 const deleteJournal = async (journalId) => {
@@ -99,7 +98,7 @@ const deleteJournal = async (journalId) => {
                 <InputError :message="form.errors.content" />
 
                 <FormField  label="Update image" help="Upload an image file">
-                    <FormControl type="file" @change="handleFileUpload"/>
+                    <FormControl type="file"  @change="handleFileUpload"/>
                 </FormField>
                 <InputError :message="form.errors.image_path" />
 

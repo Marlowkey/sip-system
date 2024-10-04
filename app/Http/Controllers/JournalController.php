@@ -21,14 +21,24 @@ class JournalController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
+        $request->validate([
+            'week' => 'nullable|integer',
+        ]);
+
+        $week = $request->week ?? 1;
+
         $user = auth()->user();
-        $journal = Journal::getJournalsForUser($user->id);
+        $journal = Journal::getJournalsForUser($user->id, $week);
+        $classBlocks = User::distinct()->pluck('block');
+
 
         return Inertia::render('Journal/Index', [
             'user' => $user,
             'journal' => $journal,
+            'week' => $week,
+            'classBlocks' => $classBlocks,
         ]);
     }
 

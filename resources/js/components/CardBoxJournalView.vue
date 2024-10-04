@@ -24,10 +24,17 @@ const props = defineProps({
     date: {
         type: String,
     },
+    user: {
+        type: String,
+    }
 });
 
 const getImageUrl = (path) => {
     return `/storage/${path}`;
+};
+
+const markAsReviewed = () => {
+    console.log(`Marking journal ${props.id} as reviewed.`);
 };
 </script>
 
@@ -54,7 +61,7 @@ const getImageUrl = (path) => {
                 <p class="mb-3 p-10 font-normal text-justify text-gray-700 dark:text-gray-400">{{ content }}</p>
             </div>
             <div class="flex justify-end mx-12">
-                <a :href="route('journals.edit', { id: props.id })"
+                <a v-if="user === 'student'" :href="route('journals.edit', { id: props.id })"
                     class="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
                     Edit
                     <svg class="rtl:rotate-180 w-3 h-3 ms-2" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
@@ -64,6 +71,7 @@ const getImageUrl = (path) => {
                     </svg>
                 </a>
             </div>
+
         </div>
     </div>
 </template>

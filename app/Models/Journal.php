@@ -16,13 +16,29 @@ class Journal extends Model
         return $this->belongsTo(User::class);
     }
 
-    public static function getJournalsForUser(int $userId)
+    public static function getJournalsForUser(int $userId, int $week = null)
     {
        $user =  User::findOrFail($userId);
         if ($user->role === 'student') {
             return $user->journals()->orderBy('created_at', 'desc')->get();
         } else {
-            return Journal::orderBy('created_at', 'desc')->get();
+            return self::getStudentJournalsForCoordinator ($user, $week);
         }
+    }
+
+    public static function getStudentJournalsForCoordinator ($user, $week = null)
+    {
+        $query = self::with(['user' => function ($query) use($user) {
+            $query->where('role', 'student');
+            $query->where('course', $user->course);
+            $query->orderBy('last_name');
+        }]);
+
+        if ($week) {
+            $query->where('week', $week);
+        } else {
+            $query->where('week', 1);
+        }
+        return $query->get();
     }
 }
