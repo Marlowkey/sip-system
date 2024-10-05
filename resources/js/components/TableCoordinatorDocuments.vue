@@ -99,10 +99,10 @@ const formatDueDate = (dueDate) => {
                     </td>
                     <td class="px-4 py-1">
                         <BaseButtons no-wrap>
-                            <BaseButton roundedFull color="blue" :icon="mdiEye" small @click="viewDocument(document)" />
-                            <BaseButton v-if="document.file_path" roundedFull color="teal" :icon="mdiDownload" small
+                            <BaseButton label="View" roundedFull color="blue" :icon="mdiEye" small @click="viewDocument(document)" />
+                            <BaseButton  label="Download" v-if="document.file_path" roundedFull color="teal" :icon="mdiDownload" small
                                 :href="route('documents.download', { id: document.id })" />
-                            <BaseButton roundedFull color="yellow" :icon="mdiFileEditOutline" small
+                            <BaseButton label="Edit" roundedFull color="yellow" :icon="mdiFileEditOutline" small
                                 :href="route('documents.edit', { id: document.id })" />
                         </BaseButtons>
                     </td>

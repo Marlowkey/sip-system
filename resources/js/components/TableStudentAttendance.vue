@@ -107,9 +107,9 @@ const isUserCoordinator = computed(() => user.value.role === 'coordinator')
                     </td>
                     <td v-if="!isUserCoordinator" data-label="Action" class="whitespace-nowrap px-2 py-2">
                         <BaseButtons type="justify-start" no-wrap>
-                            <BaseButton roundedFull color="blue" :icon="mdiFileEditOutline"
+                            <BaseButton label="Edit" roundedFull color="blue" :icon="mdiFileEditOutline"
                                 :href="route('attendances.edit', { id: attendance.id })" small />
-                            <BaseButton roundedFull color="red" :icon="mdiDeleteEmptyOutline" small
+                            <BaseButton label="Delete" roundedFull color="red" :icon="mdiDeleteEmptyOutline" small
                                 @click.prevent="deleteAttendance(attendance.id)" />
                         </BaseButtons>
                     </td>

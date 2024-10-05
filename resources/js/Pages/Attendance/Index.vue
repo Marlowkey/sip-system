@@ -84,7 +84,7 @@ const userRole = props.user.role;
                     <FormControl v-model="month" borderless type="month" placeholder="Select Date"
                         class="justify-end text-sm font-medium" />
                     <div class="justify-end content-center	mx-2">
-                        <BaseButton roundedFull :icon="mdiPlus" color="blue"
+                        <BaseButton label="Log in" roundedFull :icon="mdiPlus" color="blue"
                             routeName="attendances.create" class="p-2 mx-1" />
                     </div>
                 </div>

@@ -109,7 +109,7 @@ const formatDate = (date) => {
                     </td>
                     <td data-label="Action" class="hitespace-nowrap px-2 py-1">
                         <BaseButtons type="justify-start" no-wrap>
-                            <BaseButton roundedFull color="blue" :icon="mdiEyeArrowRightOutline" small
+                            <BaseButton label="View"  roundedFull color="blue" :icon="mdiEyeArrowRightOutline" small
                                 :href="route('student-attendance.show', { id: attendance.user_id })" />
                         </BaseButtons>
                     </td>

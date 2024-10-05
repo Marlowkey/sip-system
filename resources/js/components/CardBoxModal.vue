@@ -14,7 +14,7 @@ const props = defineProps({
   },
   button: {
     type: String,
-    default: 'blue'
+    default: 'teal'
   },
   buttonLabel: {
     type: String,
@@ -74,7 +74,7 @@ window.addEventListener('keydown', (e) => {
 
       <template #footer>
         <BaseButtons>
-          <BaseButton :label="buttonLabel" :color="button" @click="confirm" small/>
+          <BaseButton :label="buttonLabel" rounded-full :color="button" @click="confirm" small/>
           <BaseButton v-if="hasCancel" label="Cancel" :color="button" outline @click="cancel" />
         </BaseButtons>
       </template>
