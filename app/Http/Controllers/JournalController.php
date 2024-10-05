@@ -128,4 +128,29 @@ class JournalController extends Controller
     }
 
 
+    public function markAsReviewed(Request $request, int $id)
+    {
+        $journal = Journal::findOrFail($id);
+        $journal->reviewed = true;
+        $journal->save();
+
+        return redirect()->route('journals.index')->with('message', 'Journal marked as reviewed successfully.');
+    }
+
+    public function addFeedback(Request $request, int $id)
+    {
+        $request->validate([
+            'feedback' => 'required|string|max:500',
+        ]);
+
+        $journal = Journal::findOrFail($id);
+        $journal->feedback = $request->feedback;
+        $journal->save();
+
+        return redirect()->route('journals.index')->with('message', 'Feedback added successfully.');
+    }
+
+    
+
+
 }

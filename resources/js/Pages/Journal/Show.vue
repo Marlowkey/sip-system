@@ -38,12 +38,7 @@ const userRole = props.user.role;
             </SectionTitleLineWithButton>
             <CardBox>
                 <CardBoxJournalView
-                :id="journal.id"
-                :title="journal.title"
-                :date="journal.date"
-                :content="journal.content"
-                :image_path="journal.image_path"
-                :week="journal.week"
+                :journal="journal"
                 :user="user"
                 />
             </CardBox>
@@ -58,12 +53,7 @@ const userRole = props.user.role;
             </SectionTitleLineWithButton>
             <CardBox>
                 <CardBoxJournalView
-                :id="journal.id"
-                :title="journal.title"
-                :date="journal.date"
-                :content="journal.content"
-                :image_path="journal.image_path"
-                :week="journal.week"
+                :journal="journal"
                 :user="user"
                 />
             </CardBox>

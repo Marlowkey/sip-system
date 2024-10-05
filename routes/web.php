@@ -42,8 +42,8 @@ Route::get('/student-attendance/{id}', [AttendanceController::class, 'showStuden
 
 
 Route::resource('/journals', JournalController::class);
-// Route::get('/journals/{id}', [JournalController::class, 'show'])->name('journals.show');
-
+Route::post('/journals/{id}/mark-reviewed', [JournalController::class, 'markAsReviewed'])->name('journals.markReviewed');
+Route::post('/journals/{id}/feedback', [JournalController::class, 'addFeedback'])->name('journals.addFeedback');
 Route::match(['get', 'post'], '/botman', [BotManController::class, 'handle']);
 
 require __DIR__ . '/auth.php';
