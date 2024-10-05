@@ -25,12 +25,14 @@ class JournalController extends Controller
     {
         $request->validate([
             'week' => 'nullable|integer',
+            'class_block' => 'nullable|string',
         ]);
 
         $week = $request->week ?? 1;
+        $classBlock = $request->class_block ?? null;
 
         $user = auth()->user();
-        $journal = Journal::getJournalsForUser($user->id, $week);
+        $journal = Journal::getJournalsForUser($user->id, $week,$classBlock );
         $classBlocks = User::distinct()->pluck('block');
 
 
@@ -39,6 +41,7 @@ class JournalController extends Controller
             'journal' => $journal,
             'week' => $week,
             'classBlocks' => $classBlocks,
+            'classBlock' => $classBlock,
         ]);
     }
 

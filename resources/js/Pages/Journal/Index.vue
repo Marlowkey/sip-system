@@ -25,21 +25,28 @@ const props = defineProps({
     user: Object,
     journal: Array,
     week: Number,
-    classBlocks: Array
+    classBlocks: Array,
+    classBlock: String
 })
 
 const userRole = props.user.role;
 
-const week = ref(props.week ?? 1);
-const url = route('journals.index')
 
-const fetchStudentJournalsForCoordinator = debounce(() => {
-    router.get(url, { week: week.value });
+const week = ref(props.week ?? 1);
+const classBlock = ref(props.classBlock ?? 'A');
+
+const url = route('journals.index');
+
+const fetchJournalsWithFilters = debounce(() => {
+    router.get(url, {
+        week: week.value,
+        class_block: classBlock.value
+    });
 }, 1500);
 
-watch(week, (newWeek, oldWeek) => {
-    if (newWeek !== oldWeek) {
-        fetchStudentJournalsForCoordinator();
+watch([week, classBlock], ([newWeek, newClassBlock], [oldWeek, oldClassBlock]) => {
+    if (newWeek !== oldWeek || newClassBlock !== oldClassBlock) {
+        fetchJournalsWithFilters();
     }
 });
 
@@ -70,20 +77,20 @@ watch(week, (newWeek, oldWeek) => {
 
             <SectionTitleLineWithButton :icon="mdiAccountFile" title="Journal Entries" main>
                 <div class="flex items-center">
-        <label for="class-block" class="mr-2 text-lg font-medium">Class Block:</label>
-        <!-- Label for class block -->
-        <select v-model="selectedClassBlock" id="class-block" class="border rounded px-2 py-1 mx-2">
-            <option value="">Select a Class Block</option>
-            <option v-for="block in classBlocks" :key="block" :value="block">
-                {{ block }}
-            </option>
-        </select>
-        <BaseButton roundedFull :icon="mdiFilterVariant" color="whiteDark" routeName="journals.create" />
-    </div>
+                    <label for="block" class="mr-2 text-lg font-medium">Class Block:</label>
+                    <!-- Label for class block -->
+                    <select v-model="classBlock" id="block" class="border rounded px-2 py-1 mx-2">
+                        <option value="">Select a Class Block</option>
+                        <option v-for="block in classBlocks" :key="block" :value="block">
+                            {{ block }}
+                        </option>
+                    </select>
+                    <BaseButton roundedFull :icon="mdiFilterVariant" color="whiteDark" routeName="journals.create" />
+                </div>
                 <div class="flex items-center">
                     <label for="week" class="mr-2 text-lg font-medium">Week:</label> <!-- Label for the input -->
                     <FormControl v-model="week" borderless type="number" id="week"
-                        class="text-center mx-2 text-lg font-medium" />
+                        class="text-sm mx-2 font-md" />
                 </div>
             </SectionTitleLineWithButton>
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-1 gap-4">

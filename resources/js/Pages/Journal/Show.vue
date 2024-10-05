@@ -44,6 +44,7 @@ const userRole = props.user.role;
                 :content="journal.content"
                 :image_path="journal.image_path"
                 :week="journal.week"
+                :user="user"
                 />
             </CardBox>
         </SectionMain>
@@ -63,7 +64,7 @@ const userRole = props.user.role;
                 :content="journal.content"
                 :image_path="journal.image_path"
                 :week="journal.week"
-                :user="journal.userRole"
+                :user="user"
                 />
             </CardBox>
         </SectionMain>
