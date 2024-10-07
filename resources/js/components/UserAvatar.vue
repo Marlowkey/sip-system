@@ -1,6 +1,7 @@
 <script setup>
 import { computed } from 'vue'
 
+// Define the props
 const props = defineProps({
   username: {
     type: String,
@@ -16,16 +17,15 @@ const props = defineProps({
   }
 })
 
-const avatar = computed(
-  () =>
-    props.avatar ??
-    `https://api.dicebear.com/7.x/${props.api}/svg?seed=${props.username.replace(
-      /[^a-z0-9]+/gi,
-      '-'
-    )}.svg`
-)
+const getImageUrl = (path) => {
+  return `/storage/${path}`;
+}
 
-const username = computed(() => props.username)
+const avatar = computed(() => {
+  return props.avatar ? getImageUrl(props.avatar) : `https://api.dicebear.com/7.x/${props.api}/svg?seed=${props.username.replace(/[^a-z0-9]+/gi, '-')}.svg`;
+});
+
+const username = computed(() => props.username);
 </script>
 
 <template>
