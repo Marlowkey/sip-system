@@ -1,6 +1,6 @@
 <script setup>
 import { computed } from 'vue'
-import { mdiTrendingDown, mdiTrendingUp, mdiTrendingNeutral, mdiFolderText } from '@mdi/js'
+import { mdiTextBoxCheckOutline, mdiFolderText, mdiTextBoxMinusOutline } from '@mdi/js'
 import CardBox from '@/components/CardBox.vue'
 import BaseLevel from '@/components/BaseLevel.vue'
 import PillTag from '@/components/PillTag.vue'
@@ -16,12 +16,8 @@ const props = defineProps({
     type: String,
     required: true
   },
-  text: {
-    type: String,
-    default: null
-  },
-  type: {
-    type: String,
+  reviewed: {
+    type: Boolean,
     default: null
   },
   href: {
@@ -29,25 +25,15 @@ const props = defineProps({
     required: true
   },
 })
-
 const pillType = computed(() => {
-  if (props.type) {
-    return props.type
-  }
-
-  return 'info'
+  return props.reviewed ? 'success' : 'danger'
 })
 
 const pillIcon = computed(() => {
-  return {
-    success: mdiTrendingUp,
-    warning: mdiTrendingNeutral,
-    danger: mdiTrendingDown,
-    info: null
-  }[pillType.value]
+  return props.reviewed ? mdiTextBoxCheckOutline : mdiTextBoxMinusOutline
 })
 
-const pillText = computed(() => props.text ?? `${props.progress}%`)
+const pillText = computed(() => props.text ?? (props.reviewed ? 'Reviewed' : 'Pending'))
 
 </script>
 
@@ -63,7 +49,7 @@ const pillText = computed(() => props.text ?? `${props.progress}%`)
           <p class="text-gray-500 dark:text-slate-400">{{ date }}</p>
         </div>
       </BaseLevel>
-      <PillTag :color="pillType" :label="pillText" :icon="pillIcon" />
+      <PillTag :color="pillType" :icon="pillIcon" small/>
     </BaseLevel>
   </CardBox>
 </template>

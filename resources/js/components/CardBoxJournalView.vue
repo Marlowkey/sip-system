@@ -43,7 +43,7 @@ const toggleFeedbackTextarea = () => {
 
 const submit = async () => {
     try {
-        await form.post(route('journals.addFeedback', journalId.value)  );
+        await form.post(route('journals.addFeedback', journalId.value));
     } catch (error) {
         console.error('Error submitting form:', error)
     }
@@ -66,7 +66,7 @@ const markAsReviewed = async () => {
     <CardBox>
         <div class="max-w-18">
             <div class="flex justify-center p-6">
-                <img class="rounded w-[28rem] h-[25rem] object-cover" :src="getImageUrl(image_path)"
+                <img class="rounded w-[28rem] h-[25rem] object-cover" :src="getImageUrl(journal.image_path)"
                     alt="Journal attached image" />
             </div>
 
@@ -82,55 +82,42 @@ const markAsReviewed = async () => {
                     </p>
                 </div>
                 <div class="flex justify-between mx-12 gap-4">
-    <!-- Edit button only for students -->
-    <BaseButton
-        label="Edit"
-        v-if="user && user.role === 'student'"
-        small
-        :icon="mdiArrowRight"
-        roundedFull
-        color="info"
-        :href="route('journals.edit', { id: journal.id })"
-    />
+                    <!-- Edit button only for students -->
+                    <BaseButton label="Edit" v-if="user && user.role === 'student'" small :icon="mdiArrowRight"
+                        roundedFull color="info" :href="route('journals.edit', { id: journal.id })" />
 
-    <!-- Mark as Reviewed and Feedback buttons only for coordinators -->
-    <template v-if="user && user.role === 'coordinator'">
-        <BaseButton
-        small
-        :label="journal.reviewed ? 'Reviewed' : 'Mark as Reviewed'"
-        :icon="mdiArrowRight"
-        roundedFull
-        :color="journal.reviewed ? 'success' : 'info'"
-        @click="markAsReviewed"
-         :disabled="journal.reviewed"
-      />
+                    <!-- Mark as Reviewed and Feedback buttons only for coordinators -->
+                    <template v-if="user && user.role === 'coordinator'">
+                        <BaseButton small :label="journal.reviewed ? 'Reviewed' : 'Mark as Reviewed'"
+                            :icon="mdiArrowRight" roundedFull :color="journal.reviewed ? 'success' : 'info'"
+                            @click="markAsReviewed" :disabled="journal.reviewed" />
 
-        <BaseButton
-            small
-            label="Feedback"
-            :icon="mdiPlus"
-            roundedFull
-            color="info"
-            @click="toggleFeedbackTextarea"
-        />
-    </template>
-</div>
+                        <BaseButton small label="Feedback" :icon="mdiPlus" roundedFull color="info"
+                            @click="toggleFeedbackTextarea" />
+                    </template>
+                </div>
+
+                <div v-if="user && user.role === 'student' && journal.feedback" class="mt-4">
+                    <div
+                        class="flex items-center w-full flex-row my-8 py-6 pl-12 pr-4 isolate [unicode-bidi:isolate] rounded-xl relative before:content-[''] before:absolute before:w-1 before:h-4/5 before:bg-green-700 before:z-[10] before:left-6">
+                        <p class="white-space-pre-wrap [&amp;:not(:first-child)]:mt-3">
+                            <span class="font-semibold">Feedback:</span> {{ journal.feedback }}
+                        </p>
+                    </div>
+                </div>
 
                 <div v-if="showFeedbackTextarea" class="flex flex-col">
                     <form @submit.prevent="submit">
-                    <FormControl type="textarea" v-model="form.feedback" rows="4"
-                        placeholder="Enter your feedback here..." class="my-4" />
-                    <div class="flex justify-start gap-2 mt-2">
-                        <BaseButton roundedFull small type="submit" color="success" label="Submit"
-                         />
-                        <BaseButton roundedFull small type="reset" color="danger" label="Cancel"
-                            @click="toggleFeedbackTextarea" />
-                    </div>
+                        <FormControl type="textarea" v-model="form.feedback" rows="4"
+                            placeholder="Enter your feedback here..." class="my-4" />
+                        <div class="flex justify-start gap-2 mt-2">
+                            <BaseButton roundedFull small type="submit" color="success" label="Submit" />
+                            <BaseButton roundedFull small type="reset" color="danger" label="Cancel"
+                                @click="toggleFeedbackTextarea" />
+                        </div>
                     </form>
                 </div>
             </div>
         </div>
-
-
     </CardBox>
 </template>

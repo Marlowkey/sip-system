@@ -66,7 +66,7 @@ watch([week, classBlock], ([newWeek, newClassBlock], [oldWeek, oldClassBlock]) =
             </SectionTitleLineWithButton>
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-4">
                 <CardBoxJournal v-for="item in journal" :key="item.id" :title="item.title" :date="item.date"
-                    :text="'Test'" :type="'type'" :href="route('journals.show', { id: item.id })" />
+                    :reviewed="item.reviewed" :href="route('journals.show', { id: item.id })" />
             </div>
         </SectionMain>
 
@@ -95,7 +95,7 @@ watch([week, classBlock], ([newWeek, newClassBlock], [oldWeek, oldClassBlock]) =
             </SectionTitleLineWithButton>
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-1 gap-4">
                 <CardBoxJournal v-for="item in journal" :key="item.id" :title="item.title" :date="item.date"
-                    :text="'Test'" :type="'type'" :href="route('journals.show', { id: item.id })" />
+                :reviewed="item.reviewed" :href="route('journals.show', { id: item.id })" />
             </div>
         </SectionMain>
 
