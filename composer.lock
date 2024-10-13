@@ -4,20 +4,20 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "06d46ab02b2a3bd8c8dd3df8c52a96cf",
+    "content-hash": "a63b478d463a9d9ed64501f24a776269",
     "packages": [
         {
             "name": "botman/botman",
-            "version": "v2.8.3",
+            "version": "v2.8.6",
             "source": {
                 "type": "git",
                 "url": "https://github.com/botman/botman.git",
-                "reference": "800f0f89149abdd04ad4aa57b789376256bf1f1b"
+                "reference": "5ab943a4ee22d18b2a31cf84089963a257ce2fd5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/botman/botman/zipball/800f0f89149abdd04ad4aa57b789376256bf1f1b",
-                "reference": "800f0f89149abdd04ad4aa57b789376256bf1f1b",
+                "url": "https://api.github.com/repos/botman/botman/zipball/5ab943a4ee22d18b2a31cf84089963a257ce2fd5",
+                "reference": "5ab943a4ee22d18b2a31cf84089963a257ce2fd5",
                 "shasum": ""
             },
             "require": {
@@ -82,9 +82,9 @@
             ],
             "support": {
                 "issues": "https://github.com/botman/botman/issues",
-                "source": "https://github.com/botman/botman/tree/v2.8.3"
+                "source": "https://github.com/botman/botman/tree/v2.8.6"
             },
-            "time": "2024-03-13T07:59:56+00:00"
+            "time": "2024-09-24T18:33:48+00:00"
         },
         {
             "name": "botman/driver-web",
