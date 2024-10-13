@@ -64,15 +64,26 @@ class ProfileController extends Controller
 
     public function updateAvatar(Request $request)
     {
+        // Validate the incoming request
         $request->validate([
             'avatar' => ['required', File::types(['png', 'jpg', 'webp'])],
         ]);
 
         $user = $request->user();
+
+        if ($user->avatar) {
+            $existingAvatarPath = public_path('storage/' . $user->avatar);
+
+            if (file_exists($existingAvatarPath)) {
+                unlink($existingAvatarPath);
+            }
+        }
+
         $image_path = $request->file('avatar')->store('avatars', 'public');
         $user->avatar = $image_path;
         $user->save();
 
         return Redirect::route('profile.edit');
     }
+
 }
