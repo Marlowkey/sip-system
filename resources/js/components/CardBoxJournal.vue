@@ -26,7 +26,7 @@ const props = defineProps({
   },
 })
 const pillType = computed(() => {
-  return props.reviewed ? 'success' : 'danger'
+  return props.reviewed ? 'success' : 'warning'
 })
 
 const pillIcon = computed(() => {

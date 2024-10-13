@@ -21,11 +21,14 @@ const userName = computed(() => mainStore.userName)
 
 const userSwitchVal = ref(false)
 </script>
-
 <template>
     <CardBox>
       <BaseLevel type="justify-around lg:justify-center">
-        <UserAvatarCurrentUser class="lg:mx-12" />
+        <div class="flex justify-center">
+          <div class="h-80 w-80 mx-4 "> <!-- Set desired width and height -->
+            <UserAvatarCurrentUser class="lg:mx-12 w-full h-full" />
+          </div>
+        </div>
         <div class="space-y-3 text-center md:text-left lg:mx-12">
           <h1 class="text-2xl">
             Howdy, <b>{{ username ?? "User" }}</b>!
@@ -37,3 +40,4 @@ const userSwitchVal = ref(false)
       <slot name="file-upload"></slot>
     </CardBox>
   </template>
+

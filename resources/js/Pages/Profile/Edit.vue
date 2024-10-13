@@ -38,7 +38,7 @@ const submitAvatar = async () => {
         if (avatarForm.avatar) {
             formData.append('avatar', avatarForm.avatar)
         }
-            await avatarForm.post(route('profile.avatar'), formData)
+        await avatarForm.post(route('profile.avatar'), formData)
     } catch (error) {
         console.error('Error submitting form:', error)
     }
@@ -78,11 +78,13 @@ const updatePassword = () => {
 
             <UserCard :username="userName" class="mb-4">
                 <!-- File upload form in the slot -->
-                <template #file-upload >
-                    <FormField label="Update image" help="Upload an image file">
-                        <FormControl type="file" @change="handleFileUpload" />
-                        <button @click="submitAvatar">Submit Avatar</button>
-                    </FormField>
+                <template #file-upload>
+                    <div class="flex flex-col items-center my-4">
+                            <FormControl  transparent type="file" @change="handleFileUpload" class="w-60- h-auto"/>
+                    </div>
+                    <div class="flex flex-col items-center space-y-3">
+                        <BaseButton small rounded-full color="info" @click="submitAvatar" label="Submit" />
+                    </div>
                 </template>
             </UserCard>
 
