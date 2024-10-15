@@ -53,21 +53,21 @@ class BotManController extends Controller
     public function findClosestQuestions($input, $questions)
     {
         $inputLower = strtolower($input);
-        $inputWords = explode(' ', $inputLower);
+        $threshold = 50;
         $matchedQuestions = [];
 
         foreach ($questions as $question) {
             $questionLower = strtolower($question);
-            $questionWords = explode(' ', $questionLower);
 
-            $commonWords = array_intersect($inputWords, $questionWords);
+            similar_text($inputLower, $questionLower, $percent);
 
-            if (count($commonWords) > 0) {
-                $matchedQuestions[] = $question;
+            if ($percent >= $threshold) {
+                $matchedQuestions[$question] = $percent;
             }
         }
+        arsort($matchedQuestions);
 
-        return $matchedQuestions;
+        return array_keys($matchedQuestions);
     }
 
     public function showDidYouMean($botman, $matchedQuestions)
