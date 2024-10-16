@@ -80,10 +80,10 @@ const updatePassword = () => {
                 <!-- File upload form in the slot -->
                 <template #file-upload>
                     <div class="flex flex-col items-center my-2">
-                            <FormControl  transparent type="file" @change="handleFileUpload" class="w-60- h-auto"/>
-                    </div>
-                    <div class="flex flex-col items-center space-y-3">
+                        <div class="flex items-center space-x-2 my-2">
+                        <FormControl borderless type="file" @change="handleFileUpload" class="w-60 h-auto" />
                         <BaseButton small rounded-full color="info" @click="submitAvatar" label="Submit" />
+                    </div>
                     </div>
                 </template>
             </UserCard>

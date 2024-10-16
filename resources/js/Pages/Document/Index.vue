@@ -49,7 +49,7 @@ const userRole = props.user.role;
             </NotificationBar>
 
             <SectionTitleLineWithButton :icon="mdiAccountFile" title="Document Submission" main>
-                <BaseButton label="Documents" roundedFull :icon="mdiPlus" color="blue" routeName="documents.create" />
+                <BaseButton label="Documents" roundedFull :icon="mdiPlus" color="info" small routeName="documents.create" />
             </SectionTitleLineWithButton>
             <CardBox>
                 <TableCoordinatorDocuments :document="documentWithNumberOfCompleted" />

@@ -21,6 +21,7 @@ import LayoutAuthenticated from '@/layouts/LayoutAuthenticated.vue'
 import SectionTitleLineWithButton from '@/components/SectionTitleLineWithButton.vue'
 import InputError from '@/components/InputError.vue'
 import NotificationBar from '@/components/NotificationBar.vue'
+import { format } from 'date-fns';
 
 const props = defineProps({
     user: Object, // Authenticated user passed as a prop from Inertia`
@@ -30,15 +31,18 @@ const props = defineProps({
 const attendanceId = ref(props.attendance?.id);
 const isEditMode = computed(() => !!props.attendance)
 const title = computed(() => isEditMode.value ? 'Edit' : 'Time In/Out')
+const now = new Date();
+const formattedDate = format(now, 'yyyy-MM-dd');
+const formattedTime = format(now, 'HH:mm');
 
 const form = useForm({
     user_id: props.attendance?.user_id || props.user.id,
-    date: props.attendance?.date || '',
-    time_in_am: props.attendance?.time_in_am || '',
-    time_out_am: props.attendance?.time_out_am || '',
-    time_in_pm: props.attendance?.time_in_pm || '',
-    time_out_pm: props.attendance?.time_out_pm || '',
-})
+    date: props.attendance?.date || formattedDate,
+    time_in_am: props.attendance?.time_in_am || formattedTime,
+    time_out_am: props.attendance?.time_out_am || formattedTime,
+    time_in_pm: props.attendance?.time_in_pm || formattedTime,
+    time_out_pm: props.attendance?.time_out_pm || formattedTime,
+});
 
 const submit = async () => {
 
