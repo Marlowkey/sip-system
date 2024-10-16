@@ -6,7 +6,7 @@ import BaseLevel from '@/components/BaseLevel.vue'
 import BaseButtons from '@/components/BaseButtons.vue'
 import BaseButton from '@/components/BaseButton.vue'
 import { useForm } from '@inertiajs/vue3'
-import { format, parse } from 'date-fns';
+import { format, parse, differenceInDays, parseISO } from 'date-fns';
 import CardBoxComponentEmpty from './CardBoxComponentEmpty.vue'
 
 
@@ -71,6 +71,10 @@ const formatDate = (date) => {
     return format(parse(date, 'yyyy-MM-dd', new Date()), 'MMMM dd, yyyy');
 }
 
+const isMoreThanOneDay = (createdAt) => {
+    return differenceInDays(new Date(), parseISO(createdAt)) > 1;
+}
+
 const isUserCoordinator = computed(() => user.value.role === 'coordinator')
 
 </script>
@@ -89,7 +93,8 @@ const isUserCoordinator = computed(() => user.value.role === 'coordinator')
                 </tr>
             </thead>
             <tbody>
-                <tr v-for="attendance in itemsPaginated" :key="attendance.id" class="bg-white dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
+                <tr v-for="attendance in itemsPaginated" :key="attendance.id"
+                    class="bg-white dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
                     <td data-label="Date" scope="row" class="px-4 py-2 font-semibold">
                         {{ formatDate(attendance.date) }}
                     </td>
@@ -107,10 +112,25 @@ const isUserCoordinator = computed(() => user.value.role === 'coordinator')
                     </td>
                     <td v-if="!isUserCoordinator" data-label="Action" class="whitespace-nowrap px-2 py-2">
                         <BaseButtons type="justify-start" no-wrap>
-                            <BaseButton label="Edit" roundedFull color="blue" :icon="mdiFileEditOutline"
-                                :href="route('attendances.edit', { id: attendance.id })" small />
-                            <BaseButton label="Delete" roundedFull color="red" :icon="mdiDeleteEmptyOutline" small
-                                @click.prevent="deleteAttendance(attendance.id)" />
+                            <BaseButton
+                            label="Edit"
+                            roundedFull
+                            color="blue"
+                            :icon="mdiFileEditOutline"
+                            :href="route('attendances.edit', { id: attendance.id })"
+                            small
+                            :disabled="isMoreThanOneDay(attendance.created_at)"
+                            />
+
+                            <BaseButton
+                            label="Delete"
+                            roundedFull
+                            color="red"
+                            :icon="mdiDeleteEmptyOutline"
+                            small
+                            @click.prevent="deleteAttendance(attendance.id)"
+                            :disabled="isMoreThanOneDay(attendance.created_at)"
+                            />
                         </BaseButtons>
                     </td>
                 </tr>

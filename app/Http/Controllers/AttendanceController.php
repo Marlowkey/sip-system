@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Carbon\Carbon;
 use App\Models\User;
 use Inertia\Inertia;
 use App\Models\Attendance;
@@ -72,16 +73,18 @@ class AttendanceController extends Controller
         ]);
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
     public function update(StoreRequest $request, int $id)
     {
         $attendance = Attendance::findOrFail($id);
+
+        if ($attendance->created_at->lt(Carbon::now()->subDay())) {
+            return redirect()->back()->with('error', 'Attendance cannot be edited after a day.');
+        }
+
         $attendance->update($request->validated());
+
         return redirect()->route('attendances.index')->with('message', 'Attendance updated successfully.');
     }
-
     /**
      * Remove the specified resource from storage.
      */
