@@ -19,7 +19,10 @@ const props = defineProps({
     },
     user: {
         type: Object,
-    }
+    },
+    username: {
+        type: String
+    },
 });
 
 const isEditMode = computed(() => !!props.journal.feedback)
@@ -72,6 +75,9 @@ const markAsReviewed = async () => {
 
             <div class="p-5">
                 <h1 class="mb-2 text-2xl font-bold text-center text-gray-900 dark:text-white">{{ journal.title }}</h1>
+                <p v-if="username" class="text-center text-sm font-medium text-gray-600 dark:text-gray-300">
+                {{ username }}
+            </p>
                 <div class="flex items-center justify-between mx-10">
                     <p class="text-sm font-medium text-gray-600 dark:text-gray-300">Week {{ journal.week }}</p>
                     <p class="text-sm font-medium text-gray-600 dark:text-gray-300">{{ journal.date }}</p>
@@ -101,7 +107,7 @@ const markAsReviewed = async () => {
                     <div
                         class="flex items-center w-full flex-row my-8 py-6 pl-12 pr-4 isolate [unicode-bidi:isolate] rounded-xl relative before:content-[''] before:absolute before:w-1 before:h-4/5 before:bg-green-700 before:z-[10] before:left-6">
                         <p class="white-space-pre-wrap [&amp;:not(:first-child)]:mt-3">
-                            <span class="font-semibold">Feedback:</span> {{ journal.feedback }}
+                            <span class="font-semibold">Coordinator :</span> {{ journal.feedback }}
                         </p>
                     </div>
                 </div>

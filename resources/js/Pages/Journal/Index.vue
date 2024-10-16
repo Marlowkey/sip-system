@@ -65,8 +65,14 @@ watch([week, classBlock], ([newWeek, newClassBlock], [oldWeek, oldClassBlock]) =
                 <BaseButton roundedFull :icon="mdiPlus" color="whiteDark" routeName="journals.create" />
             </SectionTitleLineWithButton>
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-4">
-                <CardBoxJournal v-for="item in journal" :key="item.id" :title="item.title" :date="item.date"
-                    :reviewed="item.reviewed" :href="route('journals.show', { id: item.id })" />
+                <CardBoxJournal
+                v-for="item in journal"
+                :key="item.id"
+                :title="item.title"
+                :date="item.date"
+                :reviewed="item.reviewed"
+                :href="route('journals.show', { id: item.id })"
+                />
             </div>
         </SectionMain>
 
@@ -77,7 +83,7 @@ watch([week, classBlock], ([newWeek, newClassBlock], [oldWeek, oldClassBlock]) =
 
             <SectionTitleLineWithButton :icon="mdiAccountFile" title="Journal Entries" main>
                 <div class="flex items-center">
-                    <label for="block" class="mr-2 text-lg font-medium">Class Block:</label>
+                    <label for="block" class="mr-2 text-sm font-medium">Class Block:</label>
                     <!-- Label for class block -->
                     <select v-model="classBlock" id="block" class="border rounded px-2 py-1 mx-2">
                         <option value="">Select a Class Block</option>
@@ -88,14 +94,20 @@ watch([week, classBlock], ([newWeek, newClassBlock], [oldWeek, oldClassBlock]) =
                     <BaseButton roundedFull :icon="mdiFilterVariant" color="whiteDark" routeName="journals.create" />
                 </div>
                 <div class="flex items-center">
-                    <label for="week" class="mr-2 text-lg font-medium">Week:</label> <!-- Label for the input -->
+                    <label for="week" class="mr-2 text- font-medium">Week:</label> <!-- Label for the input -->
                     <FormControl v-model="week" borderless type="number" id="week"
-                        class="text-sm mx-2 font-md" />
+                        class="text-sm mx-4 font-medium w-16 " />
                 </div>
             </SectionTitleLineWithButton>
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-1 gap-4">
-                <CardBoxJournal v-for="item in journal" :key="item.id" :title="item.title" :date="item.date"
-                :reviewed="item.reviewed" :href="route('journals.show', { id: item.id })" />
+                <CardBoxJournal
+                v-for="item in journal"
+                :key="item.id"
+                :title="item.title"
+                :date="item.date"
+                :reviewed="item.reviewed"
+                :href="route('journals.show', { id: item.id })"
+                />
             </div>
         </SectionMain>
 

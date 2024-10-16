@@ -24,6 +24,10 @@ const props = defineProps({
     type: String,
     required: true
   },
+  username: {
+    type: String,
+    required: true
+  },
 })
 const pillType = computed(() => {
   return props.reviewed ? 'success' : 'warning'
@@ -47,6 +51,7 @@ const pillText = computed(() => props.text ?? (props.reviewed ? 'Reviewed' : 'Pe
             {{ title }}
           </h4>
           <p class="text-gray-500 dark:text-slate-400">{{ date }}</p>
+          <p v-if="username"  class="text-gray-500 dark:text-slate-400">User: {{ username }}</p>
         </div>
       </BaseLevel>
       <PillTag :color="pillType" :icon="pillIcon" small/>

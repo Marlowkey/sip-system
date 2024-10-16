@@ -78,15 +78,18 @@ class JournalController extends Controller
     public function show(string $id)
     {
         $user = auth()->user();
-        $journal = Journal::findOrFail($id);
+        $journal = Journal::with('user')->findOrFail($id); // Eager load the user relationship
+
+        $username = $journal->user ? $journal->user->first_name . ' ' . $journal->user->last_name : 'Unknown User';
 
         return Inertia::render('Journal/Show', [
             'journal' => $journal,
+            'username' => $username,
             'user' => $user,
         ]);
     }
 
-    /**
+    /**show
      * Show the form for editing the specified resource.
      */
     public function edit(string $id)
@@ -150,7 +153,7 @@ class JournalController extends Controller
         return redirect()->route('journals.index')->with('message', 'Feedback added successfully.');
     }
 
-    
+
 
 
 }

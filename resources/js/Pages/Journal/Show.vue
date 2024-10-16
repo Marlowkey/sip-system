@@ -18,6 +18,7 @@ import CardBoxJournalView from '@/components/CardBoxJournalView.vue'
 const props = defineProps({
     user: Object,
     journal: Object,
+    username: String
 })
 
 const userRole = props.user.role;
@@ -55,6 +56,7 @@ const userRole = props.user.role;
                 <CardBoxJournalView
                 :journal="journal"
                 :user="user"
+                :username="username"
                 />
             </CardBox>
         </SectionMain>
