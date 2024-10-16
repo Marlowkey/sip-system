@@ -23,15 +23,16 @@ class Document extends Model
 
     public static function getDocumentsForUser($id)
     {
-        return self::with(['users' => function ($query) use ($id) {
-            $query->where('user_id', $id);
-        }])->get();
+        return self::with([
+            'users' => function ($query) use ($id) {
+                $query->where('user_id', $id);
+            }
+        ])->get();
     }
 
-    public function getDocumentsWithNumberOfCompleted ($user)
+    public function getDocumentsWithNumberOfCompleted($user)
     {
-        return $this->getAllDocuments()->map(function ($document) use ($user)
-        {
+        return $this->getAllDocuments()->map(function ($document) use ($user) {
             return [
                 'id' => $document->id,
                 'title' => $document->title,
@@ -50,11 +51,12 @@ class Document extends Model
             $this->users->filter(function ($user) {
                 return $user->pivot->is_completed;
             })
-            ->where('course', $user->course)
-            ->count();
+                ->where('course', $user->course)
+                ->count();
     }
 
-    public function getAllDocuments ()
+
+    public function getAllDocuments()
     {
         return self::all();
     }

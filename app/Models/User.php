@@ -110,6 +110,11 @@ class User extends Authenticatable
         return $totalDocuments > 0 ? ($completedDocuments / $totalDocuments) * 100 : 0;
     }
 
+    public function getProgressForStudent($user)
+    {
+        return $user->getProgress();
+    }
+
     public function getStudentUserWithProgress()
     {
         return $this->getStudentsForCoordinator()->map(function ($student) {
@@ -125,4 +130,5 @@ class User extends Authenticatable
             ];
         });
     }
+
 }

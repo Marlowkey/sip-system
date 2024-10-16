@@ -2,15 +2,27 @@
 
 namespace App\Http\Controllers;
 
+use Exception;
 use App\Models\User;
 use Inertia\Inertia;
+use App\Models\Journal;
 use App\Models\Document;
-use Exception;
+use App\Models\Attendance;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 
 class HomeController extends Controller
 {
+    protected User $user;
+    protected Attendance $attendance;
+
+
+    public function __construct(User $user, Attendance $attendance)
+    {
+        $this->user = $user;
+        $this->attendance = $attendance;
+
+    }
     public function index()
     {
         try {
@@ -29,9 +41,16 @@ class HomeController extends Controller
 
     public function studentView($user)
     {
-        $documents = Document::getDocumentsForUser($user->id);
+        $documents = Document::getDocumentsForUser($user);
+        $progress = $this->user->getProgressForStudent($user);
+        $journals = Journal::getJournalsForUser($user->id);
+        $attendance = $this->attendance->getStudentAttendancesForStudent($user);
+
         return Inertia::render('Student/StudentView', [
-            'documents' => $documents
+            'documents' => $documents,
+            'progress' => $progress,
+            'journalsCount' => $journals->count(),
+            'attendanceCount' => $attendance->count(),
         ]);
     }
 

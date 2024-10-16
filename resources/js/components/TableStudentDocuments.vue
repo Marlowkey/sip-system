@@ -126,7 +126,7 @@ const formatDueDate = (dueDate) => {
                 <td v-if="checkable" class="px-4 py-1 text-center">
                     <input type="checkbox" :checked="isCompleted(document)"
                         @change="event => updateCompletionStatus(document, event)"
-                        class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500" />
+                        class="w-5 h-5 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500" />
                 </td>
             </tr>
         </tbody>
