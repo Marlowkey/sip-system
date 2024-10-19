@@ -47,4 +47,23 @@ class Journal extends Model
         }
         return $query->get();
     }
+
+    public static function getLatestJournalForUser(int $userId)
+    {
+        $user = User::findOrFail($userId);
+        if ($user->role === 'student') {
+            return $user->journals()->orderBy('created_at', 'desc')->first();
+        } else {
+            return null;
+        }
+    }
+
+    public static function getLatestStudentJournalForCoordinator($user)
+    {
+        $journals = self::getStudentJournalsForCoordinator($user);
+
+        $latestJournals = $journals->sortByDesc('created_at')->take(5); // No need to call get() on a collection
+
+        return $latestJournals;
+    }
 }

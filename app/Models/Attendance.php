@@ -15,13 +15,15 @@ class Attendance extends Model
         return $this->belongsTo(User::class);
     }
 
-    public function getStudentAttendancesForCoordinator ($user, $date = null)
+    public function getStudentAttendancesForCoordinator($user, $date = null)
     {
-        $query = self::with(['user' => function ($query) use($user) {
-            $query->where('role', 'student');
-            $query->where('course', $user->course);
-            $query->orderBy('last_name');
-        }]);
+        $query = self::with([
+            'user' => function ($query) use ($user) {
+                $query->where('role', 'student');
+                $query->where('course', $user->course);
+                $query->orderBy('last_name');
+            }
+        ]);
 
         if ($date) {
             $query->where('date', $date);
@@ -31,7 +33,7 @@ class Attendance extends Model
         return $query->get();
     }
 
-    public function getStudentAttendances ($user, $date = null)
+    public function getStudentAttendances($user, $date = null)
     {
         return $this->getStudentAttendancesForCoordinator($user, $date)->map(function ($attendance) {
             if ($attendance->user) {
@@ -66,7 +68,7 @@ class Attendance extends Model
                 $month = $dateComponents[1];
 
                 $query->whereYear('date', $year)
-                      ->whereMonth('date', $month);
+                    ->whereMonth('date', $month);
             } else {
                 // Handle invalid month format
                 throw new \Exception('Invalid month format. Expected format: YYYY-MM');
@@ -76,5 +78,11 @@ class Attendance extends Model
         }
 
         return $query->get();
+    }
+
+    public function getLatestStudentAttendance($userId)
+    {
+        $user = User::findOrFail($userId);
+        return $user->attendances()->orderBy('date', 'desc')->first();
     }
 }
