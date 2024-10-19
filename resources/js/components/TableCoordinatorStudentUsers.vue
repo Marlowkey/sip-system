@@ -51,45 +51,47 @@ const pagesList = computed(() => {
         <p>This is sample modal</p>
     </CardBoxModal>
     <div class="relative overflow-x-auto m-4">
-    <table class="w-full text-gray-800 text-left rtl:text-right">
-        <thead class="text-gray-700">
-            <tr class="border-b">
-                <th v-if="checkable" />
-                <th  scope="col" class="px-4 py-3">Name</th>
-                <th  scope="col" class="px-4 py-3">Email</th>
-                <th  scope="col" class="px-4 py-3">Block</th>
-                <th scope="col" class="px-8 py-3">SIP Requirements Progress</th>
-                <th scope="col" class="px-6 py-3">HTE</th>
-                <!-- <th>Action</th> -->
+        <table class="w-full text-gray-800 text-left rtl:text-right">
+            <thead class="text-gray-700">
+                <tr class="border-b">
+                    <th v-if="checkable" />
+                    <th scope="col" class="px-4 py-3">Name</th>
+                    <th scope="col" class="px-4 py-3">Email</th>
+                    <th scope="col" class="px-4 py-3">Block</th>
+                    <th scope="col" class="px-8 py-3">SIP Requirements Progress</th>
+                    <!-- <th>Action</th> -->
 
-            </tr>
-        </thead>
-        <tbody class="text-gray-600 font-medium">
-            <tr v-for="user in itemsPaginated" :key="user.id" class="bg-white dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
-                <td data-label="Name" scope="row" class="px-4 py-2 font-semibold">
-                    {{ user.last_name }} , {{ user.first_name }}
-                </td>
-                <td data-label="Email" class="px-4 py-2">
-                    {{ user.email }}
-                </td>
-                <td data-label="Year Level" class="px-4 py-2">
-                    {{ user.block }}
-                </td>
+                </tr>
+            </thead>
+            <tbody class="text-gray-600 font-medium ">
+                <tr v-for="user in itemsPaginated" :key="user.id"
+                    class="bg-white dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 transition-all duration-200 ease-in-out">
 
-                <td data-label="Progress" class="px-4 py-2 min-w-ful">
-                    <ProgressBar :progress="user.progress" />
-                </td>
-                <td data-label="HTE" class="px-4 py-2">
-                    {{ user.host_training_establishment }}
-                </td>
-                <!-- <td class="before:hidden lg:w-1 whitespace-nowrap text-center px-6">
-                    <BaseButtons type="justify-start lg:justify-end" no-wrap>
-                        <BaseButton color="info" :icon="mdiEye" small @click="isModalActive = true" />
-                    </BaseButtons>
-                </td> -->
-            </tr>
-        </tbody>
-    </table>
+                    <td data-label="Name" scope="row"
+                        class="px-6 py-4 font-semibold text-gray-800 dark:text-gray-200 whitespace-nowrap">
+                        {{ user.last_name }}, {{ user.first_name }}
+                    </td>
+
+                    <td data-label="Email" class="px-6 py-4 text-gray-600 dark:text-gray-400">
+                        {{ user.email }}
+                    </td>
+
+                    <td data-label="Year Level" class="px-6 py-4 text-gray-600 dark:text-gray-400">
+                        {{ user.block }}
+                    </td>
+
+                    <td data-label="Progress" class="px-6 py-4 min-w-full">
+                        <div class="flex items-center">
+                            <ProgressBar :progress="user.progress" />
+                            <span class="ml-4 text-sm font-medium text-gray-700 dark:text-gray-300">
+                                {{ user.progress }}%
+                            </span>
+                        </div>
+                    </td>
+                </tr>
+
+            </tbody>
+        </table>
     </div>
     <div class="p-3 mt-2 lg:px-6 border-t border-gray-100 dark:border-slate-800">
         <BaseLevel>
