@@ -16,15 +16,26 @@ class HomeController extends Controller
     protected User $user;
     protected Attendance $attendance;
 
+    protected Journal $journal;
 
-    public function __construct(User $user, Attendance $attendance)
+
+
+    public function __construct(User $user, Attendance $attendance, Journal $journal)
     {
         $this->user = $user;
         $this->attendance = $attendance;
+        $this->journal = $journal;
 
     }
-    public function index()
+    public function index(Request $request)
     {
+        $request->validate([
+            'class_block' => 'nullable|string',
+        ]);
+
+        $classBlock = $request->class_block ?? null;
+        $classBlocks = User::distinct()->pluck('block');
+
         try {
             $user = auth()->user();
 
@@ -32,7 +43,7 @@ class HomeController extends Controller
                 case 'student':
                     return $this->studentView($user);
                 case 'coordinator':
-                    return $this->coordinatorView($user);
+                    return $this->coordinatorView($user, $classBlock, $classBlocks);
             }
         } catch (Exception $e) {
             Log::error('Error ' . $e->getMessage());
@@ -45,22 +56,31 @@ class HomeController extends Controller
         $progress = $this->user->getProgressForStudent($user);
         $journals = Journal::getJournalsForUser($user->id);
         $attendance = $this->attendance->getStudentAttendancesForStudent($user);
+        $latestJournal = Journal::getLatestJournalForUser($user->id);
+        $latestAttendance = $this->attendance->getLatestStudentAttendance($user->id);
 
         return Inertia::render('Student/StudentView', [
             'documents' => $documents,
             'progress' => $progress,
             'journalsCount' => $journals->count(),
             'attendanceCount' => $attendance->count(),
+            'latestJournal' => $latestJournal,
+            'latestAttendance' => $latestAttendance,
         ]);
     }
 
-    public function coordinatorView($user)
+    public function coordinatorView($user, $classBlock, $classBlocks)
     {
-        $studentUserWithProgress = $user->getStudentUserWithProgress();
+        $studentUserWithProgress = $user->getStudentUserWithProgress($classBlock);
+        $latestJournals = Journal::getLatestStudentJournalForCoordinator($user);
+
 
         return Inertia::render('Coordinator/CoordinatorView', [
             'users' => $studentUserWithProgress,
             'user' => $user,
+            'latestJournals' => $latestJournals,
+            'classBlocks' => $classBlocks,
+            'classBlock' => $classBlock,
         ]);
     }
 }

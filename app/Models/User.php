@@ -90,13 +90,11 @@ class User extends Authenticatable
         return $query->where('role', 'student');
     }
 
-    public function getStudentsForCoordinator(): Collection
+    public function getStudentsForCoordinator()
     {
-        $query = $this->student()
+        return $this->student()
             ->orderBy('last_name')
-            ->where('course', $this->course)
-            ->get();
-        return $query;
+            ->where('course', $this->course);
     }
 
 
@@ -115,9 +113,17 @@ class User extends Authenticatable
         return $user->getProgress();
     }
 
-    public function getStudentUserWithProgress()
+    public function getStudentUserWithProgress($classBlock = null)
     {
-        return $this->getStudentsForCoordinator()->map(function ($student) {
+        $query = $this->getStudentsForCoordinator();
+
+        if ($classBlock) {
+            $query->where('block', $classBlock);
+        }
+
+        $students = $query->get();
+
+        return $students->map(function ($student) {
             return [
                 'id' => $student->id,
                 'first_name' => $student->first_name,
@@ -130,5 +136,6 @@ class User extends Authenticatable
             ];
         });
     }
+
 
 }
