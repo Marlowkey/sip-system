@@ -18,7 +18,7 @@ import NotificationBar from '@/components/NotificationBar.vue'
 import TableStudentAttendance from '@/components/TableStudentAttendance.vue'
 import CardBoxComponentEmpty from '@/components/CardBoxComponentEmpty.vue'
 import FormControl from '@/components/FormControl.vue'
-
+import BaseButton from '@/components/BaseButton.vue'
 
 const props = defineProps({
     user: Object, // Authenticated user passed as a prop from Inertia
@@ -32,6 +32,7 @@ const getMonthNow = () => {
 
 const month = ref(props.month ?? getMonthNow())
 const url = route('student-attendance.show', { id: props.user.id })
+const userId = ref(props.user.id)
 
 const fetchAttendancesForStudent = debounce(() => {
     router.get(url, { month: month.value });
@@ -52,12 +53,13 @@ const userRole = props.user.role;
 const title = computed(() => {
     if (props.user) {
         return 'Daily Time Record' + ' - ' + props.user.last_name + ', ' + props.user.first_name;
-}
+    }
 })
 
 </script>
 <template>
     <LayoutAuthenticated>
+
         <Head title="Daily Time Record" />
         <SectionMain>
             <NotificationBar v-if="$page.props.flash.message" icon="mdiAlert" color="info" class="m-2">
@@ -65,8 +67,14 @@ const title = computed(() => {
             </NotificationBar>
 
             <SectionTitleLineWithButton :icon="mdiLocationEnter" :title="title" main>
-                <FormControl v-model="month" borderless type="month" placeholder="Select Date"
-                class="justify-end text-sm font-medium" />
+
+                <div class="flex justify-end items-center">
+                    <FormControl v-model="month" borderless type="month" placeholder="Select Date"
+                        class="text-sm font-medium mx-1" />
+
+                    <BaseButton label="Export" roundedFull small :icon="mdiPlus" color="success"
+                        :href="route('attendances.export', { month: month, user_id: userId })" class="p-2 mx-1" />
+                </div>
             </SectionTitleLineWithButton>
             <CardBoxComponentEmpty v-if="isItemEmpty(props.attendance)" />
             <CardBox has-table v-else>

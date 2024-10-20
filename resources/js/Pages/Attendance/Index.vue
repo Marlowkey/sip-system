@@ -29,6 +29,8 @@ const props = defineProps({
     month: String, // Month passed as a prop from Inertia
 })
 
+
+
 const getDateNow = () => {
     return new Date().toISOString().substr(0, 10)
 }
@@ -39,6 +41,7 @@ const getMonthNow = () => {
 
 const date = ref(props.date ?? getDateNow())
 const month = ref(props.month ?? getMonthNow())
+const userId = ref(props.user?.id);
 const url = route('attendances.index')
 
 
@@ -68,6 +71,24 @@ const isItemEmpty = ((item) => {
 
 const userRole = props.user.role;
 
+const form = useForm({
+    month: props.month,
+    user_id: userId.value,
+})
+
+const exportAttendance = () => {
+    console.log('Month:', month.value);
+    console.log('User ID:', userId.value);
+
+    form.post(route('attendances.export'), {
+        month: month.value,
+        user_id: userId.value,
+    }, {
+        onSuccess: () => {
+            reset();
+        }
+    });
+}
 </script>
 <template>
     <LayoutAuthenticated>
@@ -86,6 +107,8 @@ const userRole = props.user.role;
                     <div class="justify-end content-center	mx-2">
                         <BaseButton label="Log in" roundedFull small :icon="mdiPlus" color="info"
                             routeName="attendances.create" class="p-2 mx-1" />
+                        <BaseButton label="Export" roundedFull small :icon="mdiPlus" color="success"
+                            :href="route('attendances.export', { month: month, user_id: userId})" class="p-2 mx-1" />
                     </div>
                 </div>
 

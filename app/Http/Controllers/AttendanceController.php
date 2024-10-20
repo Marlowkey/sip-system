@@ -7,7 +7,9 @@ use App\Models\User;
 use Inertia\Inertia;
 use App\Models\Attendance;
 use Illuminate\Http\Request;
+use App\Exports\AttendanceExport;
 use Illuminate\Support\Facades\Auth;
+use Maatwebsite\Excel\Facades\Excel;
 use App\Http\Requests\Attendance\ShowRequest;
 use App\Http\Requests\Attendance\IndexRequest;
 use App\Http\Requests\Attendance\StoreRequest;
@@ -27,7 +29,7 @@ class AttendanceController extends Controller
     {
         $user = auth()->user();
 
-        $month = $request->validated()['month'] ?? null;
+        $month = $request->validated()['month'] ?? Carbon::now()->format('Y-m'); // Get the current month if $month is null
         $attendance = $this->attendance->getStudentAttendancesForStudent($user, $month);
 
         $date = $request->validated()['date'] ?? null;
@@ -107,5 +109,25 @@ class AttendanceController extends Controller
             'month' => $month,
         ]);
     }
+
+    public function export(Request $request)
+    {
+
+        $request->validate([
+            'month' => 'required',
+            'user_id' => 'required',
+        ]);
+
+
+        $month = $request->input('month');
+        $userId = $request->input('user_id');
+
+        $user = User::findOrFail(   $userId);
+
+        $userName = $user->first_name . ' ' . $user->last_name;
+
+        return Excel::download(new AttendanceExport($month, $userId, $userName), 'attendance.xlsx');
+    }
+
 }
 

@@ -50,4 +50,6 @@ Route::post('/journals/{id}/mark-reviewed', [JournalController::class, 'markAsRe
 Route::post('/journals/{id}/feedback', [JournalController::class, 'addFeedback'])->name('journals.addFeedback');
 Route::match(['get', 'post'], '/botman', [BotManController::class, 'handle']);
 
+Route::get('/attendance/export', [AttendanceController::class, 'export'])->name('attendances.export');
+
 require __DIR__ . '/auth.php';

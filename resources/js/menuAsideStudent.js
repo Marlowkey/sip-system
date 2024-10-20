@@ -27,7 +27,7 @@ import {
       },
       {
         route: 'attendances.index',
-        label: 'DTR',
+        label: 'Attendance',
         icon: mdiCalendarBadge
       },
       {
