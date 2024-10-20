@@ -7,6 +7,7 @@ import {
     mdiLocationEnter,
     mdiPlus,
     mdiClockCheckOutline,
+    mdiFileExport,
 } from '@mdi/js'
 import SectionMain from '@/components/SectionMain.vue'
 import CardBox from '@/components/CardBox.vue'
@@ -107,7 +108,7 @@ const exportAttendance = () => {
                     <div class="justify-end content-center	mx-2">
                         <BaseButton label="Log in" roundedFull small :icon="mdiPlus" color="info"
                             routeName="attendances.create" class="p-2 mx-1" />
-                        <BaseButton label="Export" roundedFull small :icon="mdiPlus" color="success"
+                        <BaseButton label="Export" roundedFull small :icon="mdiFileExport " color="success"
                             :href="route('attendances.export', { month: month, user_id: userId})" class="p-2 mx-1" />
                     </div>
                 </div>

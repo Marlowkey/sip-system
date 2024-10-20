@@ -28,9 +28,4 @@ import {
         label: 'Journal',
         icon: mdiSquareEditOutline
       },
-      {
-        route: 'error',
-        label: 'Error',
-        icon: mdiAlertCircle
-      }
   ]

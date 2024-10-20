@@ -9,6 +9,7 @@ import {
     mdiPlus,
     mdiClockCheckOutline,
     mdiFilterMenu,
+    mdiFileExport,
 } from '@mdi/js'
 import SectionMain from '@/components/SectionMain.vue'
 import CardBox from '@/components/CardBox.vue'
@@ -72,7 +73,7 @@ const title = computed(() => {
                     <FormControl v-model="month" borderless type="month" placeholder="Select Date"
                         class="text-sm font-medium mx-1" />
 
-                    <BaseButton label="Export" roundedFull small :icon="mdiPlus" color="success"
+                    <BaseButton label="Export" roundedFull small :icon="mdiFileExport " color="success"
                         :href="route('attendances.export', { month: month, user_id: userId })" class="p-2 mx-1" />
                 </div>
             </SectionTitleLineWithButton>
