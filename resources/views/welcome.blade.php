@@ -39,13 +39,13 @@
 </head>
 
 <body class="leading-normal tracking-normal text-white gradient" style="font-family: 'Source Sans Pro', sans-serif;">
-    <nav id="header" class="fixed w-full z-30 top-5 text-white">
-        <div class="w-full container mx-auto flex flex-wrap items-center justify-between mt-0 py-2">
-            <div class="pl-4 flex items-center">
-                <a class="toggleColour text-white no-underline hover:no-underline font-bold text-2xl lg:text-4xl"
+    <nav id="header" class="fixed z-30 w-full text-white top-5">
+        <div class="container flex flex-wrap items-center justify-between w-full py-2 mx-auto mt-0">
+            <div class="flex items-center pl-4">
+                <a class="text-2xl font-bold text-white no-underline toggleColour hover:no-underline lg:text-4xl"
                     href="#">
                     <!--Icon from: http://www.potlabicons.com/ -->
-                    <svg class="h-8 fill-current inline" xmlns="http://www.w3.org/2000/svg"
+                    <svg class="inline h-8 fill-current" xmlns="http://www.w3.org/2000/svg"
                         viewBox="0 0 512.005 512.005">
                         <rect fill="#2a2a31" x="16.539" y="425.626" width="479.767" height="50.502"
                             transform="matrix(1,0,0,1,0,0)" />
@@ -55,38 +55,38 @@
                     SIP Registry and Monitoring System
                 </a>
             </div>
-            <div class="block lg:hidden pr-4">
+            <div class="block pr-4 lg:hidden">
                 <button id="nav-toggle"
-                    class="flex items-center p-1 text-pink-800 hover:text-gray-900 focus:outline-none focus:shadow-outline transform transition hover:scale-105 duration-300 ease-in-out">
-                    <svg class="fill-current h-6 w-6" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                    class="flex items-center p-1 text-pink-800 transition duration-300 ease-in-out transform hover:text-gray-900 focus:outline-none focus:shadow-outline hover:scale-105">
+                    <svg class="w-6 h-6 fill-current" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
                         <title>Menu</title>
                         <path d="M0 3h20v2H0V3zm0 6h20v2H0V9zm0 6h20v2H0v-2z" />
                     </svg>
                 </button>
             </div>
         </div>
-        <hr class="border-b border-gray-100 opacity-25 my-0 py-0" />
+        <hr class="py-0 my-0 border-b border-gray-100 opacity-25" />
     </nav>
     <!--Hero-->
     <div class="pt-24">
-        <div class="container px-3 mx-auto flex flex-wrap flex-col md:flex-row items-center">
+        <div class="container flex flex-col flex-wrap items-center px-3 mx-auto md:flex-row">
             <!--Left Col-->
-            <div class="flex flex-col w-full md:w-2/5 justify-center items-start text-center md:text-left">
-                <p class="uppercase tracking-loose w-full">Student Internship Program (SIP) of CICT CATSU</p>
+            <div class="flex flex-col items-start justify-center w-full text-center md:w-2/5 md:text-left">
+                <p class="w-full uppercase tracking-loose">Student Internship Program (SIP) of CICT CATSU</p>
                 <h1 class="my-4 text-5xl font-bold leading-tight">
                     Welcome!
                 </h1>
-                <p class="leading-normal text-2xl mb-8">
+                <p class="mb-8 text-2xl leading-normal">
                     Manage and track key aspects of internships, including document submission, attendance, and journal entries.                </p>
                 @if (Route::has('login'))
                     @auth
                         <a href="{{ url('/home') }}"
-                            class="mx-auto lg:mx-0 hover:underline bg-white text-gray-800 font-bold rounded-full my-6 py-4 px-8 shadow-lg focus:outline-none focus:shadow-outline transform transition hover:scale-105 duration-300 ease-in-out">
+                            class="px-8 py-2 mx-auto my-6 font-bold text-gray-800 transition duration-300 ease-in-out transform bg-white rounded-full shadow-lg lg:mx-0 hover:underline focus:outline-none focus:shadow-outline hover:scale-105">
                             Home
                         </a>
                     @else
                         <a href="{{ route('login') }}"
-                            class="mx-auto lg:mx-0 hover:underline bg-white text-gray-800 font-bold rounded-full my-6 py-2 px-8 shadow-lg focus:outline-none focus:shadow-outline transform transition hover:scale-105 duration-300 ease-in-out">
+                            class="px-8 py-2 mx-auto my-6 font-bold text-gray-800 transition duration-300 ease-in-out transform bg-white rounded-full shadow-lg lg:mx-0 hover:underline focus:outline-none focus:shadow-outline hover:scale-105">
                             Login
                         </a>
                     @endauth
@@ -94,8 +94,8 @@
                 @endif
             </div>
             <!--Right Col-->
-            <div class="w-full md:w-3/5 py-6 text-center">
-                <img class="w-full md:w-4/5 z-50" src="{{ asset('images/hero.png') }}" />
+            <div class="w-full py-6 text-center md:w-3/5">
+                <img class="z-50 w-full md:w-4/5" src="{{ asset('images/hero.png') }}" />
             </div>
         </div>
     </div>

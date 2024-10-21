@@ -60,18 +60,18 @@ const formatDate = (date) => {
         <Head title="Home" />
         <SectionMain>
             <div class="">
-                <div class="container px-3 mx-auto flex flex-wrap flex-col md:flex-row items-center">
+                <div class="container flex flex-col flex-wrap items-center px-3 mx-auto md:flex-row">
                     <!--Left Col-->
-                    <div class="flex flex-col w-full md:w-2/5 justify-center items-start text-center md:text-left">
-                        <p class="uppercase text-base font-bold tracking-loose w-full">Student Internship Program (SIP)
+                    <div class="flex flex-col items-start justify-center w-full text-center md:w-2/5 md:text-left">
+                        <p class="w-full text-base font-bold uppercase tracking-loose">Student Internship Program (SIP)
                             of CICT CATSU</p>
                         <h1 class="my-4 text-4xl font-bold leading-tight">
                             Welcome, {{ userName }}!
                         </h1>
                     </div>
                     <!--Right Col-->
-                    <div class="w-full md:w-3/5 py-6 text-center">
-                        <img class="w-full md:w-4/5 z-50" src="/images/hero.png" />
+                    <div class="w-full py-6 text-center md:w-3/5">
+                        <img class="z-50 w-full md:w-4/5" src="/images/hero.png" />
                     </div>
                 </div>
             </div>
@@ -79,7 +79,7 @@ const formatDate = (date) => {
             <SectionTitleLineWithButton title="Overview" main />
 
 
-            <div class="grid grid-cols-1 gap-6 lg:grid-cols-3 mb-6">
+            <div class="grid grid-cols-1 gap-6 mb-6 lg:grid-cols-3">
                 <CardBoxWidget color="text-emerald-500" :icon="mdiFileDocumentCheck" :number="progress.toFixed()"
                     label="Submission Progress" suffix="%" />
                 <CardBoxWidget color="text-blue-500" :icon="mdiFolderArrowLeft" :number="journalsCount.toFixed()"
@@ -99,35 +99,36 @@ const formatDate = (date) => {
             <!-- Latest Journal Section -->
             <SectionTitleLineWithButton :icon="mdiNoteText" title="Latest Journal" class="my-4" />
 
-            <div v-if="latestJournal" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-4">
+            <div v-if="latestJournal" class="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-2">
                 <CardBoxJournal :title="latestJournal.title" :date="latestJournal.date"
                     :reviewed="latestJournal.reviewed" />
             </div>
-            <p v-else class="p-4 text-center bg-gray-100 text-gray-600 rounded-lg shadow-sm">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 inline-block mb-2 text-gray-400" fill="none"
-                        viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M9 13h6m2 6H7a2 2 0 01-2-2V7a2 2 0 012-2h10a2 2 0 012 2v10a2 2 0 01-2 2z" />
-                    </svg>
-                    <span class="block text-lg font-semibold">No journal entries available.</span>
-                    <span class="text-sm">You haven't submitted any journal entries yet.</span>
-                </p>
+            <p v-else class="p-4 text-center text-gray-600 bg-gray-100 rounded-lg shadow-sm">
+                <svg xmlns="http://www.w3.org/2000/svg" class="inline-block w-6 h-6 mb-2 text-gray-400" fill="none"
+                    viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M9 13h6m2 6H7a2 2 0 01-2-2V7a2 2 0 012-2h10a2 2 0 012 2v10a2 2 0 01-2 2z" />
+                </svg>
+                <span class="block text-lg font-semibold">No journal entries available.</span>
+                <span class="text-sm">You haven't submitted any journal entries yet.</span>
+            </p>
 
 
             <!-- Latest Attendance Section -->
             <SectionTitleLineWithButton :icon="mdiClockOutline" title="Latest Attendance" />
             <CardBox v-if="latestAttendance">
-                <div  class="p-4 bg-gray-50 rounded-lg shadow-sm">
+                <div class="p-4 rounded-lg shadow-sm bg-gray-50">
                     <div class="flex items-center mb-4">
-                        <div class="p-3 bg-blue-500 rounded-full text-white">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
-                                stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M8 7V3m0 0a4 4 0 014 4v4M12 21H5a2 2 0 01-2-2v-7a2 2 0 012-2h7a2 2 0 012 2v7a2 2 0 01-2 2zm12-10h-4m0 0a4 4 0 00-4 4v4a4 4 0 004 4h4m0 0v-4m0 4v4" />
+                        <div class="p-2 text-white bg-blue-500 rounded-full">
+                            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="w-6 h-6">
+                                <rect width="24" height="24" fill="none"></rect>
+                                <path
+                                    d="M9.682,18.75a.75.75,0,0,1,.75-.75,8.25,8.25,0,1,0-6.189-2.795V12.568a.75.75,0,0,1,1.5,0v4.243a.75.75,0,0,1-.751.75H.75a.75.75,0,0,1,0-1.5H3a9.75,9.75,0,1,1,7.433,3.44A.75.75,0,0,1,9.682,18.75Zm2.875-4.814L9.9,11.281a.754.754,0,0,1-.22-.531V5.55a.75.75,0,1,1,1.5,0v4.889l2.436,2.436a.75.75,0,1,1-1.061,1.06Z" />
                             </svg>
                         </div>
+
                         <div class="ml-4">
-                            <h3 class="text-lg font-semibold text-gray-900">Latest Attendance</h3>
+                            <h3 class="text-lg font-semibold text-gray-900">Recent</h3>
                             <p class="text-sm text-gray-500">Date: {{ formatDate(latestAttendance.date) }}</p>
                         </div>
                     </div>
@@ -156,14 +157,14 @@ const formatDate = (date) => {
                     </div>
                 </div>
             </CardBox>
-            <p v-else class="p-4 text-center bg-gray-100 text-gray-600 rounded-lg shadow-sm">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 inline-block mb-2 text-gray-400" fill="none"
-                        viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M9 13h6m2 6H7a2 2 0 01-2-2V7a2 2 0 012-2h10a2 2 0 012 2v10a2 2 0 01-2 2z" />
-                    </svg>
-                    <span class="block text-lg font-semibold">No attendance entries available.</span>
-                </p>
+            <p v-else class="p-4 text-center text-gray-600 bg-gray-100 rounded-lg shadow-sm">
+                <svg xmlns="http://www.w3.org/2000/svg" class="inline-block w-6 h-6 mb-2 text-gray-400" fill="none"
+                    viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M9 13h6m2 6H7a2 2 0 01-2-2V7a2 2 0 012-2h10a2 2 0 012 2v10a2 2 0 01-2 2z" />
+                </svg>
+                <span class="block text-lg font-semibold">No attendance entries available.</span>
+            </p>
 
 
 
