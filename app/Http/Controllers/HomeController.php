@@ -16,7 +16,6 @@ class HomeController extends Controller
 {
     protected User $user;
     protected Attendance $attendance;
-
     protected Journal $journal;
 
 
@@ -55,7 +54,7 @@ class HomeController extends Controller
     {
         $documents = Document::getDocumentsForUser($user);
         $progress = $this->user->getProgressForStudent($user);
-        $journals = Journal::getJournalsForUser($user->id);
+        $journals = Journal::getJournalsForUser($user);
         $attendance = $this->attendance->getStudentAttendancesForStudent($user);
         $latestJournal = Journal::getLatestJournalForUser($user->id);
         $latestAttendance = $this->attendance->getLatestStudentAttendance($user->id);
@@ -74,14 +73,11 @@ class HomeController extends Controller
     {
 
         $dateToCheck = Carbon::today();
-
         $studentUserWithProgress = $user->getStudentUserWithProgress($classBlock);
         $latestJournals = Journal::getLatestStudentJournalForCoordinator($user);
         $usersCount = $user->getStudentUserWithProgress()->count();
         $attendancesTodayCount = $this->attendance->getStudentAttendancesForCoordinator($user, $dateToCheck)->count();
         $unreviewedJournals = Journal::getUnreviewedJournalsForCoordinator($user)->count();
-
-
 
         return Inertia::render('Coordinator/CoordinatorView', [
             'users' => $studentUserWithProgress,
