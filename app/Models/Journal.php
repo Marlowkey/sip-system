@@ -45,7 +45,7 @@ class Journal extends Model
             });
         }
 
-        $journals = $query->get();
+        $journals = $query->with('user')->get();
 
         $journalsWithUsername = $journals->map(function ($journal) {
             if ($journal->user) {
