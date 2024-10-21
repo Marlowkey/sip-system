@@ -45,9 +45,9 @@ const pillText = computed(() => props.text ?? (props.reviewed ? 'Reviewed' : 'Pe
   <CardBox isHoverable>
     <BaseLevel>
       <BaseLevel type="justify-start">
-        <BaseButton rounded-full :icon="mdiFolderText" color="blue" class="h-12 w-12"  Table :href="href"/>
-        <div class="mx-8 text-center md:text-left overflow-hidden">
-          <h4 class="text-xl text-ellipsis">
+        <BaseButton rounded-full :icon="mdiFolderText" color="blue" class="w-12 h-12"  Table :href="href"/>
+        <div class="mx-8 overflow-hidden text-center md:text-left">
+          <h4 class="text-medium text-ellipsis">
             {{ title }}
           </h4>
           <p class="text-gray-500 dark:text-slate-400">{{ date }}</p>

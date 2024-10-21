@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Exception;
+use Carbon\Carbon;
 use App\Models\User;
 use Inertia\Inertia;
 use App\Models\Journal;
@@ -71,8 +72,15 @@ class HomeController extends Controller
 
     public function coordinatorView($user, $classBlock, $classBlocks)
     {
+
+        $dateToCheck = Carbon::today();
+
         $studentUserWithProgress = $user->getStudentUserWithProgress($classBlock);
         $latestJournals = Journal::getLatestStudentJournalForCoordinator($user);
+        $usersCount = $user->getStudentUserWithProgress()->count();
+        $attendancesTodayCount = $this->attendance->getStudentAttendancesForCoordinator($user, $dateToCheck)->count();
+        $unreviewedJournals = Journal::getUnreviewedJournalsForCoordinator($user)->count();
+
 
 
         return Inertia::render('Coordinator/CoordinatorView', [
@@ -81,6 +89,9 @@ class HomeController extends Controller
             'latestJournals' => $latestJournals,
             'classBlocks' => $classBlocks,
             'classBlock' => $classBlock,
+            'usersCount' =>   $usersCount,
+            'attendancesTodayCount' => $attendancesTodayCount,
+            'unreviewedJournals' =>   $unreviewedJournals
         ]);
     }
 }
