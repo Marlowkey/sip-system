@@ -80,16 +80,16 @@ const formatDueDate = (dueDate) => {
     </CardBoxModal>
 
     <div class="relative overflow-x-auto">
-        <table class="w-full text-left rtl:text-right mb-2">
+        <table class="w-full mb-2 text-left rtl:text-right">
             <thead class="text-gray-700">
                 <tr class="border-b">
                     <th scope="col" class="px-4 py-3">Title</th>
                     <th scope="col" class="px-4 py-3">Due on</th>
-                    <th scope="col" class="px-4 py-3">Action</th>
-                    <th scope="col" class="px-4 py-3"># of Completed</th>
+                    <th scope="col" class="px-4 py-3 text-center">Action</th>
+                    <th scope="col" class="px-4 py-3 text-center">Completed</th>
                 </tr>
             </thead>
-            <tbody class="text-gray-600 font-medium">
+            <tbody class="font-medium text-gray-600">
                 <tr v-for="document in itemsPaginated" :key="document.id" class="bg-white dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
                     <td data-label="Title" scope="row" class="px-4 py-1">
                         {{ document.title }}
@@ -113,7 +113,7 @@ const formatDueDate = (dueDate) => {
             </tbody>
         </table>
     </div>
-    <div class="p-3 lg:px-6 border-t border-gray-100 dark:border-slate-800">
+    <div class="p-3 border-t border-gray-100 lg:px-6 dark:border-slate-800">
         <BaseLevel>
             <BaseButtons>
                 <BaseButton v-for="page in pagesList" :key="page" :active="page === currentPage" :label="page + 1"
