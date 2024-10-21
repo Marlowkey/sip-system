@@ -32,7 +32,8 @@ class JournalController extends Controller
         $classBlock = $request->class_block ?? null;
 
         $user = auth()->user();
-        $journal = Journal::getJournalsForUser($user->id, $week,$classBlock );
+
+        $journal = $this->journal->getJournalsForUser($user, $week,$classBlock );
         $classBlocks = User::distinct()->pluck('block');
 
 
