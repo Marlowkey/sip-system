@@ -44,6 +44,8 @@ class HomeController extends Controller
                     return $this->studentView($user);
                 case 'coordinator':
                     return $this->coordinatorView($user, $classBlock, $classBlocks);
+                case 'admin':
+                        return $this->adminView($user);
             }
         } catch (Exception $e) {
             Log::error('Error ' . $e->getMessage());
@@ -90,4 +92,12 @@ class HomeController extends Controller
             'unreviewedJournals' =>   $unreviewedJournals
         ]);
     }
+
+    public function adminView($user)
+    {
+
+
+        return Inertia::render('Admin/AdminView');
+    }
+
 }
