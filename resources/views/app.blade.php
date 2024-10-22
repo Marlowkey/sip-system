@@ -27,6 +27,25 @@
 
 <body class="font-sans antialiased">
     @inertia
+    @if(Auth::check() && Auth::user()->role === 'student')
+    <script>
+        var botmanWidget = {
+            chatServer: '/botman',
+            frameEndpoint: '/botman/chat',
+            title: 'Chatbot',
+            introMessage: "✋ Hi! I'm here to help. Ask me anything!",
+            placeholderText: "Type a message...",
+            mainColor: '#0096FF',
+            bubbleBackground: '#0096FF',
+            desktopHeight: 450,
+            desktopWidth: 370,
+            mobileHeight: '100%',
+            timeFormat: 'HH:MM',
+            displayMessageTime: false,
+        };
+    </script>
+    <script src='https://cdn.jsdelivr.net/npm/botman-web-widget@0/build/js/widget.js'></script>
+@endif
 </body>
 
 </html>

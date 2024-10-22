@@ -80,8 +80,8 @@ const updatePassword = () => {
                 <!-- File upload form in the slot -->
                 <template #file-upload>
                     <div class="flex flex-col items-center my-2">
-                        <div class="flex items-center space-x-2 my-2">
-                        <FormControl borderless type="file" @change="handleFileUpload" class="w-60 h-auto" />
+                        <div class="flex items-center my-2 space-x-2">
+                        <FormControl borderless type="file" @change="handleFileUpload" class="h-auto w-60" />
                         <BaseButton small rounded-full color="info" @click="submitAvatar" label="Submit" />
                     </div>
                     </div>
@@ -90,7 +90,7 @@ const updatePassword = () => {
 
 
 
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <div class="grid grid-cols-1 gap-6 lg:grid-cols-2">
                 <CardBox is-form @submit.prevent="profileForm.patch(route('profile.update'))">
                     <FormField label="First Name" help="Required. Your first name">
                         <FormControl v-model="profileForm.first_name" :icon="mdiAccount" name="first_name" required

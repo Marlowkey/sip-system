@@ -13,6 +13,13 @@ class DocumentSeeder extends Seeder
      */
     public function run(): void
     {
-        Document::factory(20)->create();
+        Document::factory()->personalData()->create();
+        Document::factory()->resume()->create();
+        Document::factory()->medicalCertificate()->create();
+        Document::factory()->schoolId()->create();
+        Document::factory()->barangayClearance()->create();
+        Document::factory()->internshipAgreement()->create();
+        Document::factory()->liabilityWaiver()->create();
+        Document::factory()->liabilityWaiverCovid()->create();
     }
 }
