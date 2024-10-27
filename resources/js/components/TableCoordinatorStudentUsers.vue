@@ -55,6 +55,7 @@ const pagesList = computed(() => {
             <thead class="text-gray-700">
                 <tr class="border-b">
                     <th v-if="checkable" />
+                    <th />
                     <th scope="col" class="px-4 py-3">Name</th>
                     <th scope="col" class="px-4 py-3">Email</th>
                     <th scope="col" class="px-4 py-3">Block</th>
@@ -66,7 +67,9 @@ const pagesList = computed(() => {
             <tbody class="font-medium text-gray-600 ">
                 <tr v-for="user in itemsPaginated" :key="user.id"
                     class="transition-all duration-200 ease-in-out bg-white dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600">
-
+                    <td class="px-4 py-3 border-b-0 lg:w-6 before:hidden">
+                            <UserAvatar :avatar="user.avatar"  :username="`${user.last_name}, ${user.first_name}`" class="w-24 h-24 mx-auto lg:w-6 lg:h-6" />
+                        </td>
                     <td data-label="Name" scope="row"
                         class="px-6 py-4 font-semibold text-gray-800 dark:text-gray-200 whitespace-nowrap">
                         {{ user.last_name }}, {{ user.first_name }}

@@ -1,14 +1,6 @@
 import {
-    mdiAccountCircle,
     mdiMonitor,
-    mdiLock,
-    mdiAlertCircle,
-    mdiSquareEditOutline,
-    mdiTable,
-    mdiViewList,
-    mdiTelevisionGuide,
-    mdiResponsive,
-    mdiPalette,
+    mdiAccountGroup
   } from '@mdi/js'
 
 
@@ -17,5 +9,10 @@ import {
         route: 'home',
         icon: mdiMonitor,
         label: 'Dashboard'
+      },
+      {
+        route: 'users.index',
+        icon: mdiAccountGroup ,
+        label: 'Users'
       },
   ]

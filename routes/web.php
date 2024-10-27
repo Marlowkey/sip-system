@@ -1,15 +1,16 @@
 <?php
 
 use Inertia\Inertia;
+use BotMan\BotMan\BotMan;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\UserController;
 use App\Http\Controllers\BotManController;
 use App\Http\Controllers\JournalController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\DocumentController;
 use App\Http\Controllers\AttendanceController;
 use App\Http\Controllers\StudentDocumentController;
-use BotMan\BotMan\BotMan;
 
 
 
@@ -19,9 +20,6 @@ Route::get('/', function () {
 
 Route::middleware(['auth:sanctum', 'verified'])->get('/home',[HomeController::class, 'index'])->name('home');
 
-Route::get('/tables', function () {
-    return Inertia::render('TablesView');
-})->name('tables');
 
 
 
@@ -48,4 +46,12 @@ Route::match(['get', 'post'], '/botman', [BotManController::class, 'handle']);
 
 Route::get('/attendance/export', [AttendanceController::class, 'export'])->name('attendances.export');
 
+
+Route::prefix('users')->group(function () {
+    Route::get('/', [UserController::class, 'index'])->name('users.index');
+    Route::get('/create', [UserController::class, 'create'])->name('users.create');
+    Route::post('/', [UserController::class, 'store'])->name('users.store');
+    Route::get('/{id}/edit', [UserController::class, 'edit'])->name('users.edit');
+    Route::put('/{id}', [UserController::class, 'update'])->name('users.update');
+});
 require __DIR__ . '/auth.php';

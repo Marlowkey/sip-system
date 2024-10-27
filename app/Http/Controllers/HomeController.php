@@ -95,8 +95,6 @@ class HomeController extends Controller
 
     public function adminView($user)
     {
-
-
         return Inertia::render('Admin/AdminView');
     }
 
