@@ -57,7 +57,7 @@ class HomeController extends Controller
         $documents = Document::getDocumentsForUser($user);
         $progress = $this->user->getProgressForStudent($user);
         $journals = Journal::getJournalsForUser($user);
-        $attendance = $this->attendance->getStudentAttendancesForStudent($user);
+        $attendanceCount = $this->attendance->getStudentAttendanceCountForStudent($user);
         $latestJournal = Journal::getLatestJournalForUser($user->id);
         $latestAttendance = $this->attendance->getLatestStudentAttendance($user->id);
 
@@ -65,7 +65,7 @@ class HomeController extends Controller
             'documents' => $documents,
             'progress' => $progress,
             'journalsCount' => $journals->count(),
-            'attendanceCount' => $attendance->count(),
+            'attendanceCount' => $attendanceCount,
             'latestJournal' => $latestJournal,
             'latestAttendance' => $latestAttendance,
         ]);

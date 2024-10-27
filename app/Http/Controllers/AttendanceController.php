@@ -100,7 +100,7 @@ class AttendanceController extends Controller
     public function showStudentAttendance(ShowRequest $request, $id)
     {
         $user = User::findOrFail($id);
-        $month = $request->validated()['month'] ?? null;
+        $month = $request->validated()['month'] ?? Carbon::now()->format('Y-m');
 
         $attendance = $this->attendance->getStudentAttendancesForStudent($user, $month);
         return Inertia::render('Attendance/Show', [

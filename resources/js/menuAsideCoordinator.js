@@ -21,7 +21,7 @@ import {
       {
         route: 'attendances.index',
         icon: mdiCalendarBadge,
-        label: 'DTR',
+        label: 'Attendance',
       },
       {
         route: 'journals.index',

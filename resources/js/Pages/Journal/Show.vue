@@ -34,7 +34,7 @@ const userRole = props.user.role;
                 {{ $page.props.flash.message }}
             </NotificationBar>
 
-            <SectionTitleLineWithButton :icon="mdiAccountFile" title="Journal Entries" main>
+            <SectionTitleLineWithButton :icon="mdiAccountFile" title="Journal" main>
                 <BaseButton roundedFull :icon="mdiPlus" color="whiteDark" routeName="journals.create" />
             </SectionTitleLineWithButton>
             <CardBox>
@@ -50,7 +50,7 @@ const userRole = props.user.role;
                 {{ $page.props.flash.message }}
             </NotificationBar>
 
-            <SectionTitleLineWithButton :icon="mdiAccountFile" title="Journal Entries" main>
+            <SectionTitleLineWithButton :icon="mdiAccountFile" title="Journal" main>
             </SectionTitleLineWithButton>
             <CardBox>
                 <CardBoxJournalView

@@ -97,7 +97,7 @@ const deleteJournal = async (journalId) => {
                 </FormField>
                 <InputError :message="form.errors.content" />
 
-                <FormField  label="Update image" help="Upload an image file">
+                <FormField   v-if="!isEditMode"  label="Image" help="Upload an image file">
                     <FormControl type="file"  @change="handleFileUpload"/>
                 </FormField>
                 <InputError :message="form.errors.image_path" />

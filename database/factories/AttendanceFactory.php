@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use Carbon\Carbon;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
@@ -27,5 +28,17 @@ class AttendanceFactory extends Factory
             'created_at' => now(),
             'updated_at' => now(),
         ];
+    }
+
+    public function forUserOnDate($userId, $date): static
+    {
+        return $this->state(function () use ($userId, $date) {
+            return [
+                'user_id' => $userId,
+                'date' => $date,
+                'created_at' => $date,
+                'updated_at' => $date,
+            ];
+        });
     }
 }

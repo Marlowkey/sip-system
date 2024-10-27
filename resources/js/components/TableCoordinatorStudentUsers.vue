@@ -50,8 +50,8 @@ const pagesList = computed(() => {
         <p>Lorem ipsum dolor sit amet <b>adipiscing elit</b></p>
         <p>This is sample modal</p>
     </CardBoxModal>
-    <div class="relative overflow-x-auto m-4">
-        <table class="w-full text-gray-800 text-left rtl:text-right">
+    <div class="relative m-4 overflow-x-auto">
+        <table class="w-full text-left text-gray-800 rtl:text-right">
             <thead class="text-gray-700">
                 <tr class="border-b">
                     <th v-if="checkable" />
@@ -63,9 +63,9 @@ const pagesList = computed(() => {
 
                 </tr>
             </thead>
-            <tbody class="text-gray-600 font-medium ">
+            <tbody class="font-medium text-gray-600 ">
                 <tr v-for="user in itemsPaginated" :key="user.id"
-                    class="bg-white dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 transition-all duration-200 ease-in-out">
+                    class="transition-all duration-200 ease-in-out bg-white dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600">
 
                     <td data-label="Name" scope="row"
                         class="px-6 py-4 font-semibold text-gray-800 dark:text-gray-200 whitespace-nowrap">
@@ -80,11 +80,11 @@ const pagesList = computed(() => {
                         {{ user.block }}
                     </td>
 
-                    <td data-label="Progress" class="px-6 py-4 min-w-full">
+                    <td data-label="Progress" class="min-w-full px-6 py-4">
                         <div class="flex items-center">
                             <ProgressBar :progress="user.progress" />
                             <span class="ml-4 text-sm font-medium text-gray-700 dark:text-gray-300">
-                                {{ user.progress }}%
+                                {{ Math.floor(user.progress) }}%
                             </span>
                         </div>
                     </td>
@@ -93,7 +93,7 @@ const pagesList = computed(() => {
             </tbody>
         </table>
     </div>
-    <div class="p-3 mt-2 lg:px-6 border-t border-gray-100 dark:border-slate-800">
+    <div class="p-3 mt-2 border-t border-gray-100 lg:px-6 dark:border-slate-800">
         <BaseLevel>
             <BaseButtons>
                 <BaseButton v-for="page in pagesList" :key="page" :active="page === currentPage" :label="page + 1"

@@ -23,7 +23,7 @@ const props = defineProps({
 
 const documentId = ref(props.document?.id);
 const isEditMode = computed(() => !!props.document)
-const title = computed(() => isEditMode.value ? 'Edit Document' : 'Create Document')
+const title = computed(() => isEditMode.value ? 'Edit SIP Requirement' : 'Create  SIP Requirement')
 
 const form = useForm({
     title: props.document?.title || '',

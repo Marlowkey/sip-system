@@ -77,8 +77,14 @@ class Attendance extends Model
             $query->whereDate('date', now()->toDateString());
         }
 
-        return $query->get();
+        return $query->orderBy('date', 'asc')->get();
     }
+
+    public function getStudentAttendanceCountForStudent($user)
+    {
+        return $user->attendances()->count();
+    }
+
 
     public function getLatestStudentAttendance($userId)
     {

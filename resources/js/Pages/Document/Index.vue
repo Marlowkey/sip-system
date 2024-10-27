@@ -48,8 +48,8 @@ const userRole = props.user.role;
                 {{ $page.props.flash.message }}
             </NotificationBar>
 
-            <SectionTitleLineWithButton :icon="mdiAccountFile" title="Document Submission" main>
-                <BaseButton label="Documents" roundedFull :icon="mdiPlus" color="info" small routeName="documents.create" />
+            <SectionTitleLineWithButton :icon="mdiAccountFile" title="SIP Requirements " main>
+                <BaseButton label="Add" roundedFull :icon="mdiPlus" color="info" small routeName="documents.create" />
             </SectionTitleLineWithButton>
             <CardBox>
                 <TableCoordinatorDocuments :document="documentWithNumberOfCompleted" />

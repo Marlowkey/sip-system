@@ -22,9 +22,9 @@ import FormControl from '@/components/FormControl.vue'
 import BaseButton from '@/components/BaseButton.vue'
 
 const props = defineProps({
-    user: Object, // Authenticated user passed as a prop from Inertia
-    attendance: Array, // Documents passed as a prop from Inertia
-    month: String, // Month passed as a prop from Inertia
+    user: Object,
+    attendance: Array,
+    month: String,
 })
 
 const getMonthNow = () => {
@@ -69,9 +69,9 @@ const title = computed(() => {
 
             <SectionTitleLineWithButton :icon="mdiLocationEnter" :title="title" main>
 
-                <div class="flex justify-end items-center">
+                <div class="flex items-center justify-end">
                     <FormControl v-model="month" borderless type="month" placeholder="Select Date"
-                        class="text-sm font-medium mx-1" />
+                        class="mx-1 text-sm font-medium" />
 
                     <BaseButton label="Export" roundedFull small :icon="mdiFileExport " color="success"
                         :href="route('attendances.export', { month: month, user_id: userId })" class="p-2 mx-1" />
