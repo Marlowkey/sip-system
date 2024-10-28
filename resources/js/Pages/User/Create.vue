@@ -32,6 +32,13 @@ const form = useForm({
     host_training_establishment: props.user?.host_training_establishment || '',
 })
 
+
+const roles = ref(["admin", "coordinator", "student",])
+
+
+const courses = ref(["Information Technology", "Information System", "Computer Science",])
+
+
 const submit = async () => {
     try {
         if (isEditMode.value) {
@@ -44,6 +51,17 @@ const submit = async () => {
     }
 }
 
+const deleteUser = async (userId) => {
+    try {
+        const form = useForm({})
+        await form.delete(route('users.destroy', userId))
+        // Show success notification
+    } catch (error) {
+        console.error('Error deleting journal:', error)
+        // Show error notification
+    }
+}
+
 </script>
 
 <template>
@@ -52,63 +70,54 @@ const submit = async () => {
             <SectionTitleLineWithButton :icon="mdiAccount" :title="title" main />
             <CardBox isForm @submit.prevent="submit">
 
-                <FormField label="First Name">
-                    <FormControl v-model="form.first_name" type="text" />
+                <FormField label="Name">
+                    <FormControl v-model="form.first_name" type="text" placeholder="Enter First Name" />
+                    <FormControl v-model="form.middle_initial" type="text" placeholder="Enter Middle Initial" />
                 </FormField>
                 <InputError :message="form.errors.first_name" />
+                <InputError :message="form.errors.middle_initial" />
 
                 <FormField label="Last Name">
-                    <FormControl v-model="form.last_name" type="text" />
+                    <FormControl v-model="form.last_name" type="text" placeholder="Enter Last Name" />
                 </FormField>
                 <InputError :message="form.errors.last_name" />
 
-                <FormField label="Middle Initial">
-                    <FormControl v-model="form.middle_initial" type="text" />
-                </FormField>
-                <InputError :message="form.errors.middle_initial" />
-
                 <FormField label="Email">
-                    <FormControl v-model="form.email" type="email" />
+                    <FormControl v-model="form.email" type="email" placeholder="Enter Email Address" />
                 </FormField>
                 <InputError :message="form.errors.email" />
 
                 <FormField label="Course">
-                    <FormControl v-model="form.course" as="select">
-                        <option value="" disabled>Select Course</option>
-                        <option value="Computer Science">Computer Science</option>
-                        <option value="Information Technology">Information Technology</option>
-                        <option value="Information System">Information System</option>
+                    <FormControl v-model="form.course" :options="courses" placeholder="Select Course">
                     </FormControl>
+                    <FormControl v-model="form.block" type="text" placeholder="Enter Block/Section" />
+
                 </FormField>
                 <InputError :message="form.errors.course" />
-
-                <FormField label="Block">
-                    <FormControl v-model="form.block" type="text" />
-                </FormField>
                 <InputError :message="form.errors.block" />
 
-                <FormField label="Password" v-if="!isEditMode">
-                    <FormControl v-model="form.password" type="password" />
+                <FormField label="Password">
+                    <FormControl v-model="form.password" type="password" placeholder="Enter Password" />
                 </FormField>
                 <InputError :message="form.errors.password" />
 
                 <FormField label="Role">
-                    <FormControl v-model="form.role" as="select">
-                        <option value="student">Student</option>
-                        <option value="coordinator">Coordinator</option>
-                        <option value="admin">Admin</option>
+                    <FormControl v-model="form.role" :options="roles" placeholder="Select Role">
                     </FormControl>
                 </FormField>
                 <InputError :message="form.errors.role" />
 
-                <FormField label="Host Training Establishment">
-                    <FormControl v-model="form.host_training_establishment" type="text" />
+                <FormField label="Host Training Establishment (if student)">
+                    <FormControl v-model="form.host_training_establishment" type="text"
+                        placeholder="Enter Host Training Establishment" />
                 </FormField>
                 <InputError :message="form.errors.host_training_establishment" />
 
-                <BaseButtons>
+                <BaseButtons class="flex justify-end">
                     <BaseButton roundedFull small type="submit" color="blue" label="Submit" />
                     <BaseButton roundedFull small type="reset" color="whiteTwo" label="Reset" v-if="!isEditMode" />
+                    <BaseButton roundedFull small color="red" label="Delete" @click.prevent="deleteUser(userId)"
+                        v-if="isEditMode" />
                 </BaseButtons>
             </CardBox>
         </SectionMain>

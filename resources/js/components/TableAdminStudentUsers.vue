@@ -6,6 +6,7 @@ import {
     mdiBookOpenPageVariant,
     mdiFilterCheck,
 } from '@mdi/js'
+import { router } from '@inertiajs/vue3'
 import { computed, ref, defineProps } from 'vue'
 import { mdiEye, mdiTrashCan } from '@mdi/js'
 import CardBoxModal from '@/components/CardBoxModal.vue'
@@ -36,7 +37,7 @@ const currentPage = ref(0)
 const searchTerm = ref("")
 const classBlock = ref("")
 const course = ref("")
-const courseOptions = ref(["Information Technology", "Information System", "Computer Science",]) // Replace with actual course options
+const courseOptions = ref(["Information Technology", "Information System", "Computer Science",])
 
 const itemsPaginated = computed(() => {
     let filteredItems = items.value
@@ -74,6 +75,9 @@ const pagesList = computed(() => {
 
 
 
+const redirectToEdit = (userId) => {
+      router.get(route('users.edit', { id: userId }));
+    }
 </script>
 
 <template>
@@ -110,7 +114,7 @@ const pagesList = computed(() => {
                     </tr>
                 </thead>
                 <tbody class="font-medium text-gray-600">
-                    <tr v-for="user in itemsPaginated" :key="user.id"
+                    <tr v-for="user in itemsPaginated" :key="user.id" @click="redirectToEdit(user.id)"
                         class="transition-all duration-200 ease-in-out bg-white dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600">
                         <td class="px-4 py-3 border-b-0 lg:w-6 before:hidden">
                             <UserAvatar :avatar="user.avatar"  :username="`${user.last_name}, ${user.first_name}`" class="w-24 h-24 mx-auto lg:w-6 lg:h-6" />

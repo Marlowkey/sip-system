@@ -53,5 +53,7 @@ Route::prefix('users')->group(function () {
     Route::post('/', [UserController::class, 'store'])->name('users.store');
     Route::get('/{id}/edit', [UserController::class, 'edit'])->name('users.edit');
     Route::put('/{id}', [UserController::class, 'update'])->name('users.update');
+    Route::delete('/{id}', [UserController::class, 'destroy'])->name('users.destroy');
+
 });
 require __DIR__ . '/auth.php';

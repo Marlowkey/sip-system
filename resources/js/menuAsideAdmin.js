@@ -8,7 +8,7 @@ import {
       {
         route: 'home',
         icon: mdiMonitor,
-        label: 'Dashboard'
+        label: 'Home'
       },
       {
         route: 'users.index',

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\User\UpdateRequest;
 use App\Models\User;
 use Inertia\Inertia;
 use App\Models\Document;
@@ -27,7 +28,7 @@ class UserController extends Controller
             'csStudentCount' => $csStudentCount,
             'studentUser' => $studentUser,
             'coordinatorUser' => $coordinatorUser,
-            'classBlocks' =>   $classBlocks,
+            'classBlocks' => $classBlocks,
         ]);
     }
 
@@ -44,7 +45,7 @@ class UserController extends Controller
         $validated = $request->validated();
 
         User::create($validated);
-        return redirect()->route('users.index')->with('message', 'Journal entry recorded successfully.');
+        return redirect()->route('users.index')->with('message', 'User entry recorded successfully.');
     }
 
     public function edit(string $id)
@@ -55,13 +56,26 @@ class UserController extends Controller
         ]);
     }
 
-    public function update(StoreRequest $request, int $id)
+    public function update(UpdateRequest $request, int $id)
     {
         $user = User::findOrFail($id);
         $data = $request->validated();
-        $user->update($data);
 
-        return redirect()->route('users.index')->with('message', 'Journal updated successfully.');
+        if ($request->filled('password')) {
+            $data['password'] = bcrypt($request->password); // Hash the new password
+        } else {
+            unset($data['password']);
+        }
+
+        $user->fill($data);
+        $user->save();
+        return redirect()->route('users.index')->with('message', 'User updated successfully.');
+    }
+
+    public function destroy(int $id)
+    {
+        User::findOrFail($id)->delete();
+        return redirect()->route('users.index')->with('message', 'User deleted successfully.');
     }
 
 
