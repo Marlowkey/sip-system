@@ -13,7 +13,7 @@ use Illuminate\Database\Eloquent\Collection;
 class UserController extends Controller
 {
 
-    public function index(Request $request)
+    public function indexStudent()
     {
         $classBlocks = User::distinct()->pluck('block');
         $coordinatorUser = User::where('role', 'coordinator')->get();
@@ -22,7 +22,26 @@ class UserController extends Controller
         $isStudentCount = User::where('role', 'student')->where('course', 'Information System')->count();
         $csStudentCount = User::where('role', 'student')->where('course', 'Computer Science')->count();
 
-        return Inertia::render('User/Index', [
+        return Inertia::render('User/Student/Index', [
+            'itStudentCount' => $itStudentCount,
+            'isStudentCount' => $isStudentCount,
+            'csStudentCount' => $csStudentCount,
+            'studentUser' => $studentUser,
+            'coordinatorUser' => $coordinatorUser,
+            'classBlocks' => $classBlocks,
+        ]);
+    }
+
+    public function indexCoordinator()
+    {
+        $classBlocks = User::distinct()->pluck('block');
+        $coordinatorUser = User::where('role', 'coordinator')->get();
+        $studentUser = User::where('role', 'student')->get();
+        $itStudentCount = User::where('role', 'student')->where('course', 'Information Technology')->count();
+        $isStudentCount = User::where('role', 'student')->where('course', 'Information System')->count();
+        $csStudentCount = User::where('role', 'student')->where('course', 'Computer Science')->count();
+
+        return Inertia::render('User/Coordinator/Index', [
             'itStudentCount' => $itStudentCount,
             'isStudentCount' => $isStudentCount,
             'csStudentCount' => $csStudentCount,
