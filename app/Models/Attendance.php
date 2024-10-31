@@ -33,12 +33,45 @@ class Attendance extends Model
         return $query->get();
     }
 
+    public function getStudentAttendancesForCoordinatorCount($user, $date = null)
+{
+    $query = self::with([
+        'user' => function ($query) use ($user) {
+            $query->where('role', 'student');
+            $query->where('course', $user->course);
+            $query->orderBy('last_name');
+        }
+    ]);
+
+    if ($date) {
+        $query->where('date', $date);
+    }
+
+    return $query->distinct('user_id')->count('user_id');
+}
+
+public function countTodaysAttendance($user)
+{
+    // Build the query to count today's attendance for students in the specified course
+    $query = self::with([
+        'user' => function ($query) use ($user) {
+            $query->where('role', 'student')
+                  ->where('course', $user->course);
+        }
+    ])
+    ->where('date', now()->toDateString()); // Filter for today's date
+
+    // Count distinct student IDs for today's attendance
+    return $query->distinct('user_id')->count('user_id');
+}
+
     public function getStudentAttendances($user, $date = null)
     {
         return $this->getStudentAttendancesForCoordinator($user, $date)->map(function ($attendance) {
             if ($attendance->user) {
                 return [
                     'id' => $attendance->id,
+                    'avatar' => $attendance->user->avatar,
                     'user_id' => $attendance->user->id,
                     'last_name' => $attendance->user->last_name,
                     'first_name' => $attendance->user->first_name,

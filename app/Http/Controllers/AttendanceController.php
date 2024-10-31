@@ -35,6 +35,8 @@ class AttendanceController extends Controller
         $date = $request->validated()['date'] ?? null;
         $studentAttendance = $this->attendance->getStudentAttendances($user, $date);
 
+
+        // Dump the count of today's attendance for debugging
         return Inertia::render('Attendance/Index', [
             'user' => $user,
             'attendance' => $attendance,

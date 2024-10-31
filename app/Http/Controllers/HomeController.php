@@ -78,7 +78,7 @@ class HomeController extends Controller
         $studentUserWithProgress = $user->getStudentUserWithProgress($classBlock);
         $latestJournals = Journal::getLatestStudentJournalForCoordinator($user);
         $usersCount = $user->getStudentUserWithProgress()->count();
-        $attendancesTodayCount = $this->attendance->getStudentAttendancesForCoordinator($user, $dateToCheck)->count();
+        $studentAttendance = $this->attendance->getStudentAttendances($user, $dateToCheck);
         $unreviewedJournals = Journal::getUnreviewedJournalsForCoordinator($user)->count();
 
         return Inertia::render('Coordinator/CoordinatorView', [
@@ -88,7 +88,7 @@ class HomeController extends Controller
             'classBlocks' => $classBlocks,
             'classBlock' => $classBlock,
             'usersCount' =>   $usersCount,
-            'attendancesTodayCount' => $attendancesTodayCount,
+            'attendancesTodayCount' => $studentAttendance->count(),
             'unreviewedJournals' =>   $unreviewedJournals
         ]);
     }

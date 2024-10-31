@@ -1,6 +1,7 @@
 import {
     mdiMonitor,
-    mdiAccountGroup
+    mdiAccountGroup,
+    mdiAccountCheck
   } from '@mdi/js'
 
 
@@ -11,8 +12,13 @@ import {
         label: 'Home'
       },
       {
-        route: 'users.index',
+        route: 'users-student.index',
         icon: mdiAccountGroup ,
-        label: 'Users'
+        label: 'Student'
+      },
+      {
+        route: 'users-coordinator.index',
+        icon: mdiAccountCheck  ,
+        label: 'Coordinator'
       },
   ]
