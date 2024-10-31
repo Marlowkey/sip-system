@@ -63,22 +63,6 @@ const userRole = computed(() => {
 
         <Head title="Home" />
         <SectionMain>
-            <div class="">
-                <div class="container flex flex-col flex-wrap items-center px-3 mx-auto md:flex-row">
-                    <!--Left Col-->
-                    <div class="flex flex-col items-start justify-center w-full text-center md:w-2/5 md:text-left">
-                        <p class="w-full text-base font-bold uppercase tracking-loose">Student Internship Program (SIP)
-                            of CICT CATSU</p>
-                        <h1 class="my-4 text-4xl font-bold leading-tight">
-                            Welcome, {{ userRole  }} ~ {{ userName }}!
-                        </h1>
-                    </div>
-                    <!--Right Col-->
-                    <div class="w-full py-6 text-center md:w-3/5">
-                        <img class="z-50 w-full md:w-4/5" src="/images/hero.png" />
-                    </div>
-                </div>
-            </div>
 
             <SectionTitleLineWithButton title="Users Overview" main>
             </SectionTitleLineWithButton>
@@ -94,7 +78,7 @@ const userRole = computed(() => {
 
             <SectionTitleLineWithButton :icon="mdiAccountGroup" :title="title">
                 <div class="flex items-center">
-                    <label for="block" class="mr-2 text-sm font-medium">Class Block:</label>
+                    <label for="block" class="mr-2 text-lg font-medium">Class Block:</label>
                     <!-- Label for class block -->
                     <select v-model="classBlock" id="block" class="px-2 py-1 mx-2 border rounded">
                         <option value="">Select a Class Block</option>
@@ -104,10 +88,7 @@ const userRole = computed(() => {
                     </select>
                 </div>
             </SectionTitleLineWithButton>
-            <CardBox has-table>
                 <TableCoordinatorStudentUsers :users="users" />
-            </CardBox>
-
             <SectionTitleLineWithButton :icon="mdiNoteText" title="Recent Journal Submission" class="my-4">
                 <BaseButton roundedFull :icon="mdiArrowRight" color="whiteDark" routeName="journals.index" />
             </SectionTitleLineWithButton>

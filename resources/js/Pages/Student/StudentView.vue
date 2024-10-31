@@ -59,26 +59,7 @@ const formatDate = (date) => {
 
         <Head title="Home" />
         <SectionMain>
-            <div class="">
-                <div class="container flex flex-col flex-wrap items-center px-3 mx-auto md:flex-row">
-                    <!--Left Col-->
-                    <div class="flex flex-col items-start justify-center w-full text-center md:w-2/5 md:text-left">
-                        <p class="w-full text-base font-bold uppercase tracking-loose">Student Internship Program (SIP)
-                            of CICT CATSU</p>
-                        <h1 class="my-4 text-4xl font-bold leading-tight">
-                            Welcome, {{ userName }}!
-                        </h1>
-                    </div>
-                    <!--Right Col-->
-                    <div class="w-full py-6 text-center md:w-3/5">
-                        <img class="z-50 w-full md:w-4/5" src="/images/hero.png" />
-                    </div>
-                </div>
-            </div>
-
             <SectionTitleLineWithButton title="Overview" main />
-
-
             <div class="grid grid-cols-1 gap-6 mb-6 lg:grid-cols-3">
                 <CardBoxWidget color="text-emerald-500" :icon="mdiFileDocumentCheck" :number="progress.toFixed()"
                     label="Submission Progress" suffix="%" />
