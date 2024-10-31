@@ -5,6 +5,7 @@ namespace Database\Factories;
 use App\Models\Course;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Hash;
+use App\Models\HostTrainingEstablishment;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -34,7 +35,7 @@ class UserFactory extends Factory
             'block' => $this->faker->randomElement(['A', 'B', 'C']),
             'password' => static::$password ??= Hash::make('password'),
             'role' => $this->faker->randomElement(['student', 'coordinator', 'admin']),
-            'host_training_establishment' => $this->faker->optional()->company(),
+            'host_training_establishment_id' => HostTrainingEstablishment::inRandomOrder()->first()->id ?? null,
             'remember_token' => Str::random(10),
             'created_at' => now(),
             'updated_at' => now(),
