@@ -83,15 +83,14 @@ const redirectToEdit = (userId) => {
 <template>
     <div class="p-2 m-2">
         <div class="flex flex-col items-center justify-between mb-4 lg:flex-row">
-            <div class="flex flex-col items-center mb-4 space-x-0 lg:flex-row lg:space-x-4 lg:mb-0">
-
+            <div class="flex flex-col items-center w-1/2 mb-4 space-x-0 lg:flex-row lg:space-x-4 lg:mb-0">
                 <label for="course" class="text-lg font-medium">Course:</label>
                 <FormControl :options="courseOptions" v-model="course" label="Course" placeholder="Select a Course"
-                    :icon="mdiFilterCheck" class="w-full max-w-md text-sm font-medium" />
+                    :icon="mdiFilterCheck" class="w-full max-w-2xl text-sm font-medium" />
 
                 <label for="block" class="text-lg font-medium">Block:</label>
                 <FormControl :options="classBlocks" v-model="classBlock" label="Class Block" :icon="mdiFilterCheck"
-                    placeholder="Select a Class Block" class="w-full max-w-md text-sm font-medium" />
+                    placeholder="Select a Class Block" class="w-1/4 text-sm font-medium" />
             </div>
             <div class="flex items-center space-x-4">
                 <FormControl v-model="searchTerm" type="text" placeholder="Search user..." :icon="mdiAccountSearch"

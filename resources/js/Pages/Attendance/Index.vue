@@ -105,7 +105,7 @@ const exportAttendance = () => {
                 <div class="flex mx-6">
                     <FormControl v-model="month" borderless type="month" placeholder="Select Date"
                         class="justify-end text-sm font-medium" />
-                    <div class="justify-end content-center	mx-2">
+                    <div class="content-center justify-end mx-2">
                         <BaseButton label="Log in" roundedFull small :icon="mdiPlus" color="info"
                             routeName="attendances.create" class="p-2 mx-1" />
                         <BaseButton label="Export" roundedFull small :icon="mdiFileExport " color="success"
@@ -127,12 +127,10 @@ const exportAttendance = () => {
 
             <SectionTitleLineWithButton :icon="mdiLocationEnter" title="Daily Time Record" main>
                 <FormControl v-model="date" borderless type="date" placeholder="Select Date"
-                    class="mx-2 text-sm font-medium" />
+                    class="mx-2 text-sm font-medium " />
             </SectionTitleLineWithButton>
             <CardBoxComponentEmpty v-if="isItemEmpty(props.studentAttendance)" />
-            <CardBox has-table v-else>
-                <TableCoordinatorAttendance :attendance="studentAttendance" />
-            </CardBox>
+                <TableCoordinatorAttendance v-else :attendance="studentAttendance" />
         </SectionMain>
     </LayoutAuthenticated>
 </template>

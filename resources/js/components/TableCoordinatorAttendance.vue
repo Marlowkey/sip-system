@@ -10,6 +10,7 @@ import { format, parse } from 'date-fns';
 import CardBoxComponentEmpty from './CardBoxComponentEmpty.vue'
 import FormControl from '@/components/FormControl.vue'
 import NavBarItemPlain from '@/components/NavBarItemPlain.vue'
+import CardBox from './CardBox.vue'
 
 
 const props = defineProps({
@@ -22,8 +23,10 @@ const props = defineProps({
 
 const user = computed(() => usePage().props.auth.user)
 const items = computed(() => Array.isArray(props.attendance) ? props.attendance : Object.values(props.attendance))
-const perPage = ref(10)
+const perPage = ref(12)
 const currentPage = ref(0)
+const searchTerm = ref("")
+
 
 let form = useForm({
     user_id: user.value.id,
@@ -34,11 +37,19 @@ let form = useForm({
 console.log('Attendance Props:', props.attendance);
 console.log('Computed Items:', items.value);
 
-const itemsPaginated = computed(() =>
-    Array.isArray(items.value)
-        ? items.value.slice(perPage.value * currentPage.value, perPage.value * (currentPage.value + 1))
-        : []
-)
+
+const itemsPaginated = computed(() => {
+
+    let filteredItems = items.value
+    if (searchTerm.value) {
+        filteredItems = filteredItems.filter(user =>
+            user.first_name.toLowerCase().includes(searchTerm.value.toLowerCase()) ||
+            user.last_name.toLowerCase().includes(searchTerm.value.toLowerCase())
+        )
+    }
+
+    return filteredItems.slice(perPage.value * currentPage.value, perPage.value * (currentPage.value + 1))
+})
 
 const numPages = computed(() => Math.ceil(items.value.length / perPage.value))
 
@@ -70,10 +81,20 @@ const formatDate = (date) => {
 </script>
 
 <template>
-
-    <div class="relative overflow-x-auto my-2">
-        <table class="my-2 w-full text-gray-800 text-left rtl:text-right">
-            <thead class="text-gray-800 text-left">
+    <div>
+        <div class="flex flex-col items-center justify-between mb-4 lg:flex-row">
+            <div class="flex flex-col items-center mb-4 space-x-0 lg:flex-row lg:space-x-4 lg:mb-0">
+            </div>
+            <div class="flex items-center ">
+                <FormControl borderless v-model="searchTerm" type="text" placeholder="Search user..." :icon="mdiAccountSearch"
+                    class="w-full max-w-xs text-base " />
+            </div>
+        </div>
+    </div>
+    <CardBox has-table>
+    <div class="relative my-2 overflow-x-auto">
+        <table class="w-full my-2 text-left text-gray-800 rtl:text-right">
+            <thead class="text-left text-gray-800">
                 <tr
                     class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
                     <th scope="col" class="px-4 py-3">Date</th>
@@ -89,25 +110,25 @@ const formatDate = (date) => {
             <tbody>
                 <tr v-for="attendance in itemsPaginated" :key="attendance.id"
                     class="bg-white dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
-                    <td data-label="Date" scope="row" class="px-4 py-1 font-semibold">
+                    <td data-label="Date" scope="row" class="px-4 py-4 font-semibold">
                         {{ formatDate(attendance.date) }}
                     </td>
                     <td data-label="Name" class="px-4 py-1 font-semibold">
                         {{ attendance.last_name }}, {{ attendance.first_name }}
                     </td>
-                    <td data-label="Time In (AM)" class="px-4 py-1 text-green-900 font-semibold">
+                    <td data-label="Time In (AM)" class="px-4 py-1 font-semibold text-green-900">
                         {{ formatTime(attendance.time_in_am) }}
                     </td>
-                    <td data-label="Time Out (AM)" class="px-4 py-1  text-red-900 font-semibold">
+                    <td data-label="Time Out (AM)" class="px-4 py-1 font-semibold text-red-900">
                         {{ formatTime(attendance.time_out_am) }}
                     </td>
-                    <td data-label="Time In (PM)" class="px-4 py-1 text-green-900 font-semibold">
+                    <td data-label="Time In (PM)" class="px-4 py-1 font-semibold text-green-900">
                         {{ formatTime(attendance.time_in_pm) }}
                     </td>
-                    <td data-label="Time Out (PM)" class="px-4 py-1  text-red-900 font-semibold">
+                    <td data-label="Time Out (PM)" class="px-4 py-1 font-semibold text-red-900">
                         {{ formatTime(attendance.time_out_pm) }}
                     </td>
-                    <td data-label="Action" class="hitespace-nowrap px-2 py-1">
+                    <td data-label="Action" class="px-2 py-1 hitespace-nowrap">
                         <BaseButtons type="justify-start" no-wrap>
                             <BaseButton label="View"  roundedFull color="blue" :icon="mdiEyeArrowRightOutline" small
                                 :href="route('student-attendance.show', { id: attendance.user_id })" />
@@ -117,7 +138,7 @@ const formatDate = (date) => {
             </tbody>
         </table>
     </div>
-    <div class="p-3 lg:px-6 border-t border-gray-100 dark:border-slate-800">
+    <div class="p-3 border-t border-gray-100 lg:px-6 dark:border-slate-800">
         <BaseLevel>
             <BaseButtons>
                 <BaseButton v-for="page in pagesList" :key="page" :active="page === currentPage" :label="page + 1"
@@ -126,4 +147,5 @@ const formatDate = (date) => {
             <small>Page {{ currentPageHuman }} of {{ numPages }}</small>
         </BaseLevel>
     </div>
+</CardBox>
 </template>

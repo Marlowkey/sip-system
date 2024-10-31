@@ -11,6 +11,7 @@ import {
 import CardBox from './CardBox.vue';
 import FormField from './FormField.vue';
 import FormControl from './FormControl.vue';
+import { format, parse } from 'date-fns';
 
 
 const props = defineProps({
@@ -62,6 +63,10 @@ const markAsReviewed = async () => {
     }
 };
 
+const formatDate = (date) => {
+    if (!date) return '---';
+    return format(parse(date, 'yyyy-MM-dd', new Date()), 'MMMM dd, yyyy');
+}
 
 </script>
 
@@ -75,19 +80,19 @@ const markAsReviewed = async () => {
 
             <div class="p-5">
                 <h1 class="mb-2 text-2xl font-bold text-center text-gray-900 dark:text-white">{{ journal.title }}</h1>
-                <p v-if="username" class="text-center text-sm font-medium text-gray-600 dark:text-gray-300">
+                <p v-if="username" class="text-sm font-medium text-center text-gray-600 dark:text-gray-300">
                 {{ username }}
             </p>
                 <div class="flex items-center justify-between mx-10">
                     <p class="text-sm font-medium text-gray-600 dark:text-gray-300">Week {{ journal.week }}</p>
-                    <p class="text-sm font-medium text-gray-600 dark:text-gray-300">{{ journal.date }}</p>
+                    <p class="text-sm font-medium text-gray-600 dark:text-gray-300">{{ formatDate(journal.date) }}</p>
                 </div>
                 <BaseDivider />
                 <div class="flex justify-center">
-                    <p class="mb-3 p-10 font-normal text-justify text-gray-700 dark:text-gray-400">{{ journal.content }}
+                    <p class="p-10 mb-3 font-normal text-justify text-gray-700 dark:text-gray-400">{{ journal.content }}
                     </p>
                 </div>
-                <div class="flex justify-between mx-12 gap-4">
+                <div class="flex justify-between gap-4 mx-12">
                     <!-- Edit button only for students -->
                     <BaseButton label="Edit" v-if="user && user.role === 'student'" small :icon="mdiArrowRight"
                         roundedFull color="info" :href="route('journals.edit', { id: journal.id })" />
@@ -98,12 +103,12 @@ const markAsReviewed = async () => {
                             :icon="mdiArrowRight" roundedFull :color="journal.reviewed ? 'success' : 'info'"
                             @click="markAsReviewed" :disabled="journal.reviewed" />
 
-                        <BaseButton small label="Feedback" :icon="mdiPlus" roundedFull color="info"
+                        <BaseButton small label="Add / Edit Feedback" :icon="mdiPlus" roundedFull color="info"
                             @click="toggleFeedbackTextarea" />
                     </template>
                 </div>
 
-                <div v-if="user && user.role === 'student' && journal.feedback" class="mt-4">
+                <div v-if="journal.feedback" class="mt-4">
                     <div
                         class="flex items-center w-full flex-row my-8 py-6 pl-12 pr-4 isolate [unicode-bidi:isolate] rounded-xl relative before:content-[''] before:absolute before:w-1 before:h-4/5 before:bg-green-700 before:z-[10] before:left-6">
                         <p class="white-space-pre-wrap [&amp;:not(:first-child)]:mt-3">

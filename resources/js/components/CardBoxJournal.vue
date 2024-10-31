@@ -5,6 +5,7 @@ import CardBox from '@/components/CardBox.vue'
 import BaseLevel from '@/components/BaseLevel.vue'
 import PillTag from '@/components/PillTag.vue'
 import BaseButton from './BaseButton.vue'
+import { format, parse } from 'date-fns';
 
 
 const props = defineProps({
@@ -39,6 +40,10 @@ const pillIcon = computed(() => {
 
 const pillText = computed(() => props.text ?? (props.reviewed ? 'Reviewed' : 'Pending'))
 
+const formatDate = (date) => {
+    if (!date) return '---';
+    return format(parse(date, 'yyyy-MM-dd', new Date()), 'MMMM dd, yyyy');
+}
 </script>
 
 <template>
@@ -50,7 +55,7 @@ const pillText = computed(() => props.text ?? (props.reviewed ? 'Reviewed' : 'Pe
           <h4 class="text-medium text-ellipsis">
             {{ title }}
           </h4>
-          <p class="text-gray-500 dark:text-slate-400">{{ date }}</p>
+          <p class="text-gray-500 dark:text-slate-400">{{ formatDate(date) }}</p>
           <p v-if="username"  class="text-gray-500 dark:text-slate-400">User: {{ username }}</p>
         </div>
       </BaseLevel>

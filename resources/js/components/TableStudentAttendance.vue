@@ -22,7 +22,7 @@ const props = defineProps({
 
 const user = computed(() => usePage().props.auth.user)
 const items = computed(() => props.attendance ? props.attendance : [])
-const perPage = ref(10)
+const perPage = ref(8)
 const currentPage = ref(0)
 
 
@@ -81,8 +81,8 @@ const isUserCoordinator = computed(() => user.value.role === 'coordinator')
 
 <template>
     <div class="relative overflow-x-auto">
-        <table class="my-2 w-full text-gray-800 text-left rtl:text-right">
-            <thead class="text-gray-800 text-left">
+        <table class="w-full my-2 text-left text-gray-800 rtl:text-right">
+            <thead class="text-left text-gray-800">
                 <tr class="border-b">
                     <th scope="col" class="px-4 py-3">Date</th>
                     <th scope="col" class="px-4 py-3">Time In (AM)</th>
@@ -95,49 +95,38 @@ const isUserCoordinator = computed(() => user.value.role === 'coordinator')
             <tbody>
                 <tr v-for="attendance in itemsPaginated" :key="attendance.id"
                     class="bg-white dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
-                    <td data-label="Date" scope="row" class="px-4 py-2 font-semibold">
+                    <td data-label="Date" scope="row" class="px-6 py-4 font-semibold">
                         {{ formatDate(attendance.date) }}
                     </td>
-                    <td data-label="Time In (AM)" class="px-4 py-2 text-green-900 font-semibold">
+                    <td data-label="Time In (AM)" class="px-4 py-2 font-semibold text-green-900">
                         {{ formatTime(attendance.time_in_am) }}
                     </td>
-                    <td data-label="Time Out (AM)" class="px-4 py-2  text-red-900 font-semibold">
+                    <td data-label="Time Out (AM)" class="px-4 py-2 font-semibold text-red-900">
                         {{ formatTime(attendance.time_out_am) }}
                     </td>
-                    <td data-label="Time In (PM)" class="px-4 py-2 text-green-900 font-semibold">
+                    <td data-label="Time In (PM)" class="px-4 py-2 font-semibold text-green-900">
                         {{ formatTime(attendance.time_in_pm) }}
                     </td>
-                    <td data-label="Time Out (PM)" class="px-4 py-2  text-red-900 font-semibold">
+                    <td data-label="Time Out (PM)" class="px-4 py-2 font-semibold text-red-900">
                         {{ formatTime(attendance.time_out_pm) }}
                     </td>
-                    <td v-if="!isUserCoordinator" data-label="Action" class="whitespace-nowrap px-2 py-2">
+                    <td v-if="!isUserCoordinator" data-label="Action" class="px-2 py-2 whitespace-nowrap">
                         <BaseButtons type="justify-start" no-wrap>
-                            <BaseButton
-                            label="Edit"
-                            roundedFull
-                            color="blue"
-                            :icon="mdiFileEditOutline"
-                            :href="route('attendances.edit', { id: attendance.id })"
-                            small
-                            :disabled="isMoreThanOneDay(attendance.created_at)"
-                            />
+                            <BaseButton v-if="!isMoreThanOneDay(attendance.created_at)" label="Edit" roundedFull
+                                color="blue" :icon="mdiFileEditOutline"
+                                :href="route('attendances.edit', { id: attendance.id })" small />
 
-                            <BaseButton
-                            label="Delete"
-                            roundedFull
-                            color="red"
-                            :icon="mdiDeleteEmptyOutline"
-                            small
-                            @click.prevent="deleteAttendance(attendance.id)"
-                            :disabled="isMoreThanOneDay(attendance.created_at)"
-                            />
+                            <BaseButton v-if="!isMoreThanOneDay(attendance.created_at)" label="Delete" roundedFull
+                                color="red" :icon="mdiDeleteEmptyOutline" small
+                                @click.prevent="deleteAttendance(attendance.id)" />
                         </BaseButtons>
+
                     </td>
                 </tr>
             </tbody>
         </table>
     </div>
-    <div class="p-3 lg:px-6 border-t border-gray-100 dark:border-slate-800">
+    <div class="p-3 border-t border-gray-100 lg:px-6 dark:border-slate-800">
         <BaseLevel>
             <BaseButtons>
                 <BaseButton v-for="page in pagesList" :key="page" :active="page === currentPage" :label="page + 1"

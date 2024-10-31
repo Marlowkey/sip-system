@@ -100,7 +100,7 @@ const formatDueDate = (dueDate) => {
         <p>{{ currentDescription }}</p>
     </CardBoxModal>
     <div class="relative overflow-x-auto">
-    <table class="my-2 w-full text-gray-800 text-left rtl:text-right">
+    <table class="w-full my-2 text-left text-gray-800 rtl:text-right">
         <thead class="text-gray-700">
             <tr class="border-b">
                 <th scope="col" class="px-4 py-3">Title</th>
@@ -109,9 +109,9 @@ const formatDueDate = (dueDate) => {
                 <th scope="col" class="px-4 py-3 text-center" v-if="checkable">Mark as Done</th>
             </tr>
         </thead>
-        <tbody class="text-gray-600 font-medium">
+        <tbody class="font-medium text-gray-600">
             <tr v-for="document in itemsPaginated" :key="document.id" class="bg-white dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
-                <td data-label="Title" scope="row" class="px-4 py-1">
+                <td data-label="Title" scope="row" class="px-6 py-3">
                     {{ document.title }}
                 </td>
                 <td data-label="Due on" class="px-4 py-1 text-red-800">
@@ -132,7 +132,7 @@ const formatDueDate = (dueDate) => {
         </tbody>
     </table>
     </div>
-    <div class="p-3 lg:px-6 border-t border-gray-100 dark:border-slate-800">
+    <div class="p-3 border-t border-gray-100 lg:px-6 dark:border-slate-800">
         <BaseLevel>
             <BaseButtons>
                 <BaseButton v-for="page in pagesList" :key="page" :active="page === currentPage" :label="page + 1"
