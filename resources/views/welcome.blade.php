@@ -73,15 +73,18 @@
     </nav>
     <!--Hero-->
     <div class="pt-24">
-        <div class="container flex flex-col flex-wrap items-center px-3 mx-auto md:flex-row">
-            <!--Left Col-->
-            <div class="flex flex-col items-start justify-center w-full text-center md:w-2/5 md:text-left">
-                <p class="w-full uppercase tracking-loose">Student Internship Program (SIP) of CICT CATSU</p>
-                <h1 class="my-4 text-5xl font-bold leading-tight">
+        <div class="container flex flex-col-reverse items-center px-3 mx-auto md:flex-row">
+            <!-- Left Column -->
+            <div class="flex flex-col items-center justify-center w-full text-center md:w-2/3 md:items-start md:text-left">
+                <p class="w-full text-sm uppercase tracking-loose sm:text-base">
+                    Student Internship Program (SIP) of CICT CATSU
+                </p>
+                <h1 class="my-4 text-3xl font-bold leading-tight text-center sm:text-4xl md:text-5xl">
                     Welcome!
                 </h1>
-                <p class="mb-8 text-2xl leading-normal">
-                    Manage and track key aspects of internships, including document submission, attendance, and journal entries.                </p>
+                <p class="mb-8 text-lg leading-normal sm:text-xl md:text-2xl">
+                    Manage and track key aspects of internships, including document submission, attendance, and journal entries.
+                </p>
                 @if (Route::has('login'))
                     @auth
                         <a href="{{ url('/home') }}"
@@ -94,14 +97,14 @@
                             Login
                         </a>
                     @endauth
-                    </nav>
                 @endif
             </div>
-            <!--Right Col-->
+            <!-- Right Column -->
             <div class="w-full py-6 text-center md:w-3/5">
-                <img class="z-50 w-full md:w-4/5" src="{{ asset('images/hero.png') }}" />
+                <img class="z-50 w-full max-w-md md:max-w-lg" src="{{ asset('images/hero.png') }}" alt="Hero Image"/>
             </div>
         </div>
     </div>
+
 </body>
 </html>
