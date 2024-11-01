@@ -64,6 +64,10 @@ class User extends Authenticatable
             ->withTimestamps();
     }
 
+    public function hostTrainingEstablishment()
+{
+    return $this->belongsTo(HostTrainingEstablishment::class, 'host_training_establishment_id');
+}
 
     public function journals(): HasMany
     {

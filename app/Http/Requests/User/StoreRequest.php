@@ -24,7 +24,7 @@ class StoreRequest extends FormRequest
             'block' => 'required|string|max:255',
             'password' => 'required|min:8',
             'role' => 'required|string|in:admin,student,coordinator',
-            'host_training_establishment' => 'nullable|string|max:255',
+            'host_training_establishment_id' => 'nullable',
         ];
     }
 }

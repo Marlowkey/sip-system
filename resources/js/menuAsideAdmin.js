@@ -1,7 +1,8 @@
 import {
     mdiMonitor,
     mdiAccountGroup,
-    mdiAccountCheck
+    mdiAccountCheck,
+    mdiDomain
   } from '@mdi/js'
 
 
@@ -20,5 +21,10 @@ import {
         route: 'users-coordinator.index',
         icon: mdiAccountCheck  ,
         label: 'Coordinator'
+      },
+      {
+        route: 'htes.index',
+        icon: mdiDomain   ,
+        label: 'Host Training Establishments'
       },
   ]

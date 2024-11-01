@@ -2,12 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\User\UpdateRequest;
 use App\Models\User;
 use Inertia\Inertia;
 use App\Models\Document;
 use Illuminate\Http\Request;
 use App\Http\Requests\User\StoreRequest;
+use App\Http\Requests\User\UpdateRequest;
+use App\Models\HostTrainingEstablishment;
 use Illuminate\Database\Eloquent\Collection;
 
 class UserController extends Controller
@@ -53,7 +54,10 @@ class UserController extends Controller
 
     public function create()
     {
-        return Inertia::render('User/Create');
+        $htes = HostTrainingEstablishment::all();
+        return Inertia::render('User/Create', [
+            'htes' => $htes
+        ]);
     }
 
     /**
@@ -61,17 +65,19 @@ class UserController extends Controller
      */
     public function store(StoreRequest $request)
     {
-        $validated = $request->validated();
-
+        $validated =$request->validated();
         User::create($validated);
-        return redirect()->route('users.index')->with('message', 'User entry recorded successfully.');
+        return redirect()->back()->with('message', 'User created successfully.');
     }
 
     public function edit(string $id)
     {
         $user = User::findOrFail($id);
+        $htes = HostTrainingEstablishment::all();
+
         return Inertia::render('User/Create', [
             'user' => $user,
+            'htes' => $htes,
         ]);
     }
 
@@ -88,14 +94,13 @@ class UserController extends Controller
 
         $user->fill($data);
         $user->save();
-        return redirect()->route('users.index')->with('message', 'User updated successfully.');
+        return redirect()->back()->with('message', 'User updated successfully.');
     }
 
     public function destroy(int $id)
     {
         User::findOrFail($id)->delete();
-        return redirect()->route('users.index')->with('message', 'User deleted successfully.');
-    }
+        return redirect()->route('users-student.index')->with('message', 'User deleted successfully.');     }
 
 
 }

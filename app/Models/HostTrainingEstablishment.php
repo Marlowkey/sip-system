@@ -8,4 +8,11 @@ use Illuminate\Database\Eloquent\Model;
 class HostTrainingEstablishment extends Model
 {
     use HasFactory;
+
+    protected $guarded = [];
+
+    public function users()
+    {
+        return $this->hasMany(User::class, 'host_training_establishment_id');
+    }
 }

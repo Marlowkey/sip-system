@@ -11,9 +11,11 @@ import BaseButtons from '@/components/BaseButtons.vue'
 import SectionTitleLineWithButton from '@/components/SectionTitleLineWithButton.vue'
 import InputError from '@/components/InputError.vue'
 import LayoutAuthenticated from '@/layouts/LayoutAuthenticated.vue'
+import NotificationBar from '@/components/NotificationBar.vue'
 
 const props = defineProps({
-    user: Object
+    user: Object,
+    htes: Array,
 })
 
 const userId = ref(props.user?.id);
@@ -29,7 +31,7 @@ const form = useForm({
     block: props.user?.block || '',
     password: '',
     role: props.user?.role || 'student',
-    host_training_establishment: props.user?.host_training_establishment || '',
+    host_training_establishment_id: props.user?.host_training_establishment_id || null,
 })
 
 
@@ -38,6 +40,10 @@ const roles = ref(["admin", "coordinator", "student",])
 
 const courses = ref(["Information Technology", "Information System", "Computer Science",])
 
+const selectedHostTrainingEstablishment = computed(() => {
+    const selectedHte = props.htes.find(hte => hte.id === form.host_training_establishment_id);
+    return selectedHte ? selectedHte.name : 'None';
+});
 
 const submit = async () => {
     try {
@@ -66,6 +72,10 @@ const deleteUser = async (userId) => {
 
 <template>
     <LayoutAuthenticated>
+        <NotificationBar v-if="$page.props.flash.message" icon="mdiAlert" color="info" class="m-2">
+                {{ $page.props.flash.message }}
+            </NotificationBar>
+
         <SectionMain>
             <SectionTitleLineWithButton :icon="mdiAccount" :title="title" main />
             <CardBox isForm @submit.prevent="submit">
@@ -106,12 +116,19 @@ const deleteUser = async (userId) => {
                     </FormControl>
                 </FormField>
                 <InputError :message="form.errors.role" />
-
                 <FormField label="Host Training Establishment (if student)">
-                    <FormControl v-model="form.host_training_establishment" type="text"
-                        placeholder="Enter Host Training Establishment" />
+
+                    <select id="host_training_establishment" v-model="form.host_training_establishment_id"
+                        placeholder="Select Host Training Establishment" class="w-full p-3 border rounded-md">
+                        <option value="" disabled>Select Host Training Establishment</option>
+                        <option v-for="hte in htes" :key="hte.id" :value="hte.id">
+                            {{ hte.name }}
+                        </option>
+                    </select>
+
                 </FormField>
                 <InputError :message="form.errors.host_training_establishment" />
+
 
                 <BaseButtons class="flex justify-end">
                     <BaseButton roundedFull small type="submit" color="blue" label="Submit" />

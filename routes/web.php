@@ -11,6 +11,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\DocumentController;
 use App\Http\Controllers\AttendanceController;
 use App\Http\Controllers\StudentDocumentController;
+use App\Http\Controllers\HostTrainingEstablishmentController;
 
 
 
@@ -19,8 +20,6 @@ Route::get('/', function () {
 });
 
 Route::middleware(['auth:sanctum', 'verified'])->get('/home',[HomeController::class, 'index'])->name('home');
-
-
 
 
 Route::middleware('auth')->group(function () {
@@ -57,4 +56,16 @@ Route::prefix('users')->group(function () {
     Route::delete('/{id}', [UserController::class, 'destroy'])->name('users.destroy');
 
 });
+
+Route::prefix('htes')->name('htes.')->group(function () {
+    Route::get('/', [HostTrainingEstablishmentController::class, 'index'])->name('index');
+    Route::get('/create', [HostTrainingEstablishmentController::class, 'create'])->name('create');
+    Route::post('/', [HostTrainingEstablishmentController::class, 'store'])->name('store');
+    Route::get('/{id}', [HostTrainingEstablishmentController::class, 'show'])->name('show');
+    Route::get('/{id}/edit', [HostTrainingEstablishmentController::class, 'edit'])->name('edit');
+    Route::put('/{id}', [HostTrainingEstablishmentController::class, 'update'])->name('update');
+    Route::delete('/{id}', [HostTrainingEstablishmentController::class, 'destroy'])->name('destroy');
+});
+
+
 require __DIR__ . '/auth.php';
