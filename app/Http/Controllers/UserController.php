@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\SchoolYear;
 use App\Models\User;
 use Inertia\Inertia;
 use App\Models\Document;
@@ -14,11 +15,23 @@ use Illuminate\Database\Eloquent\Collection;
 class UserController extends Controller
 {
 
-    public function indexStudent()
+    public function indexStudent(Request $request)
     {
+        $request->validate([
+            'school_year' => 'nullable|exists:school_years,id',
+        ]);
+
+        $schoolYear = $request->input('school_year');
+
+        $studentUsers = User::where('role', 'student')
+            ->when($schoolYear, function ($query) use ($schoolYear) {
+                return $query->where('school_year_id', $schoolYear);
+            })
+            ->get();
+
+
+        $schoolYears = SchoolYear::all(['id', 'year']);
         $classBlocks = User::distinct()->pluck('block');
-        $coordinatorUser = User::where('role', 'coordinator')->get();
-        $studentUser = User::where('role', 'student')->get();
         $itStudentCount = User::where('role', 'student')->where('course', 'Information Technology')->count();
         $isStudentCount = User::where('role', 'student')->where('course', 'Information System')->count();
         $csStudentCount = User::where('role', 'student')->where('course', 'Computer Science')->count();
@@ -27,28 +40,36 @@ class UserController extends Controller
             'itStudentCount' => $itStudentCount,
             'isStudentCount' => $isStudentCount,
             'csStudentCount' => $csStudentCount,
-            'studentUser' => $studentUser,
-            'coordinatorUser' => $coordinatorUser,
+            'studentUser' => $studentUsers,
             'classBlocks' => $classBlocks,
+            'schoolYears' => $schoolYears,
+            'schoolYear' => $schoolYear,
         ]);
     }
 
-    public function indexCoordinator()
+    public function indexCoordinator(Request $request)
     {
+        $request->validate([
+            'school_year' => 'nullable|exists:school_years,id',
+        ]);
+
+        $schoolYear = $request->input('school_year');
+
+        $coordinatorUsers = User::where('role', 'coordinator')
+            ->when($schoolYear, function ($query) use ($schoolYear) {
+                return $query->where('school_year_id', $schoolYear);
+            })
+            ->get();
+
+
+        $schoolYears = SchoolYear::all(['id', 'year']);
         $classBlocks = User::distinct()->pluck('block');
-        $coordinatorUser = User::where('role', 'coordinator')->get();
-        $studentUser = User::where('role', 'student')->get();
-        $itStudentCount = User::where('role', 'student')->where('course', 'Information Technology')->count();
-        $isStudentCount = User::where('role', 'student')->where('course', 'Information System')->count();
-        $csStudentCount = User::where('role', 'student')->where('course', 'Computer Science')->count();
 
         return Inertia::render('User/Coordinator/Index', [
-            'itStudentCount' => $itStudentCount,
-            'isStudentCount' => $isStudentCount,
-            'csStudentCount' => $csStudentCount,
-            'studentUser' => $studentUser,
-            'coordinatorUser' => $coordinatorUser,
+            'coordinatorUser' => $coordinatorUsers,
             'classBlocks' => $classBlocks,
+            'schoolYears' => $schoolYears,
+            'schoolYear' => $schoolYear,
         ]);
     }
 
@@ -65,7 +86,7 @@ class UserController extends Controller
      */
     public function store(StoreRequest $request)
     {
-        $validated =$request->validated();
+        $validated = $request->validated();
         User::create($validated);
         return redirect()->back()->with('message', 'User created successfully.');
     }
@@ -100,7 +121,8 @@ class UserController extends Controller
     public function destroy(int $id)
     {
         User::findOrFail($id)->delete();
-        return redirect()->route('users-student.index')->with('message', 'User deleted successfully.');     }
+        return redirect()->route('users-student.index')->with('message', 'User deleted successfully.');
+    }
 
 
 }

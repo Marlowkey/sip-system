@@ -5,6 +5,7 @@ namespace App\Models;
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use App\Models\Journal;
 use App\Models\Document;
+use App\Models\SchoolYear;
 use PhpParser\Node\Expr\FuncCall;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\Builder;
@@ -73,6 +74,11 @@ class User extends Authenticatable
     {
         return $this->hasMany(Journal::class);
     }
+
+    public function schoolYear()
+{
+    return $this->belongsTo(SchoolYear::class);
+}
 
     public function isStudent()
     {

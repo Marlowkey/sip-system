@@ -34,9 +34,25 @@ const props = defineProps({
     isStudentCount: Number,
     csStudentCount: Number,
     classBlocks: Array,
+    schoolYears: Array,
+    schoolYear: String,
 })
 
+const schoolYear = ref(props.schoolYear ?? null);
 
+const url = route('users-student.index');
+
+const fetchUsersWithFilters = debounce(() => {
+    router.get(url, {
+        school_year: schoolYear.value
+    });
+}, 1500);
+
+watch([schoolYear], (newSchoolYear, oldSchoolYear) => {
+    if (newSchoolYear !== oldSchoolYear) {
+        fetchUsersWithFilters();
+    }
+});
 </script>
 <template>
     <LayoutAuthenticated>
@@ -57,8 +73,24 @@ const props = defineProps({
 
 
             <SectionTitleLineWithButton :icon="mdiAccountGroupOutline" title="Student Intern Users" main>
-                    <BaseButton label="Add User" roundedFull :icon="mdiPlus" color="info" small routeName="users.create" />
-            </SectionTitleLineWithButton>
+    <div class="flex items-center space-x-2 space-y-1 lg:flex-row lg:space-y-0 lg:space-x-4">
+        <select v-model="schoolYear" placeholder="S/Y" class="w-full p-2 text-sm border border-black rounded-md lg:w-1/2">
+            <option value="" disabled>S/Y</option>
+            <option v-for="sy in schoolYears" :key="sy.id" :value="sy.id">
+                {{ sy.year }}
+            </option>
+        </select>
+        <BaseButton
+            label="Add User"
+            roundedFull
+            :icon="mdiPlus"
+            color="info"
+            small
+            routeName="users.create"
+            class="w-full lg:w-auto"
+        />
+    </div>
+</SectionTitleLineWithButton>
                 <TableAdminStudentUsers :users="studentUser"  :classBlocks="classBlocks"/>
         </SectionMain>
     </LayoutAuthenticated>

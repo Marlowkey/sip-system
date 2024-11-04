@@ -6,8 +6,9 @@ import {
     mdiBookOpenPageVariant,
     mdiFilterCheck,
 } from '@mdi/js'
+import debounce from 'lodash.debounce'
 import { router } from '@inertiajs/vue3'
-import { computed, ref, defineProps } from 'vue'
+import { computed, ref, defineProps, watch } from 'vue'
 import { mdiEye, mdiTrashCan } from '@mdi/js'
 import CardBoxModal from '@/components/CardBoxModal.vue'
 import TableCheckboxCell from '@/components/TableCheckboxCell.vue'
@@ -24,6 +25,8 @@ import CardBox from './CardBox.vue'
 const props = defineProps({
     checkable: Boolean,
     classBlocks: Array,
+    schoolYears: Array,
+    schoolYear: String,
     users: {
         type: Array,
         required: true,
@@ -76,8 +79,8 @@ const pagesList = computed(() => {
 
 
 const redirectToEdit = (userId) => {
-      router.get(route('users.edit', { id: userId }));
-    }
+    router.get(route('users.edit', { id: userId }));
+}
 </script>
 
 <template>
@@ -90,7 +93,9 @@ const redirectToEdit = (userId) => {
 
                 <label for="block" class="text-lg font-medium">Block:</label>
                 <FormControl :options="classBlocks" v-model="classBlock" label="Class Block" :icon="mdiFilterCheck"
-                    placeholder="Select a Class Block" class="w-1/4 text-sm font-medium" />
+                    placeholder="Select a Class Block" class="w-1/3 text-sm font-medium" />
+
+
             </div>
             <div class="flex items-center space-x-4">
                 <FormControl v-model="searchTerm" type="text" placeholder="Search user..." :icon="mdiAccountSearch"
@@ -116,7 +121,8 @@ const redirectToEdit = (userId) => {
                     <tr v-for="user in itemsPaginated" :key="user.id" @click="redirectToEdit(user.id)"
                         class="transition-all duration-200 ease-in-out bg-white dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600">
                         <td class="px-4 py-3 border-b-0 lg:w-6 before:hidden">
-                            <UserAvatar :avatar="user.avatar"  :username="`${user.last_name}, ${user.first_name}`" class="w-24 h-24 mx-auto lg:w-6 lg:h-6" />
+                            <UserAvatar :avatar="user.avatar" :username="`${user.last_name}, ${user.first_name}`"
+                                class="w-24 h-24 mx-auto lg:w-6 lg:h-6" />
                         </td>
                         <td data-label="Name" scope="row"
                             class="px-6 py-4 font-semibold text-gray-800 dark:text-gray-200 whitespace-nowrap">
