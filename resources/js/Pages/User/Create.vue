@@ -16,6 +16,7 @@ import NotificationBar from '@/components/NotificationBar.vue'
 const props = defineProps({
     user: Object,
     htes: Array,
+    school_years: Array, // Add this line to accept school years
 })
 
 const userId = ref(props.user?.id);
@@ -27,11 +28,13 @@ const form = useForm({
     last_name: props.user?.last_name || '',
     middle_initial: props.user?.middle_initial || '',
     email: props.user?.email || '',
+    email: props.user?.student_number || '',
     course: props.user?.course || '',
     block: props.user?.block || '',
     password: '',
     role: props.user?.role || 'student',
     host_training_establishment_id: props.user?.host_training_establishment_id || null,
+    school_year_id: props.user?.school_year_id || null, // Add this line for school year
 })
 
 
@@ -73,8 +76,8 @@ const deleteUser = async (userId) => {
 <template>
     <LayoutAuthenticated>
         <NotificationBar v-if="$page.props.flash.message" icon="mdiAlert" color="info" class="m-2">
-                {{ $page.props.flash.message }}
-            </NotificationBar>
+            {{ $page.props.flash.message }}
+        </NotificationBar>
 
         <SectionMain>
             <SectionTitleLineWithButton :icon="mdiAccount" :title="title" main />
@@ -96,6 +99,13 @@ const deleteUser = async (userId) => {
                     <FormControl v-model="form.email" type="email" placeholder="Enter Email Address" />
                 </FormField>
                 <InputError :message="form.errors.email" />
+
+
+                <FormField label="Student Number">
+                    <FormControl v-model="form.student_number" type="text" placeholder="Student Number (if student)" />
+                </FormField>
+                <InputError :message="form.errors.student_number" />
+
 
                 <FormField label="Course">
                     <FormControl v-model="form.course" :options="courses" placeholder="Select Course">
@@ -128,7 +138,16 @@ const deleteUser = async (userId) => {
 
                 </FormField>
                 <InputError :message="form.errors.host_training_establishment" />
-
+                <FormField label="School Year">
+                    <select id="school_year" v-model="form.school_year_id" placeholder="Select School Year"
+                        class="w-full p-3 border rounded-md">
+                        <option value="" disabled>Select School Year</option>
+                        <option v-for="schoolYear in school_years" :key="schoolYear.id" :value="schoolYear.id">
+                            {{ schoolYear.year }} <!-- Assuming 'year' is a property of the school year -->
+                        </option>
+                    </select>
+                </FormField>
+                <InputError :message="form.errors.school_year_id" />
 
                 <BaseButtons class="flex justify-end">
                     <BaseButton roundedFull small type="submit" color="blue" label="Submit" />

@@ -8,7 +8,7 @@ import {
     mdiAccountGroupOutline,
     mdiLaptop,
     mdiBookOpenPageVariant,
-    mdiLaptopAccount ,
+    mdiLaptopAccount,
     mdiPlus
 } from '@mdi/js'
 import SectionMain from '@/components/SectionMain.vue'
@@ -29,10 +29,6 @@ import TableAdminCoordinatorUser from '@/components/TableAdminCoordinatorUser.vu
 const props = defineProps({
     users: Array,
     coordinatorUser: Array,
-    studentUser: Array,
-    itStudentCount: Number,
-    isStudentCount: Number,
-    csStudentCount: Number,
     schoolYears: Array,
     schoolYear: String,
 })
@@ -55,36 +51,37 @@ watch([schoolYear], (newSchoolYear, oldSchoolYear) => {
 </script>
 <template>
     <LayoutAuthenticated>
-        <Head title="Daily Time Record" />
         <SectionMain>
             <NotificationBar v-if="$page.props.flash.message" icon="mdiAlert" color="info" class="m-2">
                 {{ $page.props.flash.message }}
             </NotificationBar>
 
+
             <SectionTitleLineWithButton :icon="mdiAccountGroupOutline" title="Coordinator Users" main>
                 <div class="flex items-center space-x-2 space-y-1 lg:flex-row lg:space-y-0 lg:space-x-4">
-        <select v-model="schoolYear" placeholder="S/Y" class="w-full p-2 text-sm border border-black rounded-md lg:w-1/2">
-            <option value="" disabled>S/Y</option>
-            <option v-for="sy in schoolYears" :key="sy.id" :value="sy.id">
-                {{ sy.year }}
-            </option>
-        </select>
-        <BaseButton
-            label="Add User"
-            roundedFull
-            :icon="mdiPlus"
-            color="info"
-            small
-            routeName="users.create"
-            class="w-full lg:w-auto"
-        />
-    </div>
+                    <select v-model="schoolYear" placeholder="S/Y"
+                        class="w-full p-2 text-sm border border-black rounded-md lg:w-1/2">
+                        <option value="" disabled>S/Y</option>
+                        <option v-for="sy in schoolYears" :key="sy.id" :value="sy.id">
+                            {{ sy.year }}
+                        </option>
+                    </select>
+                    <BaseButton label="Add User" roundedFull :icon="mdiPlus" color="info" small routeName="users.create"
+                        class="w-full lg:w-auto" />
+                </div>
             </SectionTitleLineWithButton>
-            <CardBox has-table>
+            <CardBox has-table v-if="coordinatorUser.length > 1">
                 <TableAdminCoordinatorUser :users="coordinatorUser" />
+            </CardBox>
+
+            <CardBox v-else>
+                <CardBoxComponentEmpty />
             </CardBox>
 
             <div class="m-24"></div>
         </SectionMain>
+
+
+
     </LayoutAuthenticated>
 </template>

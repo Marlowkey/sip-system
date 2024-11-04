@@ -76,8 +76,6 @@ const pagesList = computed(() => {
     return pagesList
 })
 
-
-
 const redirectToEdit = (userId) => {
     router.get(route('users.edit', { id: userId }));
 }
@@ -94,8 +92,6 @@ const redirectToEdit = (userId) => {
                 <label for="block" class="text-lg font-medium">Block:</label>
                 <FormControl :options="classBlocks" v-model="classBlock" label="Class Block" :icon="mdiFilterCheck"
                     placeholder="Select a Class Block" class="w-1/3 text-sm font-medium" />
-
-
             </div>
             <div class="flex items-center space-x-4">
                 <FormControl v-model="searchTerm" type="text" placeholder="Search user..." :icon="mdiAccountSearch"

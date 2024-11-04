@@ -19,13 +19,15 @@ class UpdateRequest extends FormRequest
         return [
             'first_name' => 'required|string|max:255',
             'last_name' => 'required|string|max:255',
-            'middle_initial' => 'nullable|string|max:1',
-            'email' => "required|email",
+            'middle_initial' => 'nullable|string|max:5',
+            'email' => 'required|email|unique:users,email',
+            'student_number' => 'nullable|string|max:255',
             'course' => 'required|string|in:Computer Science,Information Technology,Information System',
-            'block' => 'required|string|max:255',
-            'password' => 'nullable|min:8',
+            'block' => 'nullable|string|max:255',
+            'password' => 'required|min:8',
             'role' => 'required|string|in:admin,student,coordinator',
             'host_training_establishment_id' => 'nullable',
+            'school_year_id' => 'nullable|exists:school_years,id',
         ];
     }
 }

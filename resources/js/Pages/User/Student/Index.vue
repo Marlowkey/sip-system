@@ -8,7 +8,7 @@ import {
     mdiAccountGroupOutline,
     mdiLaptop,
     mdiBookOpenPageVariant,
-    mdiLaptopAccount ,
+    mdiLaptopAccount,
     mdiPlus
 } from '@mdi/js'
 import SectionMain from '@/components/SectionMain.vue'
@@ -34,7 +34,10 @@ const props = defineProps({
     isStudentCount: Number,
     csStudentCount: Number,
     classBlocks: Array,
-    schoolYears: Array,
+    schoolYears: {
+        type: Array,
+        default: () => [] // Ensure it's always an array
+    },
     schoolYear: String,
 })
 
@@ -67,31 +70,28 @@ watch([schoolYear], (newSchoolYear, oldSchoolYear) => {
                 <CardBoxWidget color="text-green-500" :icon="mdiLaptop" :number="itStudentCount" label="IT Students" />
                 <CardBoxWidget color="text-indigo-500" :icon="mdiBookOpenPageVariant" :number="isStudentCount"
                     label="IS Students" />
-                <CardBoxWidget color="text-purple-500" :icon="mdiLaptopAccount " :number="csStudentCount"
+                <CardBoxWidget color="text-purple-500" :icon="mdiLaptopAccount" :number="csStudentCount"
                     label="CS Students" />
             </div>
 
 
             <SectionTitleLineWithButton :icon="mdiAccountGroupOutline" title="Student Intern Users" main>
-    <div class="flex items-center space-x-2 space-y-1 lg:flex-row lg:space-y-0 lg:space-x-4">
-        <select v-model="schoolYear" placeholder="S/Y" class="w-full p-2 text-sm border border-black rounded-md lg:w-1/2">
-            <option value="" disabled>S/Y</option>
-            <option v-for="sy in schoolYears" :key="sy.id" :value="sy.id">
-                {{ sy.year }}
-            </option>
-        </select>
-        <BaseButton
-            label="Add User"
-            roundedFull
-            :icon="mdiPlus"
-            color="info"
-            small
-            routeName="users.create"
-            class="w-full lg:w-auto"
-        />
-    </div>
-</SectionTitleLineWithButton>
-                <TableAdminStudentUsers :users="studentUser"  :classBlocks="classBlocks"/>
+                <div class="flex items-center space-x-2 space-y-1 lg:flex-row lg:space-y-0 lg:space-x-4">
+                    <select v-model="schoolYear" placeholder="S/Y"
+                        class="w-full p-2 text-sm border border-black rounded-md lg:w-1/2">
+                        <option value="" disabled>S/Y</option>
+                        <option v-for="sy in schoolYears" :key="sy.id" :value="sy.id">
+                            {{ sy.year }}
+                        </option>
+                    </select>
+                    <BaseButton label="Add User" roundedFull :icon="mdiPlus" color="info" small routeName="users.create"
+                        class="w-full lg:w-auto" />
+                </div>
+            </SectionTitleLineWithButton>
+            <TableAdminStudentUsers v-if="studentUser.length > 1" :users="studentUser" :classBlocks="classBlocks" />
+            <CardBox v-else>
+                <CardBoxComponentEmpty />
+            </CardBox>
         </SectionMain>
     </LayoutAuthenticated>
 </template>

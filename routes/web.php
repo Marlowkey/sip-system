@@ -10,6 +10,7 @@ use App\Http\Controllers\JournalController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\DocumentController;
 use App\Http\Controllers\AttendanceController;
+use App\Http\Controllers\SchoolYearController;
 use App\Http\Controllers\StudentDocumentController;
 use App\Http\Controllers\HostTrainingEstablishmentController;
 
@@ -67,5 +68,8 @@ Route::prefix('htes')->name('htes.')->group(function () {
     Route::delete('/{id}', [HostTrainingEstablishmentController::class, 'destroy'])->name('destroy');
 });
 
+Route::middleware(['auth'])->group(function () {
+    Route::resource('schoolyears', SchoolYearController::class)->except(['show']);
+});
 
 require __DIR__ . '/auth.php';

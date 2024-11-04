@@ -31,7 +31,7 @@ class UserController extends Controller
 
 
         $schoolYears = SchoolYear::all(['id', 'year']);
-        $classBlocks = User::distinct()->pluck('block');
+        $classBlocks = User::whereNotNull('block')->distinct()->pluck('block');
         $itStudentCount = User::where('role', 'student')->where('course', 'Information Technology')->count();
         $isStudentCount = User::where('role', 'student')->where('course', 'Information System')->count();
         $csStudentCount = User::where('role', 'student')->where('course', 'Computer Science')->count();
@@ -76,11 +76,13 @@ class UserController extends Controller
     public function create()
     {
         $htes = HostTrainingEstablishment::all();
+        $schoolYears = SchoolYear::all(); // Assuming you have a SchoolYear model
+
         return Inertia::render('User/Create', [
-            'htes' => $htes
+            'htes' => $htes,
+            'school_years' => $schoolYears // Pass the school years to the view
         ]);
     }
-
     /**
      * Store a newly created resource in storage.
      */

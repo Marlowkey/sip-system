@@ -25,6 +25,9 @@ class UserFactory extends Factory
      */
     public function definition(): array
     {
+        $year = date('Y'); // Get the current year, e.g., 2024
+        $randomNumber = $this->faker->numberBetween(100000, 999999); // Generate a random number between 100000 and 999999
+
         return [
             'first_name' => $this->faker->firstName(),
             'last_name' => $this->faker->lastName(),
@@ -37,6 +40,7 @@ class UserFactory extends Factory
             'role' => $this->faker->randomElement(['student', 'coordinator', 'admin']),
             'host_training_establishment_id' => HostTrainingEstablishment::inRandomOrder()->first()->id ?? null,
             'remember_token' => Str::random(10),
+            'student_number' => "{$year}-{$randomNumber}", // Format: YYYY-XXXXXX
             'created_at' => now(),
             'updated_at' => now(),
         ];
