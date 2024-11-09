@@ -65,14 +65,8 @@ watch([week, classBlock], ([newWeek, newClassBlock], [oldWeek, oldClassBlock]) =
                 <BaseButton roundedFull :icon="mdiPlus" color="whiteDark" routeName="journals.create" />
             </SectionTitleLineWithButton>
             <div class="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-2">
-                <CardBoxJournal
-                v-for="item in journal"
-                :key="item.id"
-                :title="item.title"
-                :date="item.date"
-                :reviewed="item.reviewed"
-                :href="route('journals.show', { id: item.id })"
-                />
+                <CardBoxJournal v-for="item in journal" :key="item.id" :title="item.title" :date="item.date"
+                    :reviewed="item.reviewed" :href="route('journals.show', { id: item.id })" />
             </div>
         </SectionMain>
 
@@ -96,18 +90,12 @@ watch([week, classBlock], ([newWeek, newClassBlock], [oldWeek, oldClassBlock]) =
                 <div class="flex items-center">
                     <label for="week" class="mr-2 font-medium text-">Week:</label> <!-- Label for the input -->
                     <FormControl v-model="week" borderless type="number" id="week"
-                        class="w-16 mx-4 text-sm font-medium " />
+                        class="w-16 mx-4 text-sm font-medium input-no-arrows" />
                 </div>
             </SectionTitleLineWithButton>
             <div class="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-1">
-                <CardBoxJournal
-                v-for="item in journal"
-                :key="item.id"
-                :title="item.title + '  by: ' + item.username"
-                :date="item.date"
-                :reviewed="item.reviewed"
-                :href="route('journals.show', { id: item.id })"
-                />
+                <CardBoxJournal v-for="item in journal" :key="item.id" :title="item.title + '  by: ' + item.username"
+                    :date="item.date" :reviewed="item.reviewed" :href="route('journals.show', { id: item.id })" />
             </div>
         </SectionMain>
 
@@ -122,3 +110,15 @@ watch([week, classBlock], ([newWeek, newClassBlock], [oldWeek, oldClassBlock]) =
         </SectionMain>
     </LayoutAuthenticated>
 </template>
+<style scoped>
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+input[type=number] {
+  -moz-appearance: textfield;
+}
+</style>

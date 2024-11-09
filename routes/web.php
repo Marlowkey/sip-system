@@ -34,6 +34,9 @@ Route::middleware('auth')->group(function () {
 Route::resource('documents', DocumentController::class);
 Route::post('/student-document/completion', [StudentDocumentController::class, 'updateCompletionStatus'])->name('student-document.update');
 Route::get('/documents/download/{document}', [DocumentController::class, 'download'])->name('documents.download');
+Route::post('/documents/{document}/upload', [DocumentController::class, 'uploadDocument'])->name('documents.upload');
+Route::get('student-documents/download/{document}/{user}', [DocumentController::class, 'downloadDocument'])->name('student-documents.download');
+
 
 Route::resource('attendances', AttendanceController::class);
 Route::get('/student-attendance/{id}', [AttendanceController::class, 'showStudentAttendance'])->name('student-attendance.show');

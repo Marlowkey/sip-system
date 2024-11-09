@@ -78,7 +78,7 @@ const formatDueDate = (dueDate) => {
     <CardBoxModal v-model="isModalActive" title="Description">
         <p>{{ currentDescription }}</p>
     </CardBoxModal>
-
+    <CardBox has-table>
     <div class="relative overflow-x-auto">
         <table class="w-full mb-2 text-left rtl:text-right">
             <thead class="text-gray-700">
@@ -90,8 +90,9 @@ const formatDueDate = (dueDate) => {
                 </tr>
             </thead>
             <tbody class="font-medium text-gray-600">
-                <tr v-for="document in itemsPaginated" :key="document.id" class="bg-white dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
-                    <td data-label="Title" scope="row" class="px-4 py-1">
+                <tr v-for="document in itemsPaginated" :key="document.id"
+                    class="bg-white dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
+                    <td data-label="Title" scope="row" class="px-4 py-3">
                         {{ document.title }}
                     </td>
                     <td data-label="Due on" class="px-4 py-1">
@@ -99,20 +100,24 @@ const formatDueDate = (dueDate) => {
                     </td>
                     <td class="px-4 py-1">
                         <BaseButtons no-wrap>
-                            <BaseButton label="View" roundedFull color="blue" :icon="mdiEye" small @click="viewDocument(document)" />
-                            <BaseButton  label="Download" v-if="document.file_path" roundedFull color="teal" :icon="mdiDownload" small
-                                :href="route('documents.download', { id: document.id })" />
+                            <BaseButton label="View" roundedFull color="blue" :icon="mdiEye" small
+                                @click="viewDocument(document)" />
+                            <BaseButton label="Download" v-if="document.file_path" roundedFull color="teal"
+                                :icon="mdiDownload" small :href="route('documents.download', { id: document.id })" />
                             <BaseButton label="Edit" roundedFull color="yellow" :icon="mdiFileEditOutline" small
                                 :href="route('documents.edit', { id: document.id })" />
                         </BaseButtons>
                     </td>
                     <td data-label="Completed" class="px-4 py-1">
-                        {{ document.completed }}/{{ document.number_of_users }}
+                        <a :href="route('documents.show',{ id: document.id })" class="text-blue-600 hover:underline">
+                            {{ document.completed }}/{{ document.number_of_users }}
+                        </a>
                     </td>
                 </tr>
             </tbody>
         </table>
     </div>
+
     <div class="p-3 border-t border-gray-100 lg:px-6 dark:border-slate-800">
         <BaseLevel>
             <BaseButtons>
@@ -122,4 +127,5 @@ const formatDueDate = (dueDate) => {
             <small>Page {{ currentPageHuman }} of {{ numPages }}</small>
         </BaseLevel>
     </div>
+</CardBox>
 </template>

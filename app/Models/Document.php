@@ -17,7 +17,7 @@ class Document extends Model
     public function users()
     {
         return $this->belongsToMany(User::class, 'student_document')
-            ->withPivot('is_completed')
+            ->withPivot('is_completed', 'file_path')
             ->withTimestamps();
     }
 

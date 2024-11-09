@@ -11,10 +11,10 @@ import UserAvatar from '@/components/UserAvatar.vue'
 import { useForm } from '@inertiajs/vue3'
 import NotificationBar from './NotificationBar.vue'
 import { format, parse } from 'date-fns';
+import FormControl from './FormControl.vue'
 
 
 const props = defineProps({
-    checkable: Boolean,
     document: {
         type: Array,
         required: true,
@@ -33,9 +33,8 @@ const currentDescription = ref('')
 let form = useForm({
     user_id: user.value.id,
     document_id: null,
-    is_completed: false,
+    file: null,
 })
-
 const itemsPaginated = computed(() =>
     items.value.slice(perPage.value * currentPage.value, perPage.value * (currentPage.value + 1))
 )
@@ -79,10 +78,8 @@ const updateCompletionStatus = (document, event) => {
 const formatDueDate = (dueDate) => {
     if (!dueDate) return 'No date';
 
-    // Ensure the date string matches the expected format
     const parsedDate = parse(dueDate, 'yyyy-MM-dd', new Date());
 
-    // Check if parsing was successful
     if (isNaN(parsedDate)) {
         return 'Invalid date';
     }
@@ -92,6 +89,37 @@ const formatDueDate = (dueDate) => {
 
 
 
+const handleFileSelect = (document, event) => {
+    const file = event.target.files[0]
+    if (file) {
+        form.document_id = document.id
+        form.file = file
+    }
+}
+
+const fileErrors = ref([]) // Store file upload errors
+
+const submitFile = (document) => {
+    if (form.file) {
+        form.document_id = document.id
+
+        form.post(route('documents.upload', { id: form.document_id }), {
+            onSuccess: () => {
+                form.reset('file')
+                console.log('File uploaded successfully');
+                fileErrors.value = [] // Clear errors on successful upload
+            },
+            onError: (errors) => {
+                console.error('Upload failed:', errors)
+                fileErrors.value = errors.file || [] // Store the errors related to the file
+            },
+            preserveScroll: true,
+        })
+    } else {
+        console.log("No file selected")
+    }
+}
+
 
 </script>
 
@@ -100,37 +128,44 @@ const formatDueDate = (dueDate) => {
         <p>{{ currentDescription }}</p>
     </CardBoxModal>
     <div class="relative overflow-x-auto">
-    <table class="w-full my-2 text-left text-gray-800 rtl:text-right">
-        <thead class="text-gray-700">
-            <tr class="border-b">
-                <th scope="col" class="px-4 py-3">Title</th>
-                <th scope="col" class="px-4 py-3">Due on</th>
-                <th scope="col" class="px-4 py-3">Action</th>
-                <th scope="col" class="px-4 py-3 text-center" v-if="checkable">Mark as Done</th>
-            </tr>
-        </thead>
-        <tbody class="font-medium text-gray-600">
-            <tr v-for="document in itemsPaginated" :key="document.id" class="bg-white dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
-                <td data-label="Title" scope="row" class="px-6 py-3">
-                    {{ document.title }}
-                </td>
-                <td data-label="Due on" class="px-4 py-1 text-red-800">
-                    {{ formatDueDate(document.due_date) }}
-                </td>
-                <td class="px-4 py-1 whitespace-nowrap">
-                    <BaseButtons type="justify-start" no-wrap>
-                        <BaseButton label="View" roundedFull color="blue" :icon="mdiEye" small @click="viewDocument(document)" />
-                        <BaseButton label="Download" v-if="document.file_path" roundedFull color="teal" :icon="mdiDownload" small :href="route('documents.download', { id: document.id })" />
-                    </BaseButtons>
-                </td>
-                <td v-if="checkable" class="px-4 py-1 text-center">
-                    <input type="checkbox" :checked="isCompleted(document)"
-                        @change="event => updateCompletionStatus(document, event)"
-                        class="w-5 h-5 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500" />
-                </td>
-            </tr>
-        </tbody>
-    </table>
+        <table class="w-full my-2 text-left text-gray-800 rtl:text-right">
+            <thead class="text-gray-700">
+                <tr class="border-b">
+                    <th scope="col" class="px-4 py-3">Title</th>
+                    <th scope="col" class="px-4 py-3">Due on</th>
+                    <th scope="col" class="px-4 py-3">Action</th>
+                    <th scope="col" class="px-4 py-3 text-center" v-if="checkable">Upload File</th>
+                </tr>
+            </thead>
+            <tbody class="font-medium text-gray-600">
+                <tr v-for="document in itemsPaginated" :key="document.id" class="bg-white dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
+                    <td data-label="Title" scope="row" class="px-6 py-3">
+                        {{ document.title }}
+                    </td>
+                    <td data-label="Due on" class="px-4 py-1 text-red-800">
+                        {{ formatDueDate(document.due_date) }}
+                    </td>
+                    <td class="px-4 py-1 whitespace-nowrap">
+                        <BaseButtons type="justify-start" no-wrap>
+                            <BaseButton label="View" roundedFull color="blue" :icon="mdiEye" small @click="viewDocument(document)" />
+                            <BaseButton label="Download" v-if="document.file_path" roundedFull color="teal" :icon="mdiDownload" small :href="route('documents.download', { id: document.id })" />
+                        </BaseButtons>
+                    </td>
+                    <td class="px-4 py-1 text-center">
+                        <div class="flex items-center space-x-2">
+                            <input type="file" @change="event => handleFileSelect(document, event)" class="h-auto mb-2 w-60" />
+                                  <!-- Display file upload errors -->
+        <div v-if="fileErrors.length > 0" class="text-sm text-red-500">
+            <ul>
+                <li v-for="(error, index) in fileErrors" :key="index">{{ error }}</li>
+            </ul>
+        </div>
+                            <BaseButton small roundedFull color="info" @click="submitFile(document)" label="Submit" />
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
     </div>
     <div class="p-3 border-t border-gray-100 lg:px-6 dark:border-slate-800">
         <BaseLevel>

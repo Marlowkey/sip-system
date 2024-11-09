@@ -61,8 +61,8 @@ class User extends Authenticatable
     public function documents()
     {
         return $this->belongsToMany(Document::class, 'student_document')
-            ->withPivot('is_completed')
-            ->withTimestamps();
+                    ->withPivot('is_completed', 'file_path')
+                    ->withTimestamps();
     }
 
     public function hostTrainingEstablishment()

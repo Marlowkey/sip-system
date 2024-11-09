@@ -16,13 +16,13 @@ import LayoutAuthenticated from '@/layouts/LayoutAuthenticated.vue'
 import BaseButton from '@/components/BaseButton.vue'
 import NotificationBar from '@/components/NotificationBar.vue'
 import CardBoxComponentEmpty from '@/components/CardBoxComponentEmpty.vue'
-
+import TableCoordinatorDocumentsSubmission from '@/components/TableCoordinatorDocumentsSubmission.vue'
 
 const props = defineProps({
-
     user: Object,
-    documents: Array,
-    documentWithNumberOfCompleted: Array,
+    document: Array,
+    students: Array,
+    classBlocks: Array,
 })
 
 const userRole = props.user.role;
@@ -32,29 +32,15 @@ const userRole = props.user.role;
     <LayoutAuthenticated>
 
         <Head title="SIP Requirements" />
-        <SectionMain v-if="userRole === 'student'">
-
+        <SectionMain v-if="userRole === 'coordinator'">
             <NotificationBar v-if="$page.props.flash.message" icon="mdiAlert" color="info" class="m-2">
                 {{ $page.props.flash.message }}
             </NotificationBar>
 
-            <SectionTitleLineWithButton :icon="mdiAccountFile" title="SIP Requirements Checklist" main />
-            <CardBox>
-                <TableStudentDocuments :document="documents" checkable />
-            </CardBox>
-        </SectionMain>
-
-        <SectionMain v-else-if="userRole === 'coordinator'">
-            <NotificationBar v-if="$page.props.flash.message" icon="mdiAlert" color="info" class="m-2">
-                {{ $page.props.flash.message }}
-            </NotificationBar>
-
-            <SectionTitleLineWithButton :icon="mdiAccountFile" title="SIP Requirements " main>
-                <BaseButton label="Add" roundedFull :icon="mdiPlus" color="info" small routeName="documents.create" />
+            <SectionTitleLineWithButton :icon="mdiAccountFile" :title="document.title" main>
             </SectionTitleLineWithButton>
-            <CardBox>
-                <TableCoordinatorDocuments :document="documentWithNumberOfCompleted" />
-            </CardBox>
+
+                <TableCoordinatorDocumentsSubmission :students="students" :classBlocks="classBlocks" :document="document"/>
         </SectionMain>
 
 

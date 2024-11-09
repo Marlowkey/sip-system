@@ -2,11 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
 use Inertia\Inertia;
 use App\Models\Document;
+use Illuminate\Http\Request;
 use App\Services\DocumentService;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Redirect;
-use  App\Http\Requests\Document\StoreRequest;
+use App\Http\Requests\Document\StoreRequest;
 
 class DocumentController extends Controller
 {
@@ -51,13 +54,35 @@ class DocumentController extends Controller
         return redirect()->route('documents.index')->with('success', 'Document created successfully.');
     }
 
-    /**
-     * Display the specified resource.
-     */
     public function show(string $id)
     {
-        //
+        $user = auth()->user();
+        $classBlocks = User::whereNotNull('block')->distinct()->pluck('block');
+        $document = Document::with([
+            'users' => function ($query) {
+                $query->withPivot('file_path', 'is_completed');
+            }
+        ])->findOrFail($id);
+
+        $studentsWithFilePath = $document->users->map(function ($user) {
+            return [
+                'id' => $user->id,
+                'first_name' => $user->first_name,
+                'last_name' => $user->last_name,
+                'block' => $user->block,
+                'file_path' => $user->pivot->file_path,
+                'is_completed' => $user->pivot->is_completed,
+            ];
+        });
+
+        return Inertia::render('Document/Show', [
+            'user' => $user,
+            'document' => $document,
+            'students' => $studentsWithFilePath,
+            'classBlocks' => $classBlocks,
+        ]);
     }
+
 
     /**
      * Show the form for editing the specified resource.
@@ -99,5 +124,49 @@ class DocumentController extends Controller
         $fileName = $this->documentService->getUploadFileName($document, $filePath);
 
         return response()->download($filePath, $fileName);
+    }
+
+    public function uploadDocument(Request $request, Document $document)
+    {
+        $request->validate([
+            'file' => 'required|file|mimes:pdf,doc,docx,png,jpg,jpeg|max:5048',
+        ]);
+
+        $filePath = $request->file('file')->store('uploads/documents', 'public');
+
+        auth()->user()->documents()->syncWithoutDetaching([
+            $document->id => [
+                'file_path' => $filePath,
+                'is_completed' => true,
+            ],
+        ]);
+
+        return back()->with('success', 'Document uploaded successfully.');
+    }
+
+
+    public function downloadDocument($documentId, $userId)
+    {
+        $document = Document::findOrFail($documentId);
+
+        $user = $document->users()->findOrFail($userId);
+
+        if ($user->pivot && $user->pivot->file_path) {
+            $filePath = $user->pivot->file_path;
+
+            if (Storage::disk('public')->exists($filePath)) {
+                $documentName = $document->title;
+                $userName = $user->first_name . ' ' . $user->last_name;
+                $customFileName = $userName . ' - ' . $documentName . '.' . pathinfo($filePath, PATHINFO_EXTENSION);
+
+                return response()->download(storage_path("app/public/{$filePath}"), $customFileName, [
+                    'Content-Type' => 'application/octet-stream',
+                    'Content-Disposition' => 'attachment; filename="' . $customFileName . '"'
+                ]);            } else {
+                return back()->with('error', 'File not found.');
+            }
+        }
+
+        return back()->with('error', 'No file uploaded for this document.');
     }
 }
