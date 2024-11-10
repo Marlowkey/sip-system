@@ -24,25 +24,23 @@ class JournalController extends Controller
     public function index(Request $request)
     {
         $request->validate([
-            'week' => 'nullable|integer',
             'class_block' => 'nullable|string',
         ]);
 
-        $week = $request->week ?? 1;
         $classBlock = $request->class_block ?? null;
-
         $user = auth()->user();
 
-        $journal = $this->journal->getJournalsForUser($user, $week,$classBlock );
-        $classBlocks = User::distinct()->pluck('block');
 
+        $journal = $this->journal->getJournalsForUser($user);
+        $students = $this->journal->getStudentUserJournalsForCoordinator($user, $classBlock);
+        $classBlocks = User::distinct()->pluck('block');
 
         return Inertia::render('Journal/Index', [
             'user' => $user,
             'journal' => $journal,
-            'week' => $week,
             'classBlocks' => $classBlocks,
             'classBlock' => $classBlock,
+            'students' => $students,
         ]);
     }
 
