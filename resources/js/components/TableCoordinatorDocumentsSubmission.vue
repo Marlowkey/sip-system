@@ -46,20 +46,20 @@ const form = useForm({
 })
 
 const itemsPaginated = computed(() => {
-let filteredItems = items.value
+    let filteredItems = items.value
 
-if (searchTerm.value) {
-    filteredItems = filteredItems.filter(user =>
-        user.first_name.toLowerCase().includes(searchTerm.value.toLowerCase()) ||
-        user.last_name.toLowerCase().includes(searchTerm.value.toLowerCase())
-    )
-}
+    if (searchTerm.value) {
+        filteredItems = filteredItems.filter(user =>
+            user.first_name.toLowerCase().includes(searchTerm.value.toLowerCase()) ||
+            user.last_name.toLowerCase().includes(searchTerm.value.toLowerCase())
+        )
+    }
 
-if (classBlock.value) {
+    if (classBlock.value) {
         filteredItems = filteredItems.filter(user => user.block === classBlock.value)
     }
 
-return filteredItems.slice(perPage.value * currentPage.value, perPage.value * (currentPage.value + 1))
+    return filteredItems.slice(perPage.value * currentPage.value, perPage.value * (currentPage.value + 1))
 })
 
 const numPages = computed(() => Math.ceil(items.value.length / perPage.value))
@@ -67,13 +67,13 @@ const numPages = computed(() => Math.ceil(items.value.length / perPage.value))
 const currentPageHuman = computed(() => currentPage.value + 1)
 
 const pagesList = computed(() => {
-const pagesList = []
+    const pagesList = []
 
-for (let i = 0; i < numPages.value; i++) {
-    pagesList.push(i)
-}
+    for (let i = 0; i < numPages.value; i++) {
+        pagesList.push(i)
+    }
 
-return pagesList
+    return pagesList
 })
 
 
@@ -87,6 +87,25 @@ const formatDueDate = (dueDate) => {
     }
 
     return format(parsedDate, 'MMMM do, yyyy');
+}
+
+const submissionForm = useForm({
+    user_id: null,
+    document_id: null,
+    is_completed: false,
+})
+
+const updateCompletionStatus = (document, event, userId) => {
+    submissionForm.user_id = userId
+    submissionForm.document_id = document.id
+    submissionForm.is_completed = event.target.checked
+
+    submissionForm.post(route('student-document.update'), {
+        onFinish: () => {
+            document.is_completed = submissionForm.is_completed
+        },
+        preserveScroll: true,
+    })
 }
 
 </script>
@@ -115,40 +134,40 @@ const formatDueDate = (dueDate) => {
                     </tr>
                 </thead>
                 <tbody class="font-medium text-gray-600">
-                    <tr v-for="student in itemsPaginated" :key="student.id" class="bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-600">
+                    <tr v-for="student in itemsPaginated" :key="student.id"
+                        class="bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-600">
                         <td class="px-4 py-2">
                             {{ student.first_name }} {{ student.last_name }}
                         </td>
                         <td class="px-4 py-2">
 
-                            <BaseButton
-    v-if="student.file_path"
-    roundedFull
-    color="teal"
-    :icon="mdiDownload"
-    small
-    :href="route('student-documents.download', { document: document.id, user: student.id })"
-    label="Download"
-/>
+                            <BaseButton v-if="student.file_path" roundedFull color="teal" :icon="mdiDownload" small
+                                :href="route('student-documents.download', { document: document.id, user: student.id })"
+                                label="Download" />
 
                         </td>
                         <td class="px-4 py-2 text-center">
-                            <span :class="{'text-green-500': student.is_completed, 'text-red-500': !student.is_completed}">
-                                {{ student.is_completed ? 'Completed' : 'Pending' }}
-                            </span>
+                            <div class="flex items-center justify-center space-x-2">
+                                <input type="checkbox" :checked="student.is_completed"
+                                    @change="event => updateCompletionStatus(document, event, student.id)" />
+                                <span
+                                    :class="{ 'text-green-500': student.is_completed, 'text-red-500': !student.is_completed }">
+                                    {{ student.is_completed ? 'Completed' : 'Pending' }}
+                                </span>
+                            </div>
                         </td>
                     </tr>
                 </tbody>
             </table>
-    </div>
-    <div class="p-3 border-t border-gray-100 lg:px-6 dark:border-slate-800">
-        <BaseLevel>
-            <BaseButtons>
-                <BaseButton v-for="page in pagesList" :key="page" :active="page === currentPage" :label="page + 1"
-                    :color="page === currentPage ? 'lightDark' : 'whiteDark'" small @click="currentPage = page" />
-            </BaseButtons>
-            <small>Page {{ currentPageHuman }} of {{ numPages }}</small>
-        </BaseLevel>
-    </div>
+        </div>
+        <div class="p-3 border-t border-gray-100 lg:px-6 dark:border-slate-800">
+            <BaseLevel>
+                <BaseButtons>
+                    <BaseButton v-for="page in pagesList" :key="page" :active="page === currentPage" :label="page + 1"
+                        :color="page === currentPage ? 'lightDark' : 'whiteDark'" small @click="currentPage = page" />
+                </BaseButtons>
+                <small>Page {{ currentPageHuman }} of {{ numPages }}</small>
+            </BaseLevel>
+        </div>
     </CardBox>
 </template>
