@@ -38,6 +38,10 @@ const userRole = props.user.role;
                 {{ $page.props.flash.message }}
             </NotificationBar>
 
+            <!-- <NotificationBar  v-if="$page.props.errors" color="danger" >
+                {{ $page.props.errors.file }}
+            </NotificationBar> -->
+
             <SectionTitleLineWithButton :icon="mdiAccountFile" title="SIP Requirements Checklist" main />
             <CardBox>
                 <TableStudentDocuments :document="documents" checkable />
