@@ -16,50 +16,23 @@ class Journal extends Model
         return $this->belongsTo(User::class);
     }
 
-    public static function getJournalsForUser($user, int $week = null, string $classBlock = null)
+    public static function getJournalsForUser($user)
     {
-        if ($user->role === 'student') {
-            return $user->journals()->orderBy('created_at', 'desc')->get();
-        } elseif ($user->role === 'coordinator') {
-            return self::getStudentJournalsForCoordinator($user, $week, $classBlock);
-        }
+        return $user->journals()->orderBy('created_at', 'desc')->get();
     }
 
-    public static function getStudentJournalsForCoordinator($user, $week = null, $classBlock = null)
+    public static function getStudentUserJournalsForCoordinator($user, $classBlock = null)
     {
-        $query = self::with('user')
-        ->whereHas('user', function ($query) use ($user) {
-            $query->where('role', 'student')
-                  ->where('course', $user->course)
-                  ->orderBy('last_name');
-        });
-
-
-        if ($week !== null) {
-            $query->where('week', $week);
-        }
+        $query = User::where('role', 'student')
+            ->where('course', $user->course)
+            ->orderBy('last_name');
 
         if ($classBlock) {
-            $query->whereHas('user', function ($query) use ($classBlock) {
-                $query->where('block', $classBlock);
-            });
+            $query->where('block', $classBlock);
         }
 
-        $journals = $query->with('user')->get();
-
-        $journalsWithUsername = $journals->map(function ($journal) {
-            if ($journal->user) {
-                $journal->username = $journal->user->first_name . ' ' . $journal->user->last_name;
-            } else {
-                $journal->username = 'Unknown';
-            }
-            return $journal;
-        });
-
-        return $journalsWithUsername;
+        return $query->get();
     }
-
-
 
     public static function getLatestJournalForUser(int $userId)
     {
@@ -92,15 +65,55 @@ class Journal extends Model
 
     public static function getUnreviewedJournalsForCoordinator($user)
     {
-        $query = self::with('user')
-        ->whereHas('user', function ($query) use ($user) {
-            $query->where('role', 'student')
-                  ->where('course', $user->course)
-                  ->orderBy('last_name');
-        })->where('reviewed', false);
+        $journals = self::getStudentJournalsForCoordinator($user)->load('user');
 
-        $journals = $query->get();
-        return $journals;
+        $unreviewedJournals = $journals
+            ->where('reviewed', false);
+
+        $journalsWithUsername = $unreviewedJournals->map(function ($journal) {
+            if ($journal->user) {
+                $journal->username = $journal->user->first_name . ' ' . $journal->user->last_name;
+            } else {
+                $journal->username = 'Unknown';
+            }
+
+            return $journal;
+        });
+
+        return $journalsWithUsername;
     }
 
+    public static function getStudentJournalsForCoordinator($user, $week = null, $classBlock = null)
+    {
+        $query = self::with('user')
+            ->whereHas('user', function ($query) use ($user) {
+                $query->where('role', 'student')
+                    ->where('course', $user->course)
+                    ->orderBy('last_name');
+            });
+
+        if ($classBlock) {
+            $query->whereHas('user', function ($query) use ($classBlock) {
+                $query->where('block', $classBlock);
+            });
+        }
+        $journals = $query->with('user')->get();
+        $journalsWithUsername = $journals->map(function ($journal) {
+            if ($journal->user) {
+                $journal->username = $journal->user->first_name . ' ' . $journal->user->last_name;
+            } else {
+                $journal->username = 'Unknown';
+            }
+            return $journal;
+        });
+        return $journalsWithUsername;
+    }
 }
+
+
+
+
+
+
+
+
