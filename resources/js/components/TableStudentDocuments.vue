@@ -63,6 +63,7 @@ const isCompleted = (document) => {
 };
 
 
+
 const updateCompletionStatus = (document, event) => {
     form.document_id = document.id
     form.is_completed = event.target.checked
@@ -87,6 +88,9 @@ const formatDueDate = (dueDate) => {
     return format(parsedDate, 'MMMM do, yyyy');
 }
 
+const buttonLabel = (document) => {
+    return isCompleted(document) ? 'Update' : 'Submit';          // Show "Submit" if file selected, otherwise "Update"
+}
 
 
 const handleFileSelect = (document, event) => {
@@ -97,7 +101,7 @@ const handleFileSelect = (document, event) => {
     }
 }
 
-const fileErrors = ref([]) // Store file upload errors
+const fileErrors = ref([]) 
 
 const submitFile = (document) => {
     if (form.file) {
@@ -127,6 +131,7 @@ const submitFile = (document) => {
     <CardBoxModal v-model="isModalActive" title="Description">
         <p>{{ currentDescription }}</p>
     </CardBoxModal>
+
     <div class="relative overflow-x-auto">
         <table class="w-full my-2 text-left text-gray-800 rtl:text-right">
             <thead class="text-gray-700">
@@ -134,7 +139,7 @@ const submitFile = (document) => {
                     <th scope="col" class="px-4 py-3">Title</th>
                     <th scope="col" class="px-4 py-3">Due on</th>
                     <th scope="col" class="px-4 py-3">Action</th>
-                    <th scope="col" class="px-4 py-3 text-center" v-if="checkable">Upload File</th>
+                    <th scope="col" class="px-4 py-3 text-center">File</th>
                 </tr>
             </thead>
             <tbody class="font-medium text-gray-600">
@@ -154,13 +159,7 @@ const submitFile = (document) => {
                     <td class="px-4 py-1 text-center">
                         <div class="flex items-center space-x-2">
                             <input type="file" @change="event => handleFileSelect(document, event)" class="h-auto mb-2 w-60" />
-                                  <!-- Display file upload errors -->
-        <div v-if="fileErrors.length > 0" class="text-sm text-red-500">
-            <ul>
-                <li v-for="(error, index) in fileErrors" :key="index">{{ error }}</li>
-            </ul>
-        </div>
-                            <BaseButton small roundedFull color="info" @click="submitFile(document)" label="Submit" />
+                            <BaseButton small roundedFull color="info" @click="submitFile(document)" :label=" buttonLabel(document)" />
                         </div>
                     </td>
                 </tr>
