@@ -7,8 +7,9 @@ use Inertia\Inertia;
 use App\Models\Document;
 use Illuminate\Http\Request;
 use App\Services\DocumentService;
-use Illuminate\Support\Facades\Storage;
+use Illuminate\Validation\Rules\File;
 use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\Storage;
 use App\Http\Requests\Document\StoreRequest;
 
 class DocumentController extends Controller
@@ -129,18 +130,27 @@ class DocumentController extends Controller
     public function uploadDocument(Request $request, Document $document)
     {
         $request->validate([
-            'file' => 'required|file|mimes:pdf,doc,docx,png,jpg,jpeg|max:5048',
+            'file' => ['required', 'file', File::types(['pdf', 'doc', 'docx', 'png', 'jpg', 'jpeg', 'webp']), 'max:5048'],
         ]);
 
-        $filePath = $request->file('file')->store('uploads/documents', 'public');
+        $user = $request->user();
 
-        auth()->user()->documents()->syncWithoutDetaching([
+        $existingDocument = $user->documents()->where('document_id', $document->id)->first();
+
+        if ($existingDocument && $existingDocument->pivot->file_path) {
+            $existingFilePath = public_path('storage/' . $existingDocument->pivot->file_path);
+
+            if (file_exists($existingFilePath)) {
+                unlink($existingFilePath);
+            }
+        }
+
+        $filePath = $request->file('file')->store('document-uploads', 'public');
+        $user->documents()->syncWithoutDetaching([
             $document->id => [
                 'file_path' => $filePath,
-                'is_completed' => true,
             ],
         ]);
-
         return back()->with('success', 'Document uploaded successfully.');
     }
 
@@ -148,25 +158,46 @@ class DocumentController extends Controller
     public function downloadDocument($documentId, $userId)
     {
         $document = Document::findOrFail($documentId);
-
         $user = $document->users()->findOrFail($userId);
 
         if ($user->pivot && $user->pivot->file_path) {
             $filePath = $user->pivot->file_path;
 
+            dd($filePath);
             if (Storage::disk('public')->exists($filePath)) {
                 $documentName = $document->title;
                 $userName = $user->first_name . ' ' . $user->last_name;
-                $customFileName = $userName . ' - ' . $documentName . '.' . pathinfo($filePath, PATHINFO_EXTENSION);
 
-                return response()->download(storage_path("app/public/{$filePath}"), $customFileName, [
-                    'Content-Type' => 'application/octet-stream',
+                $extension = pathinfo($filePath, PATHINFO_EXTENSION);
+
+                $customFileName = $userName . ' - ' . $documentName . '.' . $extension;
+
+                $mimeType = $this->getMimeType($extension);
+
+                return Storage::disk('public')->download($filePath, $customFileName, [
+                    'Content-Type' => $mimeType,
                     'Content-Disposition' => 'attachment; filename="' . $customFileName . '"'
-                ]);            } else {
+                ]);
+            } else {
                 return back()->with('error', 'File not found.');
             }
         }
 
         return back()->with('error', 'No file uploaded for this document.');
+    }
+
+    private function getMimeType($extension)
+    {
+        $mimeTypes = [
+            'pdf'  => 'application/pdf',
+            'doc'  => 'application/msword',
+            'docx' => 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+            'jpg'  => 'image/jpeg',
+            'jpeg' => 'image/jpeg',
+            'png'  => 'image/png',
+            'webp' => 'image/webp',
+        ];
+
+        return $mimeTypes[$extension] ?? 'application/octet-stream';
     }
 }
