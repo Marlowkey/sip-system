@@ -12,7 +12,7 @@ class StudentDocumentUpdateRequest extends FormRequest
     public function authorize(): bool
     {
         $user = auth()->user();
-        return $user->role === 'student';
+        return $user->role === 'coordinator';
     }
 
     /**
