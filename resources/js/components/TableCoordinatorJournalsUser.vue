@@ -1,6 +1,6 @@
 <script setup>
 import { computed, ref, defineProps } from 'vue'
-import {     mdiAccountSearch,
+import {     mdiAccountSearch, mdiFolderText
 } from '@mdi/js'
 import CardBoxModal from '@/components/CardBoxModal.vue'
 import TableCheckboxCell from '@/components/TableCheckboxCell.vue'
@@ -80,7 +80,7 @@ const pagesList = computed(() => {
                         <th scope="col" class="px-4 py-3">Name</th>
                         <th scope="col" class="px-4 py-3">Email</th>
                         <th scope="col" class="px-4 py-3">Block</th>
-                        <th>Action</th>
+                        <th class="px-4 py-3">Journals</th>
 
                     </tr>
                 </thead>
@@ -102,6 +102,12 @@ const pagesList = computed(() => {
 
                         <td data-label="Block" class="px-6 py-4 text-gray-600 dark:text-gray-400">
                             {{ user.block }}
+                        </td>
+                        <td  class="px-6 py-4 text-gray-600 dark:text-gray-400">
+                            <BaseButtons type="justify-start" no-wrap>
+                            <BaseButton label="View"  roundedFull color="blue" :icon="mdiFolderText" small
+                            :href="route('student.journal.show', { id: user.id })" />
+                        </BaseButtons>
                         </td>
                     </tr>
 

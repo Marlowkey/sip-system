@@ -64,18 +64,6 @@ const isCompleted = (document) => {
 
 
 
-const updateCompletionStatus = (document, event) => {
-    form.document_id = document.id
-    form.is_completed = event.target.checked
-
-    form.post(route('student-document.update'), {
-        onFinish: () => {
-            document.is_completed = form.is_completed
-        },
-        preserveScroll: true,
-    })
-}
-
 const formatDueDate = (dueDate) => {
     if (!dueDate) return 'No date';
 
@@ -101,7 +89,7 @@ const handleFileSelect = (document, event) => {
     }
 }
 
-const fileErrors = ref([]) 
+const fileErrors = ref([])
 
 const submitFile = (document) => {
     if (form.file) {

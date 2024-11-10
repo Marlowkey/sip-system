@@ -46,6 +46,7 @@ Route::resource('/journals', JournalController::class);
 Route::post('/journals/{id}/mark-reviewed', [JournalController::class, 'markAsReviewed'])->name('journals.markReviewed');
 Route::post('/journals/{id}/feedback', [JournalController::class, 'addFeedback'])->name('journals.addFeedback');
 Route::match(['get', 'post'], '/botman', [BotManController::class, 'handle']);
+Route::get('/student/journal/{id}', [JournalController::class, 'showStudentJournal'])->name('student.journal.show');
 
 Route::get('/attendance/export', [AttendanceController::class, 'export'])->name('attendances.export');
 

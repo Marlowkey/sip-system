@@ -129,6 +129,17 @@ class JournalController extends Controller
         return redirect()->route('journals.index')->with('message', 'Journal deleted successfully.');
     }
 
+    public function showStudentJournal($id)
+    {
+        $user = User::findOrFail($id);
+
+        $journals = $this->journal->getJournalsForUser($user);
+        return Inertia::render('Journal/Coordinator/Show', [
+            'user' => $user,
+            'journals' => $journals,
+        ]);
+    }
+
 
     public function markAsReviewed(Request $request, int $id)
     {
