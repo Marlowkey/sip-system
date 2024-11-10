@@ -63,7 +63,7 @@ watch(classBlock, (newClassBlock, oldClassBlock) => {
             <SectionTitleLineWithButton :icon="mdiAccountFile" title="Journal Entries" main>
                 <BaseButton roundedFull :icon="mdiPlus" color="whiteDark" routeName="journals.create" />
             </SectionTitleLineWithButton>
-            <div class="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-2">
+            <div class="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-1">
                 <CardBoxJournal v-for="item in journal" :key="item.id" :title="item.title" :date="item.date"
                     :reviewed="item.reviewed" :href="route('journals.show', { id: item.id })" />
             </div>

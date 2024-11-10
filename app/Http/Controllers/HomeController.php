@@ -79,7 +79,7 @@ class HomeController extends Controller
         $usersCount = $user->getStudentUserWithProgress()->count();
         $studentAttendance = $this->attendance->getStudentAttendances($user, $dateToCheck);
         $unreviewedJournalsCount = Journal::getUnreviewedJournalsForCoordinator($user)->count();
-        $unreviewedJournals = Journal::getUnreviewedJournalsForCoordinator($user);
+        // $unreviewedJournals = Journal::getUnreviewedJournalsForCoordinator($user);
 
         return Inertia::render('Coordinator/CoordinatorView', [
             'users' => $studentUserWithProgress,
@@ -89,7 +89,7 @@ class HomeController extends Controller
             'usersCount' =>   $usersCount,
             'attendancesTodayCount' => $studentAttendance->count(),
             'unreviewedJournalsCount' =>   $unreviewedJournalsCount,
-            'unreviewedJournals' => $unreviewedJournals,
+            // 'unreviewedJournals' => $unreviewedJournals,
         ]);
     }
 
