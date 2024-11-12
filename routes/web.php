@@ -70,6 +70,9 @@ Route::prefix('htes')->name('htes.')->group(function () {
     Route::get('/{id}/edit', [HostTrainingEstablishmentController::class, 'edit'])->name('edit');
     Route::put('/{id}', [HostTrainingEstablishmentController::class, 'update'])->name('update');
     Route::delete('/{id}', [HostTrainingEstablishmentController::class, 'destroy'])->name('destroy');
+    Route::get('/{id}/download-moa', [HostTrainingEstablishmentController::class, 'downloadMoa'])->name('downloadMoa');
+    Route::post('/{id}/update-moa-file', [HostTrainingEstablishmentController::class, 'updateMoaFile'])
+    ->name('updateMoaFile');
 });
 
 Route::middleware(['auth'])->group(function () {

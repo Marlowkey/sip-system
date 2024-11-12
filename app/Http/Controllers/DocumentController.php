@@ -163,7 +163,6 @@ class DocumentController extends Controller
         if ($user->pivot && $user->pivot->file_path) {
             $filePath = $user->pivot->file_path;
 
-            dd($filePath);
             if (Storage::disk('public')->exists($filePath)) {
                 $documentName = $document->title;
                 $userName = $user->first_name . ' ' . $user->last_name;
@@ -174,15 +173,11 @@ class DocumentController extends Controller
 
                 $mimeType = $this->getMimeType($extension);
 
-                return Storage::disk('public')->download($filePath, $customFileName, [
-                    'Content-Type' => $mimeType,
-                    'Content-Disposition' => 'attachment; filename="' . $customFileName . '"'
-                ]);
+                return Storage::disk('public')->download($filePath, $customFileName);
             } else {
                 return back()->with('error', 'File not found.');
             }
         }
-
         return back()->with('error', 'No file uploaded for this document.');
     }
 

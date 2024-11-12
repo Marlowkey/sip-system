@@ -1,7 +1,7 @@
 <script setup>
 import { reactive, ref, computed } from 'vue'
 import { useForm } from '@inertiajs/vue3'
-import { mdiBallotOutline, mdiAccount, mdiMail, mdiFileDocumentAlertOutline   } from '@mdi/js'
+import { mdiBallotOutline, mdiAccount, mdiMail, mdiFileDocumentAlertOutline } from '@mdi/js'
 import SectionMain from '@/components/SectionMain.vue'
 import CardBox from '@/components/CardBox.vue'
 import FormCheckRadioGroup from '@/components/FormCheckRadioGroup.vue'
@@ -29,20 +29,57 @@ const form = useForm({
     name: props.establishment?.name || '',
     email: props.establishment?.email || '',
     address: props.establishment?.address || '',
+    moa_file_path: null,
+    moa_validity_period: props.establishment?.moa_validity_period || '',
 })
+
+
+const handleFileUpload = (event) => {
+    form.moa_file_path = event.target.files[0];
+};
+
 
 const submit = async () => {
     try {
         if (isEditMode.value) {
-            await form.put(route('htes.update', establishmentId.value))
+            await form.put(route('htes.update', establishmentId.value), {
+                transformRequest: (data) => {
+                    const formData = new FormData();
+                    for (let key in data) {
+                        formData.append(key, data[key]);
+                    }
+                    return formData;
+                },
+            });
         } else {
-            await form.post(route('htes.store'))
+            await form.post(route('htes.store'), {
+                transformRequest: (data) => {
+                    const formData = new FormData();
+                    for (let key in data) {
+                        formData.append(key, data[key]);
+                    }
+                    return formData;
+                },
+            });
         }
     } catch (error) {
-        console.error('Error submitting form:', error)
+        console.error('Error submitting form:', error);
     }
-}
+};
 
+const submitMoaFile = async () => {
+    try {
+        const formData = new FormData();
+        formData.append('moa_file_path', form.moa_file_path);
+
+        await form.post(route('htes.updateMoaFile', { id: establishmentId.value }), {
+            data: formData,
+            onSuccess: () => alert('MOA file updated successfully.'),
+        });
+    } catch (error) {
+        console.error('Error updating MOA file:', error);
+    }
+};
 
 const deleteEstablishment = async (establishmentId) => {
     try {
@@ -57,6 +94,16 @@ const deleteEstablishment = async (establishmentId) => {
     <LayoutAuthenticated>
         <SectionMain>
             <SectionTitleLineWithButton :icon="mdiFileDocumentAlertOutline" :title="title" main />
+            <CardBox v-if="isEditMode" isForm @submit.prevent="submit" enctype="multipart/form-data" class="my-4">
+                <FormField label="MOA File">
+                    <div class="flex items-center space-x-2">
+                        <input type="file" @change="handleFileUpload" />
+                        <InputError :message="form.errors.moa_file_path" />
+                        <BaseButton small label="Update MOA File" roundedFull color="blue" @click.prevent="submitMoaFile" />
+                    </div>
+                </FormField>
+            </CardBox>
+
             <CardBox isForm @submit.prevent="submit" enctype="multipart/form-data">
                 <FormField label="Name">
                     <FormControl v-model="form.name" type="text" />
@@ -73,13 +120,22 @@ const deleteEstablishment = async (establishmentId) => {
                 </FormField>
                 <InputError :message="form.errors.address" />
 
-                <BaseDivider />
+                <FormField v-if="!isEditMode" label="MOA File">
+                    <FormControl v-model="form.moa_file_path" type="file" @change="handleFileUpload" />
+                </FormField>
+                <InputError :message="form.errors.moa_file_path" />
 
+                <FormField label="MOA Validity Period">
+                    <FormControl v-model="form.moa_validity_period" type="date" />
+                </FormField>
+                <InputError :message="form.errors.moa_validity_period" />
+                <BaseDivider />
                 <template #footer>
                     <BaseButtons>
                         <BaseButton roundedFull small type="submit" color="blue" label="Submit" />
                         <BaseButton roundedFull small type="reset" color="whiteTwo" v-if="!isEditMode" />
-                        <BaseButton roundedFull small color="red" label="Delete" @click.prevent="deleteEstablishment(establishmentId)" v-if="isEditMode" />
+                        <BaseButton roundedFull small color="red" label="Delete"
+                            @click.prevent="deleteEstablishment(establishmentId)" v-if="isEditMode" />
                     </BaseButtons>
                 </template>
             </CardBox>
