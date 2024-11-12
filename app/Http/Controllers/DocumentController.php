@@ -129,8 +129,8 @@ class DocumentController extends Controller
 
     public function uploadDocument(Request $request, Document $document)
     {
-        $request->validate([
-            'file' => ['required', 'file', File::types(['pdf', 'doc', 'docx', 'png', 'jpg', 'jpeg', 'webp']), 'max:5048'],
+        $validated = $request->validate([
+            'file' => 'required|file|mimes:pdf|max:2048',
         ]);
 
         $user = $request->user();
@@ -146,11 +146,14 @@ class DocumentController extends Controller
         }
 
         $filePath = $request->file('file')->store('document-uploads', 'public');
+
         $user->documents()->syncWithoutDetaching([
             $document->id => [
                 'file_path' => $filePath,
             ],
         ]);
+
+        // Return success message
         return back()->with('success', 'Document uploaded successfully.');
     }
 

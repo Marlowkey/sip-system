@@ -141,7 +141,7 @@ const submitFile = (document) => {
                     <td class="px-4 py-1 whitespace-nowrap">
                         <BaseButtons type="justify-start" no-wrap>
                             <BaseButton label="View" roundedFull color="blue" :icon="mdiEye" small @click="viewDocument(document)" />
-                            <BaseButton label="Download" v-if="document.file_path" roundedFull color="teal" :icon="mdiDownload" small :href="route('documents.download', { id: document.id })" />
+                            <BaseButton label="Download" v-if="document.file_path" roundedFull color="teal" :icon="mdiDownload" small :href="`/storage${document.file_path}`" target="_blank" />
                         </BaseButtons>
                     </td>
                     <td class="px-4 py-1 text-center">

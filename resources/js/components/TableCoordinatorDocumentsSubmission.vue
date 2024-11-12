@@ -142,7 +142,7 @@ const updateCompletionStatus = (document, event, userId) => {
                         <td class="px-4 py-2">
 
                             <BaseButton v-if="student.file_path" roundedFull color="teal" :icon="mdiDownload" small
-                                :href="route('student-documents.download', { document: document.id, user: student.id })"
+                            :href="`/storage/${student.file_path}`" target="_blank"
                                 label="Download" />
 
                         </td>
