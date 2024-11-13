@@ -103,7 +103,7 @@ const formatDueDate = (dueDate) => {
                             <BaseButton label="View" roundedFull color="blue" :icon="mdiEye" small
                                 @click="viewDocument(document)" />
                             <BaseButton label="Download" v-if="document.file_path" roundedFull color="teal"
-                                :icon="mdiDownload" small :href="`/storage${document.file_path}`" target="_blank"/>
+                                :icon="mdiDownload" small :href="`/storage/${document.file_path}`" target="_blank"/>
                             <BaseButton label="Edit" roundedFull color="yellow" :icon="mdiFileEditOutline" small
                                 :href="route('documents.edit', { id: document.id })" />
                         </BaseButtons>

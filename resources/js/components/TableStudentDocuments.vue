@@ -58,9 +58,14 @@ const viewDocument = (document) => {
     isModalActive.value = true
 }
 
+const isSubmitted = (document) => {
+    return document.users.some(user => user.pivot.file_path);
+};
+
 const isCompleted = (document) => {
     return document.users.some(user => user.pivot.is_completed);
 };
+
 
 
 
@@ -77,7 +82,7 @@ const formatDueDate = (dueDate) => {
 }
 
 const buttonLabel = (document) => {
-    return isCompleted(document) ? 'Update' : 'Submit';          // Show "Submit" if file selected, otherwise "Update"
+    return isSubmitted(document) ? 'Update' : 'Submit';          // Show "Submit" if file selected, otherwise "Update"
 }
 
 
@@ -131,7 +136,8 @@ const submitFile = (document) => {
                 </tr>
             </thead>
             <tbody class="font-medium text-gray-600">
-                <tr v-for="document in itemsPaginated" :key="document.id" class="bg-white dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
+                <tr v-for="document in itemsPaginated" :key="document.id"
+                    class="bg-white dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
                     <td data-label="Title" scope="row" class="px-6 py-3">
                         {{ document.title }}
                     </td>
@@ -140,14 +146,22 @@ const submitFile = (document) => {
                     </td>
                     <td class="px-4 py-1 whitespace-nowrap">
                         <BaseButtons type="justify-start" no-wrap>
-                            <BaseButton label="View" roundedFull color="blue" :icon="mdiEye" small @click="viewDocument(document)" />
-                            <BaseButton label="Download" v-if="document.file_path" roundedFull color="teal" :icon="mdiDownload" small :href="`/storage${document.file_path}`" target="_blank" />
+                            <BaseButton label="View" roundedFull color="blue" :icon="mdiEye" small
+                                @click="viewDocument(document)" />
+                            <BaseButton label="Download" v-if="document.file_path" roundedFull color="teal"
+                                :icon="mdiDownload" small :href="`/storage/${document.file_path}`" target="_blank" />
                         </BaseButtons>
                     </td>
                     <td class="px-4 py-1 text-center">
                         <div class="flex items-center space-x-2">
-                            <input type="file" @change="event => handleFileSelect(document, event)" class="h-auto mb-2 w-60" />
-                            <BaseButton small roundedFull color="info" @click="submitFile(document)" :label=" buttonLabel(document)" />
+                            <input v-if="!isCompleted(document)" type="file"
+                                @change="event => handleFileSelect(document, event)" class="h-auto mb-2 w-60" />
+                            <div v-if="isCompleted(document)"
+                                class="flex items-center justify-center w-full h-full font-semibold text-green-500">
+                                Completed
+                            </div>
+                            <BaseButton v-else small roundedFull color="info" @click="submitFile(document)"
+                                :label="buttonLabel(document)" :disabled="isCompleted(document)" />
                         </div>
                     </td>
                 </tr>

@@ -29,7 +29,7 @@ const form = useForm({
     title: props.document?.title || '',
     due_date: props.document?.due_date || '',
     description: props.document?.description || '',
-    file: null,
+    file_path: null,
 })
 
 const submit = async () => {
@@ -40,7 +40,7 @@ const submit = async () => {
         formData.append('due_date', form.due_date)
         formData.append('description', form.description)
         if (form.file) {
-            formData.append('file', form.file)
+            formData.append('file_path', form.file_path)
         }
 
         if (isEditMode.value) {
@@ -48,17 +48,31 @@ const submit = async () => {
         } else {
             await form.post(route('documents.store'), formData)
         }
-        // Show success notification
+
     } catch (error) {
         console.error('Error submitting form:', error)
-        // Show error notification
+
     }
 }
 
 const handleFileUpload = (event) => {
-    form.file = event.target.files[0]
-    form.file = file
+    form.file_path = event.target.files[0]
+    form.file_path = file
 }
+
+const submitFile = async () => {
+    try {
+        const formData = new FormData();
+        formData.append('file_path', form.file_path);
+
+        await form.post(route('documents.updateFile', { id: documentId.value }), {
+            data: formData,
+            onSuccess: () => alert('File updated successfully.'),
+        });
+    } catch (error) {
+        console.error('Error updating MOA file:', error);
+    }
+};
 
 const deleteDocument = async (documentId) => {
     try {
@@ -76,6 +90,17 @@ const deleteDocument = async (documentId) => {
         <SectionMain>
             <SectionTitleLineWithButton :icon="mdiFileDocumentAlertOutline " :title="title" main>
             </SectionTitleLineWithButton>
+
+            <CardBox v-if="isEditMode" isForm @submit.prevent="submit" enctype="multipart/form-data" class="my-4">
+                <FormField label=" File">
+                    <div class="flex items-center space-x-2">
+                        <input type="file" @change="handleFileUpload" />
+                        <InputError :message="form.errors.file_path" />
+                        <BaseButton small label="Update File" roundedFull color="blue" @click.prevent="submitFile" />
+                    </div>
+                </FormField>
+            </CardBox>
+
             <CardBox isForm @submit.prevent="submit" enctype="multipart/form-data">
                 <FormField label="Title">
                     <FormControl v-model="form.title" type="text" />
@@ -97,7 +122,7 @@ const deleteDocument = async (documentId) => {
                 <FormField v-if="!isEditMode" label="File" help="Upload a document file">
                     <FormControl type="file" @change="handleFileUpload"/>
                 </FormField>
-                <InputError :message="form.errors.file" />
+                <InputError :message="form.errors.file_path" />
 
                 <template #footer>
                     <BaseButtons>

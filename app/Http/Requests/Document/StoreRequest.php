@@ -26,7 +26,7 @@ class StoreRequest extends FormRequest
             'title' => 'required|string|max:255',
             'due_date' => 'required|date',
             'description' => 'nullable|string',
-            'file' => 'nullable|mimes:pdf,doc,docx,jpg,jpeg,png|max:2048',
+            'file_path' => 'nullable|mimes:pdf,doc,docx,jpg,jpeg,png|max:2048',
         ];
     }
 }

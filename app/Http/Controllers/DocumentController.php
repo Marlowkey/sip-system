@@ -35,23 +35,26 @@ class DocumentController extends Controller
             'documentWithNumberOfCompleted' => $documentWithNumberOfCompleted,
         ]);
     }
-
-    /**
-     * Show the form for creating a new resource.
-     */
     public function create()
     {
         return Inertia::render('Document/Create');
     }
-
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(StoreRequest $request)
     {
         $validated = $request->validated();
-        $this->documentService->storeDocument($validated);
 
+        if ($request->hasFile('file_path')) {
+            $title = $validated['title'];
+            $extension = $request->file('file_path')->getClientOriginalExtension();
+
+            $validated['file_path'] = $request->file('file_path')->storeAs(
+                'documents',
+                $title . '.' . $extension,
+                'public'
+            );
+        }
+
+        Document::create($validated);
         return redirect()->route('documents.index')->with('success', 'Document created successfully.');
     }
 
@@ -85,9 +88,6 @@ class DocumentController extends Controller
     }
 
 
-    /**
-     * Show the form for editing the specified resource.
-     */
     public function edit($id)
     {
         $document = Document::findOrFail($id);
@@ -97,25 +97,26 @@ class DocumentController extends Controller
         ]);
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
     public function update(StoreRequest $request, $id)
     {
         $document = Document::findOrFail($id);
         $validated = $request->validated();
-        $this->documentService->updateDocument($document, $validated);
+        if ($request->hasFile('file')) {
+            $validated['file'] = $request->file('file')->store('documents', 'public');
+        }
+
+        $document->update($validated);
 
         return Redirect::route('documents.index')->with('message', 'Document updated successfully.');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
     public function destroy($id)
     {
         $document = Document::findOrFail($id);
-        $this->documentService->deleteDocument($document);
+        if ($document->file_path) {
+            Storage::disk('public')->delete($document->file_path);
+        }
+        $document->delete();
         return Redirect::route('documents.index')->with('message', 'Document deleted successfully.');
     }
 
@@ -134,18 +135,28 @@ class DocumentController extends Controller
         ]);
 
         $user = $request->user();
-
         $existingDocument = $user->documents()->where('document_id', $document->id)->first();
 
         if ($existingDocument && $existingDocument->pivot->file_path) {
             $existingFilePath = public_path('storage/' . $existingDocument->pivot->file_path);
-
             if (file_exists($existingFilePath)) {
                 unlink($existingFilePath);
             }
         }
 
-        $filePath = $request->file('file')->store('document-uploads', 'public');
+        // Get the student's name and document title
+        $studentName = $user->last_name . ', ' .  $user->first_name;  // Assuming the user's name is stored in the 'name' attribute
+        $documentTitle = $document->title;
+        $extension = $request->file('file')->getClientOriginalExtension();
+
+        // Create a filename with both student name and document title
+        $filename = $studentName . '_' . $documentTitle . '.' . $extension;
+
+        $filePath = $request->file('file')->storeAs(
+            'document-uploads',
+            $filename,
+            'public'
+        );
 
         $user->documents()->syncWithoutDetaching([
             $document->id => [
@@ -153,7 +164,6 @@ class DocumentController extends Controller
             ],
         ]);
 
-        // Return success message
         return back()->with('success', 'Document uploaded successfully.');
     }
 
@@ -169,12 +179,8 @@ class DocumentController extends Controller
             if (Storage::disk('public')->exists($filePath)) {
                 $documentName = $document->title;
                 $userName = $user->first_name . ' ' . $user->last_name;
-
                 $extension = pathinfo($filePath, PATHINFO_EXTENSION);
-
                 $customFileName = $userName . ' - ' . $documentName . '.' . $extension;
-
-                $mimeType = $this->getMimeType($extension);
 
                 return Storage::disk('public')->download($filePath, $customFileName);
             } else {
@@ -197,5 +203,24 @@ class DocumentController extends Controller
         ];
 
         return $mimeTypes[$extension] ?? 'application/octet-stream';
+    }
+
+    public function updateFile(Request $request, $id)
+    {
+        $document = Document::findOrFail($id);
+        $request->validate([
+            'file_path' => 'nullable|mimes:pdf,doc,docx,jpg,jpeg,png|max:2048',
+        ]);
+        if ($request->hasFile('file_path')) {
+            $title = $document->title;
+            $extension = $request->file('file_path')->getClientOriginalExtension();
+            $path = $request->file('file_path')->storeAs(
+                'documents',
+                $title . '.' . $extension,
+                'public'
+            );
+            $document->update(['file_path' => $path]);
+        }
+        return Redirect::route('documents.index')->with('message', 'Document updated successfully.');
     }
 }

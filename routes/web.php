@@ -36,6 +36,7 @@ Route::post('/student-document/completion', [StudentDocumentController::class, '
 Route::get('/documents/download/{document}', [DocumentController::class, 'download'])->name('documents.download');
 Route::post('/documents/{document}/upload', [DocumentController::class, 'uploadDocument'])->name('documents.upload');
 Route::get('student-documents/download/{document}/{user}', [DocumentController::class, 'downloadDocument'])->name('student-documents.download');
+Route::post('/documents/{id}/update-file', [DocumentController::class, 'updateFile'])->name('documents.updateFile');
 
 
 Route::resource('attendances', AttendanceController::class);
