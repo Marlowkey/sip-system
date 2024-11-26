@@ -114,21 +114,20 @@ class AttendanceController extends Controller
 
     public function export(Request $request)
     {
-
         $request->validate([
             'month' => 'required',
             'user_id' => 'required',
         ]);
 
-
         $month = $request->input('month');
         $userId = $request->input('user_id');
 
-        $user = User::findOrFail(   $userId);
+        $user = User::findOrFail($userId);
 
         $userName = $user->first_name . ' ' . $user->last_name;
 
-        return Excel::download(new AttendanceExport($month, $userId, $userName), 'attendance.xlsx');
+        // Return PDF using DOMPDF
+        return Excel::download(new AttendanceExport($month, $userId, $userName), 'attendance.pdf', \Maatwebsite\Excel\Excel::DOMPDF);
     }
 
 }
