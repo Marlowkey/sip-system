@@ -101,14 +101,19 @@ class DocumentController extends Controller
     {
         $document = Document::findOrFail($id);
         $validated = $request->validated();
+
         if ($request->hasFile('file')) {
-            $validated['file'] = $request->file('file')->store('documents', 'public');
+            // Store the new file and update the file_path
+            $validated['file_path'] = $request->file('file')->store('documents', 'public');
+        } else {
+            $validated['file_path'] = $document->file_path;
         }
 
         $document->update($validated);
 
         return Redirect::route('documents.index')->with('message', 'Document updated successfully.');
     }
+
 
     public function destroy($id)
     {
