@@ -44,7 +44,7 @@ const userRole = props.user.role;
 
             <SectionTitleLineWithButton :icon="mdiAccountFile" title="SIP Requirements Checklist" main />
             <CardBox>
-                <TableStudentDocuments :document="documents" checkable />
+                <TableStudentDocuments :document="documents" file checkable />
             </CardBox>
         </SectionMain>
 

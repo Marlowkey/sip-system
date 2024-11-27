@@ -1,6 +1,6 @@
 <script setup>
 import { computed, ref, defineProps } from 'vue'
-import { mdiEye, mdiTrashCan, mdiDownload } from '@mdi/js'
+import { mdiEye, mdiTrashCan, mdiDownload, mdiClose} from '@mdi/js'
 import { router, usePage } from '@inertiajs/vue3'
 import CardBoxModal from '@/components/CardBoxModal.vue'
 import TableCheckboxCell from '@/components/TableCheckboxCell.vue'
@@ -13,11 +13,13 @@ import NotificationBar from './NotificationBar.vue'
 import { format, parse } from 'date-fns';
 import FormControl from './FormControl.vue'
 
-
 const props = defineProps({
     document: {
         type: Array,
         required: true,
+    },
+    file: {
+        type: Boolean,
     }
 })
 
@@ -117,6 +119,16 @@ const submitFile = (document) => {
     }
 }
 
+const visibleInputs = ref({});
+
+const toggleFileInput = (documentId) => {
+    visibleInputs.value[documentId] = !visibleInputs.value[documentId];
+};
+
+const hideFileInput = (documentId) => {
+    visibleInputs.value[documentId] = false;
+};
+
 
 </script>
 
@@ -132,7 +144,7 @@ const submitFile = (document) => {
                     <th scope="col" class="px-4 py-3">Title</th>
                     <th scope="col" class="px-4 py-3">Due on</th>
                     <th scope="col" class="px-4 py-3">Action</th>
-                    <th scope="col" class="px-4 py-3 text-center">File</th>
+                    <th v-if="file" scope="col" class="px-4 py-3 text-center">File</th>
                 </tr>
             </thead>
             <tbody class="font-medium text-gray-600">
@@ -152,18 +164,33 @@ const submitFile = (document) => {
                                 :icon="mdiDownload" small :href="`/storage/${document.file_path}`" target="_blank" />
                         </BaseButtons>
                     </td>
-                    <td class="px-4 py-1 text-center">
-                        <div class="flex items-center space-x-2">
-                            <input v-if="!isCompleted(document)" type="file"
-                                @change="event => handleFileSelect(document, event)" class="h-auto mb-2 w-60" />
-                            <div v-if="isCompleted(document)"
-                                class="flex items-center justify-center w-full h-full font-semibold text-green-500">
-                                Completed
-                            </div>
-                            <BaseButton v-else small roundedFull color="info" @click="submitFile(document)"
-                                :label="buttonLabel(document)" :disabled="isCompleted(document)" />
-                        </div>
-                    </td>
+                    <td v-if="file" class="px-4 py-1 text-center">
+    <div class="flex items-center">
+        <!-- Toggle Button (X instead of Cancel) -->
+        <BaseButton v-if="!isCompleted(document)"
+            :label="visibleInputs[document.id] ? 'Close' : 'Upload File'"
+            :color="visibleInputs[document.id] ? 'danger' : 'info'"
+            small roundedFull @click="toggleFileInput(document.id)" class="py-1 mr-2" />
+
+        <!-- File Input -->
+        <input v-if="visibleInputs[document.id] && !isCompleted(document)" type="file"
+            @change="event => handleFileSelect(document, event)"
+            class="h-auto p-1 mb-2 border rounded-md w-60" />
+
+        <!-- Submit Button -->
+        <BaseButton v-if="visibleInputs[document.id] && !isCompleted(document)" :label="buttonLabel(document)"
+            roundedFull color="success" small class="ml-2" @click="submitFile(document)" :disabled="isCompleted(document)" />
+
+        <!-- Status for Completed Documents -->
+        <div v-if="isCompleted(document)"
+            class="flex items-center justify-center w-full h-full font-semibold text-green-500">
+            Completed
+        </div>
+    </div>
+</td>
+
+
+
                 </tr>
             </tbody>
         </table>
