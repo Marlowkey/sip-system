@@ -127,7 +127,7 @@ class AttendanceController extends Controller
         $userName = $user->first_name . ' ' . $user->last_name;
 
         // Parse the month to a human-readable format
-        $formattedMonth = \Carbon\Carbon::createFromFormat('Y-m', $month)->format('F_Y'); // Example: "October_2024"
+        $formattedMonth = Carbon::createFromFormat('Y-m', $month)->format('F_Y'); // Example: "October_2024"
 
         // Construct a filename with user's name and formatted month
         $fileName = "{$userName}_{$formattedMonth}_attendance.pdf";
