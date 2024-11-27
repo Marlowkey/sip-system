@@ -115,7 +115,7 @@ class AttendanceController extends Controller
     public function export(Request $request)
     {
         $request->validate([
-            'month' => 'required',
+            'month' => 'required|date_format:Y-m',
             'user_id' => 'required',
         ]);
 
@@ -126,9 +126,16 @@ class AttendanceController extends Controller
 
         $userName = $user->first_name . ' ' . $user->last_name;
 
+        // Parse the month to a human-readable format
+        $formattedMonth = \Carbon\Carbon::createFromFormat('Y-m', $month)->format('F_Y'); // Example: "October_2024"
+
+        // Construct a filename with user's name and formatted month
+        $fileName = "{$userName}_{$formattedMonth}_attendance.pdf";
+
         // Return PDF using DOMPDF
-        return Excel::download(new AttendanceExport($month, $userId, $userName), 'attendance.pdf', \Maatwebsite\Excel\Excel::DOMPDF);
+        return Excel::download(new AttendanceExport($month, $userId, $userName), $fileName, \Maatwebsite\Excel\Excel::DOMPDF);
     }
+
 
 }
 
