@@ -100,20 +100,35 @@ const exportAttendance = () => {
             <NotificationBar v-if="$page.props.flash.message" icon="mdiAlert" color="info" class="m-2">
                 {{ $page.props.flash.message }}
             </NotificationBar>
-
             <SectionTitleLineWithButton :icon="mdiLocationEnter" title="Daily Time Record" main>
-                <div class="flex mx-6">
-                    <FormControl v-model="month" borderless type="month" placeholder="Select Date"
-                        class="justify-end text-sm font-medium" />
-                    <div class="content-center justify-end mx-2">
-                        <BaseButton label="Log in" roundedFull small :icon="mdiPlus" color="info"
-                            routeName="attendances.create" class="p-2 mx-1" />
-                        <BaseButton label="Export" roundedFull small :icon="mdiFileExport " color="success"
-                            :href="route('attendances.export', { month: month, user_id: userId})" class="p-2 mx-1" />
-                    </div>
-                </div>
-
-            </SectionTitleLineWithButton>
+        <div class="flex flex-wrap items-center gap-4">
+            <FormControl
+                v-model="month"
+                borderless
+                type="month"
+                placeholder="Select Date"
+                class="text-sm font-medium"
+            />
+                <BaseButton
+                    label="Log in"
+                    roundedFull
+                    small
+                    :icon="mdiPlus"
+                    color="info"
+                    routeName="attendances.create"
+                    class="p-2"
+                />
+                <BaseButton
+                    label="Export"
+                    roundedFull
+                    small
+                    :icon="mdiFileExport"
+                    color="success"
+                    :href="route('attendances.export', { month: month, user_id: userId })"
+                    class="p-2"
+                />
+        </div>
+    </SectionTitleLineWithButton>
             <CardBoxComponentEmpty v-if="isItemEmpty(props.attendance)" />
             <CardBox has-table v-else>
                 <TableStudentAttendance :attendance="attendance" />
