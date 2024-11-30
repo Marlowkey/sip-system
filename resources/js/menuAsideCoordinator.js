@@ -3,7 +3,8 @@ import {
     mdiAlertCircle,
     mdiSquareEditOutline,
     mdiCalendarBadge,
-    mdiAccountFile
+    mdiAccountFile,
+    mdiDomain
   } from '@mdi/js'
 
 
@@ -27,5 +28,10 @@ import {
         route: 'journals.index',
         label: 'Journal',
         icon: mdiSquareEditOutline
+      },
+      {
+        route: 'htes.index',
+        icon: mdiDomain   ,
+        label: 'Host Training Establishments'
       },
   ]

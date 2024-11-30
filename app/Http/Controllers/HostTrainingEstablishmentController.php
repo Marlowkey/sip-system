@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
 use Inertia\Inertia;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
@@ -12,9 +13,24 @@ class HostTrainingEstablishmentController extends Controller
 
     public function index()
     {
+        $user = auth()->user();
         $establishments = HostTrainingEstablishment::all();
+        $studentUsers = User::where('role', 'student')
+        ->where('course', $user->course)
+        ->with('hostTrainingEstablishment')
+        ->orderBy('last_name')
+        ->get();
+
+        $classBlocks = User::where('role', 'student')
+        ->where('course', $user->course)
+        ->distinct()
+        ->pluck('block');
+
         return Inertia::render('HostTrainingEstablishment/Index', [
             'establishments' => $establishments,
+            'user' => $user,
+            'studentUsers' =>  $studentUsers,
+            'classBlocks' => $classBlocks,
         ]);
     }
 

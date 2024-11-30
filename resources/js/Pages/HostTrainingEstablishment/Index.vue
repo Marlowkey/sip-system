@@ -18,11 +18,17 @@ import BaseButton from '@/components/BaseButton.vue'
 import NotificationBar from '@/components/NotificationBar.vue'
 import CardBoxComponentEmpty from '@/components/CardBoxComponentEmpty.vue'
 import TableAdminHtes from '@/components/TableAdminHtes.vue'
+import TableCoordinatorStudentHte from '@/components/TableCoordinatorStudentHte.vue'
 
 
 const props = defineProps({
+    user: Object,
     establishments: Array,
+    studentUsers: Array,
+    classBlocks: Array,
 })
+
+const userRole = props.user.role;
 
 </script>
 
@@ -32,7 +38,7 @@ const props = defineProps({
         <Head title="Host Training Establishments" />
 
 
-        <SectionMain v-if="establishments">
+        <SectionMain v-if="establishments && userRole === 'admin'">
             <NotificationBar v-if="$page.props.flash.message" icon="mdiAlert" color="info" class="m-2">
                 {{ $page.props.flash.message }}
             </NotificationBar>
@@ -45,15 +51,27 @@ const props = defineProps({
             </CardBox>
         </SectionMain>
 
+        <SectionMain v-else-if="establishments && userRole === 'coordinator'">
+            <NotificationBar v-if="$page.props.flash.message" icon="mdiAlert" color="info" class="m-2">
+                {{ $page.props.flash.message }}
+            </NotificationBar>
 
-        <SectionMain v-else>
+            <SectionTitleLineWithButton :icon="mdiDomain" title="Host Training Establishments " main>
+            </SectionTitleLineWithButton>
+
+                <TableCoordinatorStudentHte v-if="studentUsers.length > 1" :users="studentUsers" :classBlocks="classBlocks" :htes="establishments"/>
+               
+        </SectionMain>
+
+
+        <!-- <SectionMain v-else>
             <NotificationBar color="danger" :icon="mdiTableOff">
                 <b>Empty table.</b>
             </NotificationBar>
             <CardBox>
                 <CardBoxComponentEmpty />
             </CardBox>
-        </SectionMain>
+        </SectionMain> -->
 
     </LayoutAuthenticated>
 </template>
