@@ -80,4 +80,7 @@ Route::middleware(['auth'])->group(function () {
     Route::resource('schoolyears', SchoolYearController::class)->except(['show']);
 });
 
+Route::post('/users/{id}/update-hte', [UserController::class, 'updateHostTrainingEstablishment'])->name('users.update-hte');
+
+
 require __DIR__ . '/auth.php';
