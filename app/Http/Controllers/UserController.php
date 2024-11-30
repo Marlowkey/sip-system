@@ -22,12 +22,14 @@ class UserController extends Controller
         ]);
 
         $schoolYear = $request->input('school_year');
-
         $studentUsers = User::where('role', 'student')
-            ->when($schoolYear, function ($query) use ($schoolYear) {
-                return $query->where('school_year_id', $schoolYear);
-            })
-            ->get();
+        ->when($schoolYear, function ($query) use ($schoolYear) {
+            return $query->where('school_year_id', $schoolYear);
+        })
+        ->with('hostTrainingEstablishment') // Eager load the HostTrainingEstablishment relationship
+        ->orderBy('last_name') // Optional: Order by last name
+        ->get();
+
 
 
         $schoolYears = SchoolYear::all(['id', 'year']);
@@ -125,6 +127,19 @@ class UserController extends Controller
         User::findOrFail($id)->delete();
         return redirect()->route('users-student.index')->with('message', 'User deleted successfully.');
     }
+
+    public function updateHostTrainingEstablishment(Request $request, int $id)
+{
+    $request->validate([
+        'host_training_establishment_id' => 'required|exists:host_training_establishments,id',
+    ]);
+
+    $user = User::findOrFail($id);
+    $user->host_training_establishment_id = $request->input('host_training_establishment_id');
+    $user->save();
+
+    return redirect()->back()->with('message', 'Host Training Establishment updated successfully.');
+}
 
 
 }

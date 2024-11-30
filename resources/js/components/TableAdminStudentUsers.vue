@@ -23,6 +23,7 @@ import CardBox from './CardBox.vue'
 
 
 const props = defineProps({
+    admin: Boolean,
     checkable: Boolean,
     classBlocks: Array,
     schoolYears: Array,
@@ -85,8 +86,8 @@ const redirectToEdit = (userId) => {
     <div class="p-2 m-2">
         <div class="flex flex-col items-center justify-between mb-4 lg:flex-row">
             <div class="flex flex-col items-center w-1/2 mb-4 space-x-0 lg:flex-row lg:space-x-4 lg:mb-0">
-                <label for="course" class="text-lg font-medium">Course:</label>
-                <FormControl :options="courseOptions" v-model="course" label="Course" placeholder="Select a Course"
+                <label v-if="admin" for="course" class="text-lg font-medium">Course:</label>
+                <FormControl v-if="admin" :options="courseOptions" v-model="course" label="Course" placeholder="Select a Course"
                     :icon="mdiFilterCheck" class="w-full max-w-2xl text-sm font-medium" />
 
                 <label for="block" class="text-lg font-medium">Block:</label>
@@ -111,6 +112,8 @@ const redirectToEdit = (userId) => {
                         <th scope="col" class="px-4 py-3">Email</th>
                         <th scope="col" class="px-4 py-3">Course</th>
                         <th scope="col" class="px-4 py-3">Block</th>
+                        <th scope="col" class="px-4 py-3">HTE</th>
+
                     </tr>
                 </thead>
                 <tbody class="font-medium text-gray-600">
@@ -132,6 +135,9 @@ const redirectToEdit = (userId) => {
                         </td>
                         <td data-label="Block" class="px-6 py-4 text-gray-600 dark:text-gray-400">
                             {{ user.block }}
+                        </td>
+                        <td data-label="HTE" class="px-6 py-4 text-gray-600 dark:text-gray-400">
+                            {{ user.host_training_establishment.name }}
                         </td>
                     </tr>
                 </tbody>

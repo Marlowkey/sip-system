@@ -88,7 +88,7 @@ watch([schoolYear], (newSchoolYear, oldSchoolYear) => {
                         class="w-full lg:w-auto" />
                 </div>
             </SectionTitleLineWithButton>
-            <TableAdminStudentUsers v-if="studentUser.length > 1" :users="studentUser" :classBlocks="classBlocks" />
+            <TableAdminStudentUsers v-if="studentUser.length > 1" admin :users="studentUser" :classBlocks="classBlocks" />
             <CardBox v-else>
                 <CardBoxComponentEmpty />
             </CardBox>

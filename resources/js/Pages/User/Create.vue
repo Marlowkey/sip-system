@@ -28,7 +28,7 @@ const form = useForm({
     last_name: props.user?.last_name || '',
     middle_initial: props.user?.middle_initial || '',
     email: props.user?.email || '',
-    email: props.user?.student_number || '',
+    student_number: props.user?.student_number || '',
     course: props.user?.course || '',
     block: props.user?.block || '',
     password: '',
