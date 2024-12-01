@@ -34,6 +34,8 @@ const props = defineProps({
     attendanceCount: Number,
     latestJournal: Array,
     latestAttendance: Array,
+    placement: String,
+
 })
 
 const mainStore = useMainStore()
@@ -69,6 +71,13 @@ const formatDate = (date) => {
                     label="Attendance Logged" />
             </div>
 
+
+            <div class="flex flex-col items-center justify-center h-full p-4 text-center">
+                <h3 class="text-3xl font-semibold text-gray-800 underline">{{ placement }}</h3>
+                <p class="mt-2 text-xl font-medium text-gray-600 ">HTE Assignment</p>
+            </div>
+
+
             <SectionTitleLineWithButton :icon="mdiAccountFile" title="Pending Requirements">
                 <BaseButton roundedFull :icon="mdiArrowRight" color="whiteDark" routeName="documents.index" />
             </SectionTitleLineWithButton>
@@ -101,7 +110,8 @@ const formatDate = (date) => {
                 <div class="p-4 rounded-lg shadow-sm bg-gray-50">
                     <div class="flex items-center mb-4">
                         <div class="p-2 text-white bg-blue-500 rounded-full">
-                            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="w-6 h-6">
+                            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="currentColor"
+                                class="w-6 h-6">
                                 <rect width="24" height="24" fill="none"></rect>
                                 <path
                                     d="M9.682,18.75a.75.75,0,0,1,.75-.75,8.25,8.25,0,1,0-6.189-2.795V12.568a.75.75,0,0,1,1.5,0v4.243a.75.75,0,0,1-.751.75H.75a.75.75,0,0,1,0-1.5H3a9.75,9.75,0,1,1,7.433,3.44A.75.75,0,0,1,9.682,18.75Zm2.875-4.814L9.9,11.281a.754.754,0,0,1-.22-.531V5.55a.75.75,0,1,1,1.5,0v4.889l2.436,2.436a.75.75,0,1,1-1.061,1.06Z" />

@@ -60,6 +60,7 @@ class HomeController extends Controller
         $attendanceCount = $this->attendance->getStudentAttendanceCountForStudent($user);
         $latestJournal = Journal::getLatestJournalForUser($user->id);
         $latestAttendance = $this->attendance->getLatestStudentAttendance($user->id);
+        $placement = $user->hostTrainingEstablishment()->first();
 
         return Inertia::render('Student/StudentView', [
             'documents' => $documents,
@@ -68,6 +69,8 @@ class HomeController extends Controller
             'attendanceCount' => $attendanceCount,
             'latestJournal' => $latestJournal,
             'latestAttendance' => $latestAttendance,
+            'placement' => $placement->name ?? 'Not Assigned',
+
         ]);
     }
 
