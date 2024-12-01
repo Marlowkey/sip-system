@@ -20,10 +20,11 @@ const itemHref = computed(() => (props.item.route ? route(props.item.route) : pr
 const activeInactiveStyle = computed(() =>
   props.item.route && route().current(props.item.route)
     ? darkModeStore.isEnabled
-      ? darkModeStore.asideMenuItemActiveStyle // Assuming asideMenuItemActiveStyle exists in the store
-      : ''
+      ? `${darkModeStore.asideMenuItemActiveStyle} underline` // Add underline for dark mode
+      : 'underline text-blue-900 font-bold' // Blue text for light mode
     : ''
 )
+
 
 const hasColor = computed(() => props.item && props.item.color)
 
@@ -41,26 +42,26 @@ const componentClass = computed(() => [
 </script>
 
 <template>
-  <li>
-    <component
-      :is="item.route ? Link : 'a'"
-      :href="itemHref"
-      :target="item.target ?? null"
-      class="flex cursor-pointer"
-      :class="componentClass"
-    >
-      <BaseIcon
-        v-if="item.icon"
-        :path="item.icon"
-        class="flex-none"
-        :class="activeInactiveStyle"
-        w="w-16"
-        :size="18"
-      />
-      <span
-        class="grow text-ellipsis line-clamp-1"
-        :class="activeInactiveStyle"
-      >{{ item.label }}</span>
-    </component>
-  </li>
-</template>
+    <li>
+      <component
+        :is="item.route ? Link : 'a'"
+        :href="itemHref"
+        :target="item.target ?? null"
+        class="flex cursor-pointer"
+        :class="componentClass"
+      >
+        <BaseIcon
+          v-if="item.icon"
+          :path="item.icon"
+          class="flex-none"
+          :class="activeInactiveStyle"
+          w="w-16"
+          :size="18"
+        />
+        <span
+          class="grow text-ellipsis line-clamp-1"
+          :class="activeInactiveStyle"
+        >{{ item.label }}</span>
+      </component>
+    </li>
+  </template>
