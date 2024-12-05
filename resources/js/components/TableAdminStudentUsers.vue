@@ -23,7 +23,9 @@ import CardBox from './CardBox.vue'
 
 
 const props = defineProps({
-    admin: Boolean,
+    filterRole: Boolean,
+    hte: Boolean,
+    clickable: Boolean,
     checkable: Boolean,
     classBlocks: Array,
     schoolYears: Array,
@@ -33,6 +35,7 @@ const props = defineProps({
         required: true,
     }
 })
+
 const items = computed(() => props.users ? props.users : [])
 const isModalActive = ref(false)
 const isModalDangerActive = ref(false)
@@ -41,10 +44,14 @@ const currentPage = ref(0)
 const searchTerm = ref("")
 const classBlock = ref("")
 const course = ref("")
-const courseOptions = ref(["Information Technology", "Information System", "Computer Science",])
+const role = ref("")
+const courseOptions = ref(["Information Technology", "Information System", "Computer Science"])
+const roleOptions = ref(["student", "coordinator"])  
 
 const itemsPaginated = computed(() => {
     let filteredItems = items.value
+
+    // Apply search term filter
     if (searchTerm.value) {
         filteredItems = filteredItems.filter(user =>
             user.first_name.toLowerCase().includes(searchTerm.value.toLowerCase()) ||
@@ -52,12 +59,19 @@ const itemsPaginated = computed(() => {
         )
     }
 
+    // Apply class block filter
     if (classBlock.value) {
         filteredItems = filteredItems.filter(user => user.block === classBlock.value)
     }
 
+    // Apply course filter
     if (course.value) {
         filteredItems = filteredItems.filter(user => user.course === course.value)
+    }
+
+    // Apply role filter if filterRole is true and a role is selected
+    if (props.filterRole && role.value) {
+        filteredItems = filteredItems.filter(user => user.role === role.value)
     }
 
     return filteredItems.slice(perPage.value * currentPage.value, perPage.value * (currentPage.value + 1))
@@ -69,11 +83,9 @@ const currentPageHuman = computed(() => currentPage.value + 1)
 
 const pagesList = computed(() => {
     const pagesList = []
-
     for (let i = 0; i < numPages.value; i++) {
         pagesList.push(i)
     }
-
     return pagesList
 })
 
@@ -86,13 +98,18 @@ const redirectToEdit = (userId) => {
     <div class="p-2 m-2">
         <div class="flex flex-col items-center justify-between mb-4 lg:flex-row">
             <div class="flex flex-col items-center w-1/2 mb-4 space-x-0 lg:flex-row lg:space-x-4 lg:mb-0">
-                <label v-if="admin" for="course" class="text-lg font-medium">Course:</label>
-                <FormControl v-if="admin" :options="courseOptions" v-model="course" label="Course" placeholder="Select a Course"
+                <label for="course" class="text-lg font-medium">Course:</label>
+                <FormControl :options="courseOptions" v-model="course" label="Course" placeholder="Select a Course"
                     :icon="mdiFilterCheck" class="w-full max-w-2xl text-sm font-medium" />
 
                 <label for="block" class="text-lg font-medium">Block:</label>
                 <FormControl :options="classBlocks" v-model="classBlock" label="Class Block" :icon="mdiFilterCheck"
                     placeholder="Select a Class Block" class="w-1/3 text-sm font-medium" />
+
+                <!-- Conditionally render Role filter if filterRole is true -->
+                <label v-if="filterRole" for="role" class="text-lg font-medium">Role:</label>
+                <FormControl v-if="filterRole" :options="roleOptions" v-model="role" label="Role" placeholder="Select a Role"
+                    :icon="mdiFilterCheck" class="w-full max-w-xs text-sm font-medium" />
             </div>
             <div class="flex items-center space-x-4">
                 <FormControl v-model="searchTerm" type="text" placeholder="Search user..." :icon="mdiAccountSearch"
@@ -112,12 +129,12 @@ const redirectToEdit = (userId) => {
                         <th scope="col" class="px-4 py-3">Email</th>
                         <th scope="col" class="px-4 py-3">Course</th>
                         <th scope="col" class="px-4 py-3">Block</th>
-                        <th scope="col" class="px-4 py-3">HTE</th>
+                        <th v-if="hte" scope="col" class="px-4 py-3">HTE</th>
 
                     </tr>
                 </thead>
                 <tbody class="font-medium text-gray-600">
-                    <tr v-for="user in itemsPaginated" :key="user.id" @click="redirectToEdit(user.id)"
+                    <tr v-for="user in itemsPaginated" :key="user.id"  @click="clickable ? redirectToEdit(user.id) : null"
                         class="transition-all duration-200 ease-in-out bg-white dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600">
                         <td class="px-4 py-3 border-b-0 lg:w-6 before:hidden">
                             <UserAvatar :avatar="user.avatar" :username="`${user.last_name}, ${user.first_name}`"
@@ -136,7 +153,7 @@ const redirectToEdit = (userId) => {
                         <td data-label="Block" class="px-6 py-4 text-gray-600 dark:text-gray-400">
                             {{ user.block }}
                         </td>
-                        <td data-label="HTE" class="px-6 py-4 text-gray-600 dark:text-gray-400">
+                        <td  v-if="hte" data-label="HTE" class="px-6 py-4 text-gray-600 dark:text-gray-400">
                             {{ user.host_training_establishment.name }}
                         </td>
                     </tr>

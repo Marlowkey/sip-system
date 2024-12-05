@@ -28,67 +28,53 @@ import TableAdminCoordinatorUser from '@/components/TableAdminCoordinatorUser.vu
 
 const props = defineProps({
     users: Array,
-    coordinatorUser: Array,
-    studentUser: Array,
-    itStudentCount: Number,
-    isStudentCount: Number,
-    csStudentCount: Number,
-    classBlocks: Array,
-    schoolYears: {
-        type: Array,
-        default: () => [] // Ensure it's always an array
-    },
     schoolYear: String,
+    classBlocks: Array,
+
 })
 
-const schoolYear = ref(props.schoolYear ?? null);
 
-const url = route('users-student.index');
-
-const fetchUsersWithFilters = debounce(() => {
-    router.get(url, {
-        school_year: schoolYear.value
-    });
-}, 1500);
-
-watch([schoolYear], (newSchoolYear, oldSchoolYear) => {
-    if (newSchoolYear !== oldSchoolYear) {
-        fetchUsersWithFilters();
+const groupedUsers = computed(() => {
+  return props.users.reduce((acc, user) => {
+    if (user.course === 'Computer Science') {
+      acc.cs.push(user);
+    } else if (user.course === 'Information System') {
+      acc.is.push(user);
+    } else if (user.course === 'Information Technology') {
+      acc.it.push(user);
+    } else {
+      console.warn('Unknown course for user:', user); // Handle unknown courses
     }
+    return acc;
+  }, { it: [], is: [], cs: [] });
 });
+
+const itStudentCount = computed(() => groupedUsers.value.it.length);
+const isStudentCount = computed(() => groupedUsers.value.is.length);
+const csStudentCount = computed(() => groupedUsers.value.cs.length);
 </script>
+
 <template>
     <LayoutAuthenticated>
 
-        <Head title="Daily Time Record" />
+        <Head :title="schoolYear.year" />
         <SectionMain>
             <NotificationBar v-if="$page.props.flash.message" icon="mdiAlert" color="info" class="m-2">
                 {{ $page.props.flash.message }}
             </NotificationBar>
 
             <div class="grid grid-cols-1 gap-6 mb-16 lg:grid-cols-3">
-                <CardBoxWidget color="text-green-500" :icon="mdiLaptop" :number="itStudentCount" label="IT Students" />
+                <CardBoxWidget color="text-green-500" :icon="mdiLaptop" :number="itStudentCount" label="IT Student Interns" />
                 <CardBoxWidget color="text-indigo-500" :icon="mdiBookOpenPageVariant" :number="isStudentCount"
-                    label="IS Students" />
+                    label="IS Student Interns" />
                 <CardBoxWidget color="text-purple-500" :icon="mdiLaptopAccount" :number="csStudentCount"
-                    label="CS Students" />
+                    label="CS Student Interns" />
             </div>
 
 
-            <SectionTitleLineWithButton :icon="mdiAccountGroupOutline" title="Student Intern Users" main>
-                <div class="flex items-center space-x-2 space-y-1 lg:flex-row lg:space-y-0 lg:space-x-4">
-                    <select v-model="schoolYear" placeholder="S/Y"
-                        class="w-full p-2 text-sm border border-black rounded-md lg:w-1/2">
-                        <option value="" disabled>S/Y</option>
-                        <option v-for="sy in schoolYears" :key="sy.id" :value="sy.id">
-                            {{ sy.year }}
-                        </option>
-                    </select>
-                    <BaseButton label="Add User" roundedFull :icon="mdiPlus" color="info" small routeName="users.create"
-                        class="w-full lg:w-auto" />
-                </div>
+            <SectionTitleLineWithButton :icon="mdiAccountGroupOutline" title="Users" main>
             </SectionTitleLineWithButton>
-            <TableAdminStudentUsers  v-if="studentUser.length > 1" clickable :users="studentUser" :classBlocks="classBlocks" hte />
+            <TableAdminStudentUsers v-if="users.length > 1"  :users="users" filterRole :classBlocks="classBlocks"/>
             <CardBox v-else>
                 <CardBoxComponentEmpty />
             </CardBox>

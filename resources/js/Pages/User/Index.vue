@@ -1,10 +1,6 @@
 <script setup>
 import { Head, useForm, router } from '@inertiajs/vue3'
-import debounce from 'lodash.debounce'
-import { computed, ref, onMounted, watch } from 'vue'
-import { useMainStore } from '@/stores/main.js'
 import {
-    mdiAccountSearch,
     mdiAccountGroupOutline,
     mdiLaptop,
     mdiBookOpenPageVariant,
@@ -17,10 +13,6 @@ import SectionTitleLineWithButton from '@/components/SectionTitleLineWithButton.
 import LayoutAuthenticated from '@/layouts/LayoutAuthenticated.vue'
 import BaseButton from '@/components/BaseButton.vue'
 import NotificationBar from '@/components/NotificationBar.vue'
-import TableStudentAttendance from '@/components/TableStudentAttendance.vue'
-import CardBoxComponentEmpty from '@/components/CardBoxComponentEmpty.vue'
-import TableCoordinatorAttendance from '@/components/TableCoordinatorAttendance.vue'
-import FormControl from '@/components/FormControl.vue'
 import CardBoxWidget from '@/components/CardBoxWidget.vue'
 import TableAdminStudentUsers from '@/components/TableAdminStudentUsers.vue'
 import TableAdminCoordinatorUser from '@/components/TableAdminCoordinatorUser.vue'
