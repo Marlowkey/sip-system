@@ -18,28 +18,10 @@ class User extends Authenticatable
 {
     use HasFactory, Notifiable;
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array<int, string>
-     */
     protected $guarded = [];
 
-    /**
-     * The attributes that should be hidden for serialization.
-     *
-     * @var array<int, string>
-     */
-    protected $hidden = [
-        'password',
-        'remember_token',
-    ];
+    protected $hidden = ['password', 'remember_token'];
 
-    /**
-     * Get the attributes that should be cast.
-     *
-     * @return array<string, string>
-     */
     protected function casts(): array
     {
         return [
@@ -48,11 +30,6 @@ class User extends Authenticatable
         ];
     }
 
-    /**
-     * Get the attendances for the user.
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
-     */
     public function attendances(): HasMany
     {
         return $this->hasMany(Attendance::class);
@@ -61,14 +38,14 @@ class User extends Authenticatable
     public function documents()
     {
         return $this->belongsToMany(Document::class, 'student_document')
-                    ->withPivot('is_completed', 'file_path')
-                    ->withTimestamps();
+            ->withPivot('is_completed', 'file_path')
+            ->withTimestamps();
     }
 
     public function hostTrainingEstablishment()
-{
-    return $this->belongsTo(HostTrainingEstablishment::class, 'host_training_establishment_id');
-}
+    {
+        return $this->belongsTo(HostTrainingEstablishment::class, 'host_training_establishment_id');
+    }
 
     public function journals(): HasMany
     {
@@ -76,9 +53,9 @@ class User extends Authenticatable
     }
 
     public function schoolYear()
-{
-    return $this->belongsTo(SchoolYear::class);
-}
+    {
+        return $this->belongsTo(SchoolYear::class);
+    }
 
     public function isStudent()
     {
@@ -107,13 +84,14 @@ class User extends Authenticatable
             ->where('course', $this->course);
     }
 
-
     public function getProgress()
     {
         $totalDocuments = Document::count();
-        $completedDocuments = $this->documents->filter(function ($document) {
-            return $document->pivot->is_completed;
-        })->count();
+        $completedDocuments = $this->documents
+            ->filter(function ($document) {
+                return $document->pivot->is_completed;
+            })
+            ->count();
 
         return $totalDocuments > 0 ? ($completedDocuments / $totalDocuments) * 100 : 0;
     }
@@ -146,6 +124,4 @@ class User extends Authenticatable
             ];
         });
     }
-
-
 }

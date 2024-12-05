@@ -78,6 +78,11 @@ Route::prefix('htes')->name('htes.')->group(function () {
 
 Route::middleware(['auth'])->group(function () {
     Route::resource('schoolyears', SchoolYearController::class)->except(['show']);
+
+    Route::post('schoolyears/{schoolyear}/activate', [SchoolYearController::class, 'activate'])->name('schoolyears.activate');
+    Route::post('schoolyears/{schoolyear}/deactivate', [SchoolYearController::class, 'deactivate'])->name('schoolyears.deactivate');
+    Route::get('schoolyears/{schoolyear}', [SchoolYearController::class, 'show'])->name('schoolyears.show');
+
 });
 
 Route::post('/users/{id}/update-hte', [UserController::class, 'updateHostTrainingEstablishment'])->name('users.update-hte');
