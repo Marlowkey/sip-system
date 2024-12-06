@@ -108,6 +108,14 @@
                 {{ $page . props . flash . message }}
             </NotificationBar>
 
+            <div class="p-4 mb-6 border rounded-lg"
+                :class="form.is_active ? 'bg-green-100 border-green-500 text-green-700' : 'bg-red-100 border-red-500 text-red-700'">
+                <p>
+                    <strong>Status:</strong>
+                    {{ form.is_active ? 'School Year is Active' : 'School Year is Deactivated' }}
+                </p>
+            </div>
+
             <div class="grid grid-cols-1 gap-6 mb-16 lg:grid-cols-3">
                 <CardBoxWidget color="text-green-500" :icon="mdiLaptop" :number="itStudentCount"
                     label="IT Student Interns" />

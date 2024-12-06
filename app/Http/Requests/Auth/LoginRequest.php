@@ -49,6 +49,17 @@ class LoginRequest extends FormRequest
             ]);
         }
 
+        $user = Auth::user();
+
+        if ($user->schoolYear && !$user->schoolYear->is_active) {
+            Auth::logout(); // Log the user out
+            RateLimiter::hit($this->throttleKey());
+
+            throw ValidationException::withMessages([
+                'email' => 'Your school year is inactive. You cannot log in.',
+            ]);
+        }
+
         RateLimiter::clear($this->throttleKey());
     }
 
