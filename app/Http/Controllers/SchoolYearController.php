@@ -54,17 +54,21 @@ class SchoolYearController extends Controller
         return redirect()->route('schoolyears.index')->with('message', 'School year deleted successfully.');
     }
 
-    public function activate(SchoolYear $schoolYear)
+    public function activate(SchoolYear $schoolyear)
     {
-        $schoolYear->activate();
 
-        return redirect()->back()->with('success', 'School year activated successfully.');
+        $schoolyear->is_active = true;
+        $schoolyear->save();
+
+        return redirect()->back()->with('flash', 'School Year activated successfully.');
     }
 
-    public function deactivate(SchoolYear $schoolYear)
-    {
-        $schoolYear->deactivate();
 
-        return redirect()->back()->with('success', 'School year deactivated successfully.');
+    public function deactivate(SchoolYear $schoolyear)
+    {
+        $schoolyear->is_active = false;
+        $schoolyear->save();
+
+        return redirect()->back()->with('flash', 'School Year deactivated successfully.');
     }
 }
