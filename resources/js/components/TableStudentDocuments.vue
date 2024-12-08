@@ -31,6 +31,9 @@ const perPage = ref(8)
 const currentPage = ref(0)
 const checkedRows = ref([])
 const currentDescription = ref('')
+const selectedFile = ref('') // Store selected file URL for preview
+const isModalPreviewActive = ref(false)
+
 
 let form = useForm({
     user_id: user.value.id,
@@ -129,11 +132,21 @@ const hideFileInput = (documentId) => {
     visibleInputs.value[documentId] = false;
 };
 
+    // Function to open the PDF modal with the selected student's file
+    const openPdfPreview = (filePath) => {
+        selectedFile.value = `/storage/${filePath}`; // Set the file path to show in modal
+        isModalPreviewActive.value = true; // Open the modal
+    }
 
+    // Function to close the modal
+    const closePdfPreview = () => {
+        isModalPreviewActive.value = false; // Close the modal
+        selectedFile.value = ''; // Reset file path
+    }
 </script>
 
-<template>
-    <CardBoxModal v-model="isModalActive" title="Description">
+    <template>`
+        <CardBoxModal v-model="isModalActive" title="Description">
         <p>{{ currentDescription }}</p>
     </CardBoxModal>
 
@@ -166,6 +179,8 @@ const hideFileInput = (documentId) => {
                     </td>
                     <td v-if="file" class="px-4 py-1 text-center">
     <div class="flex items-center">
+        <BaseButton roundedFull color="blue" :icon="mdiEye"
+        small @click="openPdfPreview(document.users[0].pivot.file_path)" label="Preview" />
         <!-- Toggle Button (X instead of Cancel) -->
         <BaseButton v-if="!isCompleted(document)"
             :label="visibleInputs[document.id] ? 'Close' : 'Upload File'"
@@ -189,8 +204,6 @@ const hideFileInput = (documentId) => {
     </div>
 </td>
 
-
-
                 </tr>
             </tbody>
         </table>
@@ -203,5 +216,23 @@ const hideFileInput = (documentId) => {
             </BaseButtons>
             <small>Page {{ currentPageHuman }} of {{ numPages }}</small>
         </BaseLevel>
+    </div>
+
+    <div v-if="isModalPreviewActive" class="fixed inset-0 bg-gray-800 bg-opacity-50 flex justify-center items-center z-50">
+        <div class="bg-white p-4 w-full max-w-4xl rounded-lg shadow-lg">
+            <div class="flex justify-between items-center mb-4">
+                <h2 class="text-xl font-semibold">Document Preview</h2>
+                <button @click="closePdfPreview" class="text-gray-600 hover:text-gray-800">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
+                        stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12">
+                        </path>
+                    </svg>
+                </button>
+            </div>
+            <div>
+                <iframe v-if="selectedFile" :src="selectedFile" class="w-full h-[500px]" frameborder="0"></iframe>
+            </div>
+        </div>
     </div>
 </template>
