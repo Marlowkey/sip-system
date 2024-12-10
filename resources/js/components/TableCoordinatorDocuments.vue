@@ -1,7 +1,7 @@
 <script setup>
 import { computed, ref, defineProps } from 'vue'
 import { format, parse } from 'date-fns'
-import { mdiEye, mdiTrashCan, mdiFileEditOutline, mdiDownload } from '@mdi/js'
+import { mdiEye, mdiTrashCan, mdiFileEditOutline, mdiDownload, mdiAccountFileText  } from '@mdi/js'
 import { router, usePage } from '@inertiajs/vue3'
 import CardBoxModal from '@/components/CardBoxModal.vue'
 import TableCheckboxCell from '@/components/TableCheckboxCell.vue'
@@ -92,26 +92,28 @@ const formatDueDate = (dueDate) => {
             <tbody class="font-medium text-gray-600">
                 <tr v-for="document in itemsPaginated" :key="document.id"
                     class="bg-white dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
-                    <td data-label="Title" scope="row" class="px-4 py-3">
+                    <td data-label="Title" scope="row" class="px-4 py-4">
                         {{ document.title }}
                     </td>
                     <td data-label="Due on" class="px-4 py-1">
                         {{ formatDueDate(document.due_date) }}
                     </td>
                     <td class="px-4 py-1">
-                        <BaseButtons no-wrap>
-                            <BaseButton label="View" roundedFull color="blue" :icon="mdiEye" small
+                        <BaseButtons type="justify-end" no-wrap>
+                            <BaseButton label="Description" roundedFull color="blue" :icon="mdiEye" small
                                 @click="viewDocument(document)" />
-                            <BaseButton label="Download" v-if="document.file_path" roundedFull color="teal"
+                            <BaseButton label="File" v-if="document.file_path" roundedFull color="teal"
                                 :icon="mdiDownload" small :href="`/storage/${document.file_path}`" target="_blank"/>
                             <BaseButton label="Edit" roundedFull color="yellow" :icon="mdiFileEditOutline" small
                                 :href="route('documents.edit', { id: document.id })" />
+                                <BaseButton label="Submission" roundedFull color="primary" :icon="mdiAccountFileText " small
+                                :href="route('documents.show',{ id: document.id })" />
                         </BaseButtons>
                     </td>
-                    <td data-label="Completed" class="px-4 py-1">
-                        <a :href="route('documents.show',{ id: document.id })" class="text-blue-600 hover:underline">
+                    <td data-label="Completed" class="px-6 py-1">
+                        <p  class="text-blue-600 hover:underline w-full">
                             {{ document.completed }}/{{ document.number_of_users }}
-                        </a>
+                        </p>
                     </td>
                 </tr>
             </tbody>

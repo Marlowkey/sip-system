@@ -190,7 +190,7 @@
                         <BaseButtons type="justify-start" no-wrap>
                             <BaseButton label="Description" roundedFull color="blue" :icon="mdiEye" small
                                 @click="viewDocument(document)" />
-                            <BaseButton label="Download" v-if="document.file_path" roundedFull color="teal"
+                            <BaseButton label="File" v-if="document.file_path" roundedFull color="teal"
                                 :icon="mdiDownload" small :href="`/storage/${document.file_path}`" target="_blank" />
                         </BaseButtons>
                     </td>

@@ -147,7 +147,7 @@
         <div class="flex flex-col items-center justify-between mb-4 lg:flex-row">
             <div class="flex flex-col items-center w-1/2 mb-4 space-x-0 lg:flex-row lg:space-x-4 lg:mb-0">
                 <label for="block" class="text-lg font-medium">Block:</label>
-                <FormControl :options="classBlocks" v-model="classBlock" label="Class Block" :icon="mdiFilterCheck"
+                <FormControl borderless :options="classBlocks" v-model="classBlock" label="Class Block" :icon="mdiFilterCheck"
                     placeholder="Select a Class Block" class="text-sm font-medium " />
             </div>
             <div class="flex items-center space-x-4">
@@ -185,7 +185,7 @@
                         <td class="px-4 py-2 text-center">
                             <div class="flex items-center justify-center space-x-2">
                                 <input type="checkbox" :checked="student.is_completed"
-                                    @change="event => updateCompletionStatus(document, event, student.id)" />
+                                    @change="event => updateCompletionStatus(document, event, student.id)" class="w-5 h-5"/>
                                 <span
                                     :class="{ 'text-green-500': student.is_completed, 'text-red-500': !student.is_completed }">
                                     {{ student . is_completed ? 'Completed' : 'Pending' }}
