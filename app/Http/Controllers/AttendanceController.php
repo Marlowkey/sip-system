@@ -35,6 +35,9 @@ class AttendanceController extends Controller
         $date = $request->validated()['date'] ?? null;
         $studentAttendance = $this->attendance->getStudentAttendances($user, $date);
 
+            // Determine whether it's currently AM or PM
+    $currentHour = Carbon::now()->hour;
+    $currentSession = $currentHour < 12 ? 'AM' : 'PM';
 
         // Dump the count of today's attendance for debugging
         return Inertia::render('Attendance/Index', [
@@ -43,6 +46,7 @@ class AttendanceController extends Controller
             'studentAttendance' => $studentAttendance,
             'date' => $date,
             'month' => $month,
+            'currentSession' => $currentSession, 
         ]);
     }
 
@@ -60,11 +64,36 @@ class AttendanceController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreRequest $request)
+    public function store(Request $request)
     {
-        Auth::user()->attendances()->create($request->validated());
-        return redirect()->route('attendances.index')->with('message', 'Attendance recorded successfully.');
+        $user = Auth::user();
+        $currentTime = now()->toTimeString();
+        $currentDate = now()->toDateString();
+
+        $validTypes = ['time_in_am', 'time_out_am', 'time_in_pm', 'time_out_pm'];
+        $type = $request->input('type');
+
+        if (!in_array($type, $validTypes)) {
+            return redirect()->route('attendances.index')
+                ->with('message', 'Invalid attendance type.');
+        }
+
+        $attendance = $user->attendances()->firstOrCreate(
+            ['date' => $currentDate],
+            ['date' => $currentDate]
+        );
+
+        if (is_null($attendance->$type)) {
+            $attendance->$type = $currentTime;
+            $attendance->save();
+            return redirect()->route('attendances.index')
+                ->with('message', ucfirst(str_replace('_', ' ', $type)) . ' logged successfully.');
+        }
+
+        return redirect()->route('attendances.index')
+            ->with('message', ucfirst(str_replace('_', ' ', $type)) . ' already logged.');
     }
+
 
     /**
      * Show the form for editing the specified resource.

@@ -27,7 +27,8 @@ const props = defineProps({
     attendance: Array, // Documents passed as a prop from Inertia
     studentAttendance: Array, // Student attendance passed as a prop from Inertia
     date: String, // Date passed as a prop from Inertia
-    month: String, // Month passed as a prop from Inertia
+    month: String,
+    currentSession: String,
 })
 
 
@@ -72,10 +73,10 @@ const isItemEmpty = ((item) => {
 
 const userRole = props.user.role;
 
-const form = useForm({
-    month: props.month,
-    user_id: userId.value,
-})
+// const form = useForm({
+//     month: props.month,
+//     user_id: userId.value,
+// })
 
 const exportAttendance = () => {
     console.log('Month:', month.value);
@@ -90,6 +91,25 @@ const exportAttendance = () => {
         }
     });
 }
+
+const form = useForm({
+    type: '', // Attendance type (time_in_am, time_out_am, etc.)
+});
+
+const logAttendance = (type) => {
+    form.type = type; // Dynamically set the attendance type
+    form.post(route('attendances.store'), {
+        onSuccess: () => {
+            NotificationBar({
+                message: `${type.replace('_', ' ').toUpperCase()} logged successfully.`,
+                color: 'success',
+            });
+        },
+        onError: (errors) => {
+            console.error('Error logging attendance:', errors);
+        },
+    });
+};
 </script>
 <template>
     <LayoutAuthenticated>
@@ -101,33 +121,86 @@ const exportAttendance = () => {
                 {{ $page.props.flash.message }}
             </NotificationBar>
             <SectionTitleLineWithButton :icon="mdiLocationEnter" title="Daily Time Record" main>
-        <div class="flex flex-wrap items-center gap-4">
-            <FormControl
-                v-model="month"
-                borderless
-                type="month"
-                placeholder="Select Date"
-                class="text-sm font-medium"
-            />
-                <BaseButton
-                    label="Log in"
-                    roundedFull
-                    small
-                    :icon="mdiPlus"
-                    color="info"
-                    routeName="attendances.create"
-                    class="p-2"
-                />
-                <BaseButton
-                    label="Export"
-                    roundedFull
-                    small
-                    :icon="mdiFileExport"
-                    color="success"
-                    :href="route('attendances.export', { month: month, user_id: userId })"
-                    class="p-2"
-                />
-        </div>
+            <div class="flex flex-wrap gap-4 items-center justify-end">
+
+
+    <!-- Buttons -->
+    <div class="flex flex-wrap gap-4">
+        <!-- Time In AM -->
+        <BaseButton
+         v-if="currentSession === 'AM'"
+            label="Time In (AM)"
+            roundedFull
+            small
+            :icon="mdiClockCheckOutline"
+            color="info"
+            class="p-2"
+            :disabled="props.attendance?.time_in_am"
+            @click="logAttendance('time_in_am')"
+        />
+
+        <!-- Time Out AM -->
+        <BaseButton
+        v-if="currentSession === 'AM'"
+            label="Time Out (AM)"
+            roundedFull
+            small
+            :icon="mdiClockCheckOutline"
+            color="danger"
+            class="p-2"
+            :disabled="props.attendance?.time_out_am"
+            @click="logAttendance('time_out_am')"
+        />
+
+        <!-- Time In PM -->
+        <BaseButton
+         v-if="currentSession === 'PM'"
+            label="Time In (PM)"
+            roundedFull
+            small
+            :icon="mdiClockCheckOutline"
+            color="info"
+            class="p-2"
+            :disabled="props.attendance?.time_in_pm"
+            @click="logAttendance('time_in_pm')"
+        />
+
+        <!-- Time Out PM -->
+        <BaseButton
+         v-if="currentSession === 'PM'"
+            label="Time Out (PM)"
+            roundedFull
+            small
+            :icon="mdiClockCheckOutline"
+            color="danger"
+            class="p-2"
+            :disabled="props.attendance?.time_out_pm"
+            @click="logAttendance('time_out_pm')"
+        />
+
+        <!-- Export Button -->
+        <BaseButton
+            label="Export"
+            roundedFull
+            small
+            :icon="mdiFileExport"
+            color="success"
+            :href="route('attendances.export', { month: month, user_id: userId })"
+            class="p-2"
+        />
+    </div>
+        <!-- Month Picker -->
+        <div class=" sm:w-auto">
+        <FormControl
+            v-model="month"
+            borderless
+            type="month"
+            placeholder="Select Date"
+            class="text-sm font-medium w-full sm:w-auto"
+        />
+    </div>
+</div>
+
     </SectionTitleLineWithButton>
             <CardBoxComponentEmpty v-if="isItemEmpty(props.attendance)" />
             <CardBox has-table v-else>
