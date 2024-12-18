@@ -37,7 +37,7 @@ class AttendanceController extends Controller
 
             // Determine whether it's currently AM or PM
     $currentHour = Carbon::now()->hour;
-    $currentSession = $currentHour < 12 ? 'AM' : 'PM';
+    $currentSession = $currentHour < 12 || ($currentHour == 12 && Carbon::now()->minute == 0) ? 'AM' : 'PM';
 
         // Dump the count of today's attendance for debugging
         return Inertia::render('Attendance/Index', [
@@ -46,7 +46,7 @@ class AttendanceController extends Controller
             'studentAttendance' => $studentAttendance,
             'date' => $date,
             'month' => $month,
-            'currentSession' => $currentSession, 
+            'currentSession' => $currentSession,
         ]);
     }
 

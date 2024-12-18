@@ -95,11 +95,11 @@ const formatDueDate = (dueDate) => {
                     <td data-label="Title" scope="row" class="px-4 py-4">
                         {{ document.title }}
                     </td>
-                    <td data-label="Due on" class="px-4 py-1">
+                    <td data-label="Due on" class="text-red-900 px-4 py-1">
                         {{ formatDueDate(document.due_date) }}
                     </td>
                     <td class="px-4 py-1">
-                        <BaseButtons type="justify-end" no-wrap>
+                        <BaseButtons type="justify-center" no-wrap>
                             <BaseButton label="Description" roundedFull color="blue" :icon="mdiEye" small
                                 @click="viewDocument(document)" />
                             <BaseButton label="File" v-if="document.file_path" roundedFull color="teal"
@@ -110,7 +110,7 @@ const formatDueDate = (dueDate) => {
                                 :href="route('documents.show',{ id: document.id })" />
                         </BaseButtons>
                     </td>
-                    <td data-label="Completed" class="px-6 py-1">
+                    <td data-label="Completed" class="px-2 text-center py-1">
                         <p  class="text-blue-600 hover:underline w-full">
                             {{ document.completed }}/{{ document.number_of_users }}
                         </p>

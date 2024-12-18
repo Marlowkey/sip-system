@@ -20,6 +20,8 @@ const props = defineProps({
 })
 
 const userId = ref(props.user?.id);
+const userRole = ref(props.user?.role);
+const isStudent = computed(() => userRole.value === 'student');
 const isEditMode = computed(() => !!props.user)
 const title = computed(() => isEditMode.value ? 'Edit User' : 'Create User')
 
@@ -101,18 +103,23 @@ const deleteUser = async (userId) => {
                 <InputError :message="form.errors.email" />
 
 
-                <FormField label="Student Number">
+                <FormField v-if="isStudent" label="Student Number">
                     <FormControl v-model="form.student_number" type="text" placeholder="Student Number (if student)" />
                 </FormField>
                 <InputError :message="form.errors.student_number" />
 
 
-                <FormField label="Course">
-                    <FormControl v-model="form.course" :options="courses" placeholder="Select Course">
+                <FormField v-if="isStudent" label="Course">
+                    <FormControl  v-model="form.course" :options="courses" placeholder="Select Course">
                     </FormControl>
                     <FormControl v-model="form.block" type="text" placeholder="Enter Block/Section" />
-
                 </FormField>
+
+                <FormField label="Course">
+                    <FormControl  v-model="form.course" :options="courses" placeholder="Select Course">
+                    </FormControl>
+                </FormField>
+
                 <InputError :message="form.errors.course" />
                 <InputError :message="form.errors.block" />
 
@@ -126,7 +133,7 @@ const deleteUser = async (userId) => {
                     </FormControl>
                 </FormField>
                 <InputError :message="form.errors.role" />
-                <FormField label="Host Training Establishment (if student)">
+                <FormField v-if="isStudent"  label="Host Training Establishment (if student)">
 
                     <select id="host_training_establishment" v-model="form.host_training_establishment_id"
                         placeholder="Select Host Training Establishment" class="w-full p-3 border rounded-md">

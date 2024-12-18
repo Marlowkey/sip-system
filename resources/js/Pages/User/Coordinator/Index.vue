@@ -58,17 +58,24 @@ watch([schoolYear], (newSchoolYear, oldSchoolYear) => {
 
 
             <SectionTitleLineWithButton :icon="mdiAccountGroupOutline" title="Coordinator Users" main>
-                <div class="flex items-center space-x-2 space-y-1 lg:flex-row lg:space-y-0 lg:space-x-4">
+                <div class="flex justify-end items-center space-x-2 space-y-1 lg:flex-row lg:space-y-0 lg:space-x-4 w-1/2">
+                    <!-- Label for School Year (left of select) -->
+                    <label for="schoolYear"
+                        class="text-sm font-medium text-gray-700 dark:text-gray-300 w-full lg:w-auto">
+                        School Year
+                    </label>
+                    <!-- School Year Select -->
                     <select v-model="schoolYear" placeholder="S/Y"
-                        class="w-full p-2 text-sm border border-black rounded-md lg:w-1/2">
-                        <option value="" disabled>S/Y</option>
+                        class="w-1/3 p-2 text-sm border border-black rounded-md">
+                        <option value="">S/Y</option>
                         <option v-for="sy in schoolYears" :key="sy.id" :value="sy.id">
-                            {{ sy.year }}
+                            {{ sy . year }}
                         </option>
                     </select>
-                    <BaseButton label="Add User" roundedFull :icon="mdiPlus" color="info" small routeName="users.create"
-                        class="w-full lg:w-auto" />
+                    <BaseButton label="Add User" roundedFull :icon="mdiPlus" color="info" small
+                        routeName="users.create" class="w-full lg:w-auto" />
                 </div>
+
             </SectionTitleLineWithButton>
             <CardBox has-table v-if="coordinatorUser.length > 1">
                 <TableAdminCoordinatorUser :users="coordinatorUser" />

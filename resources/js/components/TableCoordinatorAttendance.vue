@@ -11,7 +11,7 @@ import CardBoxComponentEmpty from './CardBoxComponentEmpty.vue'
 import FormControl from '@/components/FormControl.vue'
 import NavBarItemPlain from '@/components/NavBarItemPlain.vue'
 import CardBox from './CardBox.vue'
-
+import UserAvatar from './UserAvatar.vue'
 
 const props = defineProps({
     attendance: {
@@ -97,6 +97,7 @@ const formatDate = (date) => {
             <thead class="text-left text-gray-800">
                 <tr
                     class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
+                    <th />
                     <th scope="col" class="px-4 py-3">Date</th>
                     <th scope="col" class="px-4 py-3">Name</th>
                     <th scope="col" class="px-4 py-3">Time In (AM)</th>
@@ -110,6 +111,10 @@ const formatDate = (date) => {
             <tbody>
                 <tr v-for="attendance in itemsPaginated" :key="attendance.id"
                     class="bg-white dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
+                    <td class="px-4 py-3 border-b-0 lg:w-6 before:hidden">
+                            <UserAvatar :avatar="attendance.avatar" :username="`${attendance.last_name}, ${attendance.first_name}`"
+                                class="w-24 h-24 mx-auto lg:w-6 lg:h-6" />
+                        </td>
                     <td data-label="Date" scope="row" class="px-4 py-4 font-semibold">
                         {{ formatDate(attendance.date) }}
                     </td>

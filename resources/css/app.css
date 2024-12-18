@@ -2,3 +2,10 @@
 @tailwind components;
 @tailwind utilities;
 
+th {
+@apply px-4 py-6 text-black font-bold pl-3 !important;
+}
+
+td {
+@apply px-4 py-3 !important;
+}
