@@ -17,15 +17,16 @@ class UserSchoolYearSeeder extends Seeder
         $schoolYear = SchoolYear::where('year', '2024-2025')->first();
 
         if (!$schoolYear) {
-            $this->command->error("School year '2024-2025' not found. Please create it first.");
-            return;
+            $schoolYear = SchoolYear::create([
+                'year' => '2024-2025',
+            ]);
         }
 
         $users = User::all();
-
         foreach ($users as $user) {
             $user->school_year_id = $schoolYear->id;
             $user->save();
         }
+
     }
 }

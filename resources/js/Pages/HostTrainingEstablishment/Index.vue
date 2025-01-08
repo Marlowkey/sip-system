@@ -44,7 +44,5 @@ const userRole = props.user.role;
                 <TableAdminHtes :establishments="establishments" />
             </CardBox>
         </SectionMain>
-
-
     </LayoutAuthenticated>
 </template>
