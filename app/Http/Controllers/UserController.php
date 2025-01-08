@@ -29,9 +29,6 @@ class UserController extends Controller
         ->with('hostTrainingEstablishment') // Eager load the HostTrainingEstablishment relationship
         ->orderBy('last_name') // Optional: Order by last name
         ->get();
-
-
-
         $schoolYears = SchoolYear::all(['id', 'year']);
         $classBlocks = User::whereNotNull('block')->distinct()->pluck('block');
         $itStudentCount = User::where('role', 'student')->where('course', 'Information Technology')->count();
@@ -72,6 +69,29 @@ class UserController extends Controller
             'classBlocks' => $classBlocks,
             'schoolYears' => $schoolYears,
             'schoolYear' => $schoolYear,
+        ]);
+    }
+
+    public function indexStudentHte()
+    {
+        $user = auth()->user();
+        $establishments = HostTrainingEstablishment::all();
+        $studentUsers = User::where('role', 'student')
+        ->where('course', $user->course)
+        ->with('hostTrainingEstablishment')
+        ->orderBy('last_name')
+        ->get();
+
+        $classBlocks = User::where('role', 'student')
+        ->where('course', $user->course)
+        ->distinct()
+        ->pluck('block');
+
+        return Inertia::render('User/StudentHte/Index', [
+            'establishments' => $establishments,
+            'user' => $user,
+            'studentUsers' =>  $studentUsers,
+            'classBlocks' => $classBlocks,
         ]);
     }
 

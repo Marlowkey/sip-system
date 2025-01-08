@@ -24,11 +24,6 @@ import {
         label: 'Coordinator'
       },
       {
-        route: 'htes.index',
-        icon: mdiDomain   ,
-        label: 'Host Training Establishments'
-      },
-      {
         route: 'schoolyears.index',
         icon: mdiSchoolOutline   ,
         label: 'School Year'

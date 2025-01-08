@@ -13,16 +13,10 @@ import {
     mdiCheckCircle,
     mdiAlertCircle,
 } from '@mdi/js'
-
+import BarChart from '@/components/Charts/LineChart.vue'
 import LayoutAuthenticated from '@/layouts/LayoutAuthenticated.vue'
 import SectionMain from '@/components/SectionMain.vue'
-import CardBoxWidget from '@/components/CardBoxWidget.vue'
-import CardBox from '@/components/CardBox.vue'
-import TableCoordinatorStudentUsers from '@/components/TableCoordinatorStudentUsers.vue'
-import SectionTitleLineWithButton from '@/components/SectionTitleLineWithButton.vue'
-import CardBoxJournal from '@/components/CardBoxJournal.vue'
-import BaseButton from '@/components/BaseButton.vue'
-import debounce from 'lodash.debounce'
+
 
 
 const user = computed(() => usePage().props.auth.user)
@@ -54,6 +48,7 @@ const userRole = computed(() => {
                     </div>
                 </div>
             </div>
+
         </SectionMain>
     </LayoutAuthenticated>
 </template>

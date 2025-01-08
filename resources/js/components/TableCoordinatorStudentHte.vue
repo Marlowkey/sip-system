@@ -43,6 +43,17 @@ const searchTerm = ref("")
 const classBlock = ref("")
 const course = ref("")
 const courseOptions = ref(["Information Technology", "Information System", "Computer Science",])
+const htePlacement = ref("");
+const availableHTEs = computed(() => {
+    const hteSet = new Set();
+    props.users.forEach(user => {
+        if (user.host_training_establishment?.name) {
+            hteSet.add(user.host_training_establishment.name);
+        }
+    });
+    return Array.from(hteSet);
+});
+
 
 const itemsPaginated = computed(() => {
     let filteredItems = items.value
@@ -61,10 +72,16 @@ const itemsPaginated = computed(() => {
         filteredItems = filteredItems.filter(user => user.course === course.value)
     }
 
+        if (htePlacement.value) {
+        filteredItems = filteredItems.filter(user =>
+            user.host_training_establishment?.name === htePlacement.value
+        );
+    }
+
     return filteredItems.slice(perPage.value * currentPage.value, perPage.value * (currentPage.value + 1))
 })
 
-const numPages = computed(() => Math.ceil(items.value.length / perPage.value))
+const numPages = computed(() => Math.ceil(itemsPaginated.value.length / perPage.value))
 
 const currentPageHuman = computed(() => currentPage.value + 1)
 
@@ -106,6 +123,10 @@ const saveHTE = (userId) => {
                 <label for="block" class="text-lg font-medium">Block:</label>
                 <FormControl :options="classBlocks" v-model="classBlock" label="Class Block" :icon="mdiFilterCheck"
                     placeholder="Select a Class Block" class="w-1/3 text-sm font-medium" />
+
+                    <label for="hte" class="text-lg font-medium">HTE:</label>
+    <FormControl :options="availableHTEs" v-model="htePlacement" label="HTE Placement"
+        placeholder="Select an HTE" :icon="mdiFilterCheck" class="w-1/3 text-sm font-medium" />
             </div>
             <div class="flex items-center space-x-4">
                 <FormControl v-model="searchTerm" type="text" placeholder="Search user..." :icon="mdiAccountSearch"

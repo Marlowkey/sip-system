@@ -55,6 +55,7 @@ Route::get('/attendance/export', [AttendanceController::class, 'export'])->name(
 Route::prefix('users')->group(function () {
     Route::get('/student', [UserController::class, 'indexStudent'])->name('users-student.index');
     Route::get('/coordinator', [UserController::class, 'indexCoordinator'])->name('users-coordinator.index');
+    Route::get('/student-hte', [UserController::class, 'indexStudentHte'])->name('users-student-hte.index');
     Route::get('/create', [UserController::class, 'create'])->name('users.create');
     Route::post('/', [UserController::class, 'store'])->name('users.store');
     Route::get('/{id}/edit', [UserController::class, 'edit'])->name('users.edit');

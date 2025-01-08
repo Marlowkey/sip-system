@@ -29,6 +29,11 @@ import {
         label: 'Journal',
         icon: mdiSquareEditOutline
       },
+        {
+              route: 'users-student-hte.index',
+              icon: mdiDomain   ,
+              label: 'Student HTE Placements'
+        },
       {
         route: 'htes.index',
         icon: mdiDomain   ,
