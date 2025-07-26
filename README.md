@@ -45,8 +45,6 @@ The SIP (Student Internship Program) System is a comprehensive web-based applica
 - **Build Tool**: Vite
 
 ### Development Tools
-- **Testing**: PHPUnit
-- **Code Quality**: Laravel Pint
 - **Package Management**: Composer (PHP), NPM (JavaScript)
 
 ## User Roles and Access Control
@@ -70,21 +68,19 @@ The SIP (Student Internship Program) System is a comprehensive web-based applica
   - Manage host training establishments
   - Export attendance reports
   - Filter students by class blocks
+  - Update profile information
 
 ### 3. Admin Role
 - **Purpose**: System administrators with full access
 - **Permissions**:
   - Manage all users (students, coordinators)
   - Create and manage school years
-  - System-wide configuration
-  - Full access to all features
-
+  - Update profile information
+    
 ## Core Functionalities
 
 ### 1. User Management
 - **User Registration and Authentication**
-  - Email verification
-  - Password reset functionality
   - Profile management with avatar upload
   - Role-based access control
 
@@ -160,7 +156,6 @@ The SIP (Student Internship Program) System is a comprehensive web-based applica
 - **Student Placement**
   - Assign students to HTEs
   - Track placement status
-  - Placement history
 
 - **HTE Documentation**
   - MOA file upload and storage
@@ -183,12 +178,9 @@ The SIP (Student Internship Program) System is a comprehensive web-based applica
   - Document completion percentage
   - Attendance statistics
   - Journal submission tracking
-  - Overall internship progress
 
 - **Coordinator Analytics**
   - Course-wide progress overview
-  - Student performance metrics
-  - Completion rate statistics
   - Attendance analytics
 
 ### 8. Export and Reporting
@@ -196,7 +188,6 @@ The SIP (Student Internship Program) System is a comprehensive web-based applica
   - Excel format export
   - Date range selection
   - Student-specific reports
-  - Course-wide reports
 
 - **Document Reports**
   - Completion status reports
