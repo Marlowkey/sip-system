@@ -15,10 +15,17 @@
 
 The SIP (Student Internship Program) System is a comprehensive web-based application designed to manage student internship programs. It provides a complete solution for tracking student progress, managing documents, monitoring attendance, and facilitating communication between students, coordinators, and administrators.
 
-Dashboard Previews
+**Explore the various interfaces of the platform below.**
 
-![Dashboard Part 1](public/images/dashboard-part-1.png)
-![Student Dashboard](public/images/student%20dash.png)
+![Coordinator Dashboard](public/images/Dashboard.png)
+![Student Dashboard](public/images/student%20dash.png) 
+
+![Page 1](public/images/Page%201.png)
+![Page 3](public/images/Page%203.png) 
+![Page 4](public/images/Page%204.png) |
+
+![Student Page 1](public/images/student%20page%201.png) 
+![Student Page 2](public/images/student%20page%202.png)
 
 ### Key Features
 - **Multi-role User Management**: Students, Coordinators, and Administrators
