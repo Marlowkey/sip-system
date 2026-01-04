@@ -36,7 +36,10 @@ The SIP (Student Internship Program) System is a comprehensive web-based applica
 
 
 **Student Page Previews**
+
+
 ![Student Page 1](public/images/student%20page%201.png) 
+
 
 ![Student Page 2](public/images/student%20page%202.png) 
 
